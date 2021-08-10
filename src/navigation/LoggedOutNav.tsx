@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 import CreateAccount from "../screens/CreateAccount";
 import Login from "../screens/Login";
 import { colors } from "../styles";
-
+import { Ionicons } from "@expo/vector-icons";
 export type LoggedOutNavStackParamList = {
   Welcome: undefined;
   Login: {
@@ -21,7 +21,7 @@ export default function LoggedOutNav() {
       screenOptions={{
         headerTitle: "",
         headerTransparent: true,
-        headerTintColor: `${colors.blue}`,
+        headerTintColor: `${colors.yellow}`,
         headerBackTitleVisible: false,
       }}
     >

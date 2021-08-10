@@ -5,8 +5,9 @@ import { Ionicons } from "@expo/vector-icons";
 import * as Font from "expo-font";
 import { Asset } from "expo-asset";
 import { ApolloProvider, useReactiveVar } from "@apollo/client";
-import client from "./src/apollo";
+import client, { isLoggedInVar, tokenVar } from "./src/apollo";
 import Router from "./src/navigation/Router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -25,6 +26,11 @@ export default function App() {
   };
 
   const preload = async () => {
+    const token = await AsyncStorage.getItem("token");
+    if (token) {
+      isLoggedInVar(true);
+      tokenVar(token);
+    }
     return preloadAsset();
   };
 
