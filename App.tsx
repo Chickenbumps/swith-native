@@ -1,21 +1,46 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import AppLoading from "expo-app-loading";
+import { StatusBar } from "expo-status-bar";
+import React, { useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
+import * as Font from "expo-font";
+import { Asset } from "expo-asset";
+import { ApolloProvider, useReactiveVar } from "@apollo/client";
+import client from "./src/apollo";
+import Router from "./src/navigation/Router";
 
 export default function App() {
+  const [loading, setLoading] = useState(true);
+  const onFinish = () => {
+    setLoading(false);
+  };
+  const preloadAsset = async () => {
+    const fontsToLoad = [Ionicons.font];
+    const fontPromises = fontsToLoad.map((font) => Font.loadAsync(font));
+    const imageToLoad = [require("./assets/image/logo.png")];
+    const ImagePromises = imageToLoad.map((image) => Asset.loadAsync(image));
+    await Promise.all<Promise<void> | Promise<Asset[]>>([
+      ...fontPromises,
+      ...ImagePromises,
+    ]);
+  };
+
+  const preload = async () => {
+    return preloadAsset();
+  };
+
+  if (loading) {
+    return (
+      <AppLoading
+        startAsync={preload}
+        onError={console.warn}
+        onFinish={onFinish}
+      />
+    );
+  }
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <ApolloProvider client={client}>
+      <StatusBar />
+      <Router />
+    </ApolloProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
