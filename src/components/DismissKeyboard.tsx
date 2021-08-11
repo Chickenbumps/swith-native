@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Keyboard,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
+import { Keyboard, TouchableWithoutFeedback } from "react-native";
 
 export default function DismissKeyboard({ children }: any) {
   const onPress = () => {

@@ -8,6 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { setContext } from "@apollo/client/link/context";
 
 export const isLoggedInVar = makeVar(false);
+export const darkModeVar = makeVar(false);
 export const tokenVar = makeVar<string | null>(null);
 
 const TOKEN = "token";

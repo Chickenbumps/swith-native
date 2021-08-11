@@ -2,8 +2,10 @@ import "styled-components";
 
 declare module "styled-components" {
   export interface DefaultTheme {
-    white: string;
-    blue: string;
+    bgColor: string;
+    txtColor: string;
+    activeColor: string;
+    phColor: string;
     border: string;
     error: string;
   }

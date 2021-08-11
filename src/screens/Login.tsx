@@ -12,7 +12,7 @@ import AuthFormError from "../components/auth/AuthFormError";
 import AuthLayout from "../components/auth/AuthLayout";
 import AuthTextInput from "../components/auth/AuthTextInput";
 import { LoggedOutNavStackParamList } from "../navigation/Router";
-import { colors } from "../styles";
+import { colors, useSelectTheme } from "../styles";
 import { login, loginVariables, login_login } from "../__generated__/login";
 
 const LOGIN_MUTATION = gql`
@@ -28,6 +28,7 @@ const LOGIN_MUTATION = gql`
 type LoginScreenProps = StackScreenProps<LoggedOutNavStackParamList, "Login">;
 
 export default function Login({ navigation, route }: LoginScreenProps) {
+  const theme = useSelectTheme();
   const { handleSubmit, setError, formState, control } = useForm({
     mode: "onChange",
     defaultValues: {
@@ -91,11 +92,11 @@ export default function Login({ navigation, route }: LoginScreenProps) {
           },
         }}
         placeholder="아이디"
-        placeholderTextColor={`${colors.skyblue}`}
+        placeholderTextColor={theme.phColor}
+        selectionColor={theme.txtColor}
         returnKeyType="next"
         autoCapitalize="none"
         onSubmitEditing={() => nextRef(passwordRef)}
-        selectionColor={`${colors.blue}`}
         hasError={Boolean(formState.errors?.username)}
       />
       <AuthFormError message={formState.errors?.username?.message} />
@@ -111,13 +112,13 @@ export default function Login({ navigation, route }: LoginScreenProps) {
           },
         }}
         placeholder="비밀번호"
-        placeholderTextColor={`${colors.skyblue}`}
+        placeholderTextColor={theme.phColor}
+        selectionColor={theme.txtColor}
         returnKeyType="next"
         autoCapitalize="none"
         secureTextEntry
         keyboardType="ascii-capable"
         onSubmitEditing={handleSubmit(onValid)}
-        selectionColor={`${colors.blue}`}
         hasError={Boolean(formState.errors?.password)}
       />
       <AuthFormError message={formState.errors?.password?.message} />
@@ -154,5 +155,5 @@ const LostContainer = styled.TouchableOpacity`
   align-items: flex-end;
 `;
 const LostText = styled.Text`
-  color: ${(props) => props.theme.blue};
+  color: ${(props) => props.theme.txtColor};
 `;

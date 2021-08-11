@@ -20,10 +20,10 @@ interface ControlTextInput extends TextInputProps {
   hasError?: boolean;
 }
 const BaseTextInput = styled.TextInput<textInputProps>`
-  background-color: ${(props) => props.theme.white};
+  background-color: ${(props) => props.theme.bgColor};
   padding: 15px 7px;
   border-radius: 4px;
-  color: ${(props) => props.theme.blue};
+  color: ${(props) => props.theme.txtColor};
   margin-bottom: ${(props) => (props.lastOne ? 15 : 8)}px;
   border: 2px solid
     ${(props) => (props.hasError ? props.theme.error : props.theme.border)};

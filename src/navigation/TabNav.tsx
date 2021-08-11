@@ -7,16 +7,17 @@ import Plan from "../screens/tab/Plan";
 import Group from "../screens/tab/Group";
 import Profile from "../screens/tab/Profile";
 import { Ionicons } from "@expo/vector-icons";
-import { colors } from "../styles";
+import { useSelectTheme } from "../styles";
 
 const Tab = createBottomTabNavigator();
 
 export default function TabNav() {
+  const theme = useSelectTheme();
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: `${colors.blue}`,
+        tabBarActiveTintColor: theme.txtColor,
       }}
     >
       <Tab.Screen
@@ -27,7 +28,7 @@ export default function TabNav() {
             <Ionicons
               name={focused ? "home" : "home-outline"}
               size={24}
-              color={`${colors.blue}`}
+              color={theme.txtColor}
             />
           ),
         }}
@@ -40,7 +41,7 @@ export default function TabNav() {
             <Ionicons
               name={focused ? "stats-chart" : "stats-chart-outline"}
               size={24}
-              color={`${colors.blue}`}
+              color={theme.txtColor}
             />
           ),
         }}
@@ -53,7 +54,7 @@ export default function TabNav() {
             <Ionicons
               name={focused ? "stopwatch" : "stopwatch-outline"}
               size={28}
-              color={`${colors.blue}`}
+              color={theme.txtColor}
             />
           ),
         }}
@@ -66,7 +67,7 @@ export default function TabNav() {
             <Ionicons
               name={focused ? "people" : "people-outline"}
               size={28}
-              color={`${colors.blue}`}
+              color={theme.txtColor}
             />
           ),
         }}
@@ -79,7 +80,7 @@ export default function TabNav() {
             <Ionicons
               name={focused ? "person" : "person-outline"}
               size={24}
-              color={`${colors.blue}`}
+              color={theme.txtColor}
             />
           ),
         }}
