@@ -4,10 +4,12 @@ import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import * as Font from "expo-font";
 import { Asset } from "expo-asset";
-import { ApolloProvider, useReactiveVar } from "@apollo/client";
+import { ApolloProvider } from "@apollo/client";
 import client, { isLoggedInVar, tokenVar } from "./src/apollo";
 import Router from "./src/navigation/Router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ThemeProvider } from "styled-components";
+import { lightTheme } from "./src/styles";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -16,13 +18,10 @@ export default function App() {
   };
   const preloadAsset = async () => {
     const fontsToLoad = [Ionicons.font];
-    const fontPromises = fontsToLoad.map((font) => Font.loadAsync(font));
-    const imageToLoad = [require("./assets/image/logo.png")];
-    const ImagePromises = imageToLoad.map((image) => Asset.loadAsync(image));
-    await Promise.all<Promise<void> | Promise<Asset[]>>([
-      ...fontPromises,
-      ...ImagePromises,
-    ]);
+    const FontCache = fontsToLoad.map((font) => Font.loadAsync(font));
+    const images = [require("./assets/image/logo.png")];
+    const ImageCache = images.map((image) => Asset.loadAsync(images));
+    await Promise.all<any>([...FontCache, ...ImageCache]);
   };
 
   const preload = async () => {
@@ -45,8 +44,10 @@ export default function App() {
   }
   return (
     <ApolloProvider client={client}>
-      <StatusBar />
-      <Router />
+      <ThemeProvider theme={lightTheme}>
+        <StatusBar />
+        <Router />
+      </ThemeProvider>
     </ApolloProvider>
   );
 }

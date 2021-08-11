@@ -1,18 +1,18 @@
 import React from "react";
 import { ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
-import { colors } from "../../styles";
 
 const Button = styled.TouchableOpacity`
-  background-color: ${colors.yellow};
+  background-color: ${(props) => props.theme.blue};
   padding: 15px 10px;
   border-radius: 3px;
   width: 100%;
   opacity: ${(props) => (props.disabled ? "0.5" : "1")};
+  margin-top: 10px;
 `;
 
 const ButtonText = styled.Text`
-  color: ${colors.blue};
+  color: ${(props) => props.theme.white};
   font-weight: 600;
   text-align: center;
 `;

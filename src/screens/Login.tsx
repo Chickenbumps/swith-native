@@ -1,13 +1,17 @@
 import { gql, useMutation } from "@apollo/client";
-import { useNavigation } from "@react-navigation/native";
+
+import { StackScreenProps } from "@react-navigation/stack";
 import React, { useRef } from "react";
+
 import { useForm } from "react-hook-form";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { TextInput } from "react-native";
+import styled from "styled-components/native";
 import { logUserIn } from "../apollo";
 import AuthButton from "../components/auth/AuthButton";
 import AuthFormError from "../components/auth/AuthFormError";
 import AuthLayout from "../components/auth/AuthLayout";
 import AuthTextInput from "../components/auth/AuthTextInput";
+import { LoggedOutNavStackParamList } from "../navigation/Router";
 import { colors } from "../styles";
 import { login, loginVariables, login_login } from "../__generated__/login";
 
@@ -21,31 +25,25 @@ const LOGIN_MUTATION = gql`
   }
 `;
 
-export default function Login() {
-  const {
-    handleSubmit,
-    setError,
-    formState,
-    setValue,
-    getValues,
-    control,
-  } = useForm({
+type LoginScreenProps = StackScreenProps<LoggedOutNavStackParamList, "Login">;
+
+export default function Login({ navigation, route }: LoginScreenProps) {
+  const { handleSubmit, setError, formState, control } = useForm({
     mode: "onChange",
     defaultValues: {
-      username: "",
-      password: "",
+      username: route?.params?.username,
+      password: route?.params?.password,
       loginResult: "",
     },
   });
 
   const usernameRef = useRef<TextInput>(null);
   const passwordRef = useRef<TextInput>(null);
-  const navigation = useNavigation<any>();
-
   const onCompleted = (data: login) => {
     const {
       login: { ok, token, error },
     } = data;
+    console.log(data);
     if (!ok) {
       setError("loginResult", {
         message: "가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.",
@@ -75,8 +73,13 @@ export default function Login() {
     }
     return false;
   };
+
   return (
     <AuthLayout>
+      <Logo
+        resizeMode="contain"
+        source={require("../../assets/image/logo.png")}
+      />
       <AuthTextInput
         name="username"
         refName={usernameRef}
@@ -88,11 +91,11 @@ export default function Login() {
           },
         }}
         placeholder="아이디"
-        placeholderTextColor="rgba(255, 255, 255, 0.6)"
+        placeholderTextColor={`${colors.skyblue}`}
         returnKeyType="next"
         autoCapitalize="none"
         onSubmitEditing={() => nextRef(passwordRef)}
-        selectionColor={`${colors.yellow}`}
+        selectionColor={`${colors.blue}`}
         hasError={Boolean(formState.errors?.username)}
       />
       <AuthFormError message={formState.errors?.username?.message} />
@@ -108,20 +111,22 @@ export default function Login() {
           },
         }}
         placeholder="비밀번호"
-        placeholderTextColor="rgba(255, 255, 255, 0.6)"
+        placeholderTextColor={`${colors.skyblue}`}
         returnKeyType="next"
         autoCapitalize="none"
         secureTextEntry
         keyboardType="ascii-capable"
         onSubmitEditing={handleSubmit(onValid)}
-        selectionColor={`${colors.yellow}`}
+        selectionColor={`${colors.blue}`}
         hasError={Boolean(formState.errors?.password)}
       />
       <AuthFormError message={formState.errors?.password?.message} />
-
+      <LostContainer>
+        <LostText>회원정보 찾기</LostText>
+      </LostContainer>
       <AuthButton
         text="로그인"
-        disabled={false}
+        disabled={!formState.isValid || loading}
         onPress={handleSubmit(onValid)}
       />
       <AuthButton
@@ -132,3 +137,22 @@ export default function Login() {
     </AuthLayout>
   );
 }
+
+const LoginImage = styled.Image`
+  max-width: 70%;
+  width: 100%;
+  height: 170px;
+  margin: 0 auto;
+`;
+const Logo = styled.Image`
+  max-width: 100%;
+  width: 100%;
+  height: 150px;
+`;
+
+const LostContainer = styled.TouchableOpacity`
+  align-items: flex-end;
+`;
+const LostText = styled.Text`
+  color: ${(props) => props.theme.blue};
+`;

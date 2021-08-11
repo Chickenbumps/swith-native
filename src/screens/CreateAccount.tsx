@@ -1,15 +1,15 @@
 import { gql, useMutation } from "@apollo/client";
-import { useNavigation } from "@react-navigation/native";
+import { StackScreenProps } from "@react-navigation/stack";
 import React from "react";
 import { useRef } from "react";
-import { useEffect } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
-import { Colors } from "react-native/Libraries/NewAppScreen";
+import { useForm } from "react-hook-form";
+import { Alert, TextInput } from "react-native";
+import styled from "styled-components/native";
 import AuthButton from "../components/auth/AuthButton";
 import AuthFormError from "../components/auth/AuthFormError";
 import AuthLayout from "../components/auth/AuthLayout";
 import AuthTextInput from "../components/auth/AuthTextInput";
+import { LoggedOutNavStackParamList } from "../navigation/Router";
 import { colors } from "../styles";
 import { EMAIL_EXP, PASSWORD_EXP, USERNAME_EXP } from "../variables";
 import {
@@ -37,8 +37,14 @@ const CREATE_ACCOUNT_MUTATION = gql`
     }
   }
 `;
+type CreateAccountScreenProps = StackScreenProps<
+  LoggedOutNavStackParamList,
+  "CreateAccount"
+>;
 
-export default function CreateAccount() {
+export default function CreateAccount({
+  navigation,
+}: CreateAccountScreenProps) {
   const {
     handleSubmit,
     setError,
@@ -62,7 +68,6 @@ export default function CreateAccount() {
   const usernameRef = useRef<TextInput>(null);
   const passwordRef = useRef<TextInput>(null);
   const passwordConfirmRef = useRef<TextInput>(null);
-  const navigation = useNavigation<any>();
 
   const onCompleted = (data: createAccount) => {
     const {
@@ -99,6 +104,10 @@ export default function CreateAccount() {
   };
   return (
     <AuthLayout>
+      <Logo
+        resizeMode="contain"
+        source={require("../../assets/image/logo.png")}
+      />
       <AuthTextInput
         name="name"
         refName={nameRef}
@@ -118,11 +127,11 @@ export default function CreateAccount() {
           },
         }}
         placeholder="이름"
-        placeholderTextColor="rgba(255, 255, 255, 0.6)"
+        placeholderTextColor={`${colors.skyblue}`}
         returnKeyType="next"
         autoCapitalize="none"
         onSubmitEditing={() => nextRef(usernameRef)}
-        selectionColor={`${colors.yellow}`}
+        selectionColor={`${colors.blue}`}
         hasError={Boolean(formState.errors.name)}
       />
       <AuthFormError message={formState.errors?.name?.message} />
@@ -142,11 +151,11 @@ export default function CreateAccount() {
           },
         }}
         placeholder="아이디"
-        placeholderTextColor="rgba(255, 255, 255, 0.6)"
+        placeholderTextColor={`${colors.skyblue}`}
         returnKeyType="next"
         autoCapitalize="none"
         onSubmitEditing={() => nextRef(emailRef)}
-        selectionColor={`${colors.yellow}`}
+        selectionColor={`${colors.blue}`}
         hasError={Boolean(formState.errors?.username)}
       />
       <AuthFormError message={formState.errors?.username?.message} />
@@ -165,11 +174,11 @@ export default function CreateAccount() {
           },
         }}
         placeholder="이메일"
-        placeholderTextColor="rgba(255, 255, 255, 0.6)"
+        placeholderTextColor={`${colors.skyblue}`}
         returnKeyType="next"
         autoCapitalize="none"
         onSubmitEditing={() => nextRef(passwordRef)}
-        selectionColor={`${colors.yellow}`}
+        selectionColor={`${colors.blue}`}
         hasError={Boolean(formState.errors?.email)}
       />
       <AuthFormError message={formState.errors?.email?.message} />
@@ -188,13 +197,13 @@ export default function CreateAccount() {
           },
         }}
         placeholder="비밀번호"
-        placeholderTextColor="rgba(255, 255, 255, 0.6)"
+        placeholderTextColor={`${colors.skyblue}`}
         returnKeyType="next"
         autoCapitalize="none"
         secureTextEntry
         keyboardType="ascii-capable"
         onSubmitEditing={() => nextRef(passwordConfirmRef)}
-        selectionColor={`${colors.yellow}`}
+        selectionColor={`${colors.blue}`}
         hasError={Boolean(formState.errors?.password)}
       />
       <AuthFormError message={formState.errors?.password?.message} />
@@ -217,13 +226,13 @@ export default function CreateAccount() {
           },
         }}
         placeholder="비밀번호 확인"
-        placeholderTextColor="rgba(255, 255, 255, 0.6)"
+        placeholderTextColor={`${colors.skyblue}`}
         returnKeyType="done"
         autoCapitalize="none"
         secureTextEntry
         keyboardType="ascii-capable"
         onSubmitEditing={handleSubmit(onValid)}
-        selectionColor={`${colors.yellow}`}
+        selectionColor={`${colors.blue}`}
         hasError={Boolean(formState.errors?.passwordConfirm)}
       />
       <AuthFormError message={formState.errors?.passwordConfirm?.message} />
@@ -235,3 +244,8 @@ export default function CreateAccount() {
     </AuthLayout>
   );
 }
+const Logo = styled.Image`
+  max-width: 100%;
+  width: 100%;
+  height: 150px;
+`;

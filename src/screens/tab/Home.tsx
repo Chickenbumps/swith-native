@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { logUserOut } from "../apollo";
+import { logUserOut } from "../../apollo";
 
 export default function Home() {
   return (

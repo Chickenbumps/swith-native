@@ -1,14 +1,8 @@
 import React from "react";
 import styled from "styled-components/native";
-import { colors } from "../../styles";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TextInputProps,
-  View,
-} from "react-native";
-import { Controller, RegisterOptions, FieldValue } from "react-hook-form";
+
+import { TextInput, TextInputProps } from "react-native";
+import { Controller, RegisterOptions } from "react-hook-form";
 
 interface textInputProps {
   lastOne?: boolean;
@@ -26,13 +20,13 @@ interface ControlTextInput extends TextInputProps {
   hasError?: boolean;
 }
 const BaseTextInput = styled.TextInput<textInputProps>`
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: ${(props) => props.theme.white};
   padding: 15px 7px;
   border-radius: 4px;
-  color: ${colors.yellow};
+  color: ${(props) => props.theme.blue};
   margin-bottom: ${(props) => (props.lastOne ? 15 : 8)}px;
   border: 2px solid
-    ${(props) => (props.hasError ? "tomato" : "rgba(255, 255, 255, 0.6)")};
+    ${(props) => (props.hasError ? props.theme.error : props.theme.border)};
 `;
 
 export default function AuthTextInput({
@@ -58,9 +52,6 @@ export default function AuthTextInput({
       )}
       rules={rules}
       name={name}
-      defaultValue={defaultValue}
     />
   );
 }
-
-const styles = StyleSheet.create({});

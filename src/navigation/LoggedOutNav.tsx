@@ -3,16 +3,9 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import CreateAccount from "../screens/CreateAccount";
 import Login from "../screens/Login";
-import { colors } from "../styles";
 import { Ionicons } from "@expo/vector-icons";
-export type LoggedOutNavStackParamList = {
-  Welcome: undefined;
-  Login: {
-    username: string;
-    password: string;
-  };
-  CreateAccount: undefined;
-};
+import { colors } from "../styles";
+
 const Stack = createStackNavigator();
 
 export default function LoggedOutNav() {
@@ -21,7 +14,7 @@ export default function LoggedOutNav() {
       screenOptions={{
         headerTitle: "",
         headerTransparent: true,
-        headerTintColor: `${colors.yellow}`,
+        headerTintColor: `${colors.blue}`,
         headerBackTitleVisible: false,
       }}
     >

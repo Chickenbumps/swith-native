@@ -1624,6 +1624,15 @@
     "sudo-prompt" "^9.0.0"
     "wcwidth" "^1.0.1"
 
+"@react-navigation/bottom-tabs@^6.0.3":
+  "integrity" "sha512-F7sR3oPet5av2boszWIo04P1Vc/ZUb9HiWZJWGFj/prZAW8nuHsQl+J/0xN2PTI1BqMhga/n6ZUPf4EEUaS9/A=="
+  "resolved" "https://registry.npmjs.org/@react-navigation/bottom-tabs/-/bottom-tabs-6.0.3.tgz"
+  "version" "6.0.3"
+  dependencies:
+    "@react-navigation/elements" "^1.0.3"
+    "color" "^3.1.3"
+    "warn-once" "^0.1.0"
+
 "@react-navigation/core@^6.0.1":
   "integrity" "sha512-mVdvBDYdz8uzLQHokmVdX/xC4rS7NIkD1FN/yaGdovVzYApAhM+UGd3w1zskjyCSyXaVHHOwV59ZGVew+84xfQ=="
   "resolved" "https://registry.npmjs.org/@react-navigation/core/-/core-6.0.1.tgz"
@@ -1635,10 +1644,10 @@
     "query-string" "^7.0.0"
     "react-is" "^16.13.0"
 
-"@react-navigation/elements@^1.0.2":
-  "integrity" "sha512-V4rSDYgK1m14CpHlqpTi83auub1mVaItOb8kr+7rzhC7BUYO5wbMh/T88qZOrxMNMeZfveb6MI3zTw+u31eAUw=="
-  "resolved" "https://registry.npmjs.org/@react-navigation/elements/-/elements-1.0.2.tgz"
-  "version" "1.0.2"
+"@react-navigation/elements@^1.0.2", "@react-navigation/elements@^1.0.3":
+  "integrity" "sha512-hDf55C65kD7X09r4p9Z74xuCLe2damL+i7v0YLM3AFD0TEkDiGwRczhsoZFm8gg/TIJpLqa+CjqX2gvrdQyQ+A=="
+  "resolved" "https://registry.npmjs.org/@react-navigation/elements/-/elements-1.0.3.tgz"
+  "version" "1.0.3"
 
 "@react-navigation/native@^6.0.2":
   "integrity" "sha512-HDqEwgvQ4Cu16vz8jQ55lfyNK9CGbECI1wM9cPOcUa+gkOQEDZ/95VFfFjGGflXZs3ybPvGXlMC4ZAyh1CcO6w=="
