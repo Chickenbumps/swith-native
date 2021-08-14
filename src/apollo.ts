@@ -27,11 +27,10 @@ const httpLink = createHttpLink({
   uri: "http://localhost:4000/graphql",
 });
 
-const authLink = setContext((_, { headers }) => {
-  console.log(headers);
+const authLink = setContext((request, prevContext) => {
   return {
     headers: {
-      ...headers,
+      ...prevContext.headers,
       token: tokenVar(),
     },
   };

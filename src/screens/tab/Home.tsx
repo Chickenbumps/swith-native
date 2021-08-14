@@ -1,19 +1,31 @@
 import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
-import { KeyboardAvoidingView, useWindowDimensions } from "react-native";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect } from "react";
+import { useState } from "react";
 import styled from "styled-components/native";
-import { logUserOut } from "../../apollo";
-import AuthLayout from "../../components/auth/AuthLayout";
-import DismissKeyboard from "../../components/DismissKeyboard";
 import ExpBar from "../../components/ExpBar";
 import HomeLayout from "../../components/HomeLayout";
-import ScreenLayout from "../../components/ScreenLayout";
 import WeekEntry from "../../components/WeekEntry";
+import useUser from "../../hooks/useUser";
 import { screenXY, useSelectTheme } from "../../styles";
 
 export default function Home() {
   const theme = useSelectTheme();
+  const [currentDate, setCurrentDate] = useState("");
+  const { data, refetch } = useUser();
+
+  const getCurrentDate = () => {
+    let week = new Array("일", "월", "화", "수", "목", "금", "토");
+    let date = new Date().getDate();
+    let month = new Date().getMonth() + 1;
+    let year = new Date().getFullYear();
+    let today = new Date().getDay();
+    let dayLabel = week[today];
+    setCurrentDate(year + "." + month + "." + date + "(" + dayLabel + ")");
+  };
+  useEffect(() => {
+    getCurrentDate();
+    refetch();
+  }, [currentDate]);
   return (
     <HomeLayout>
       <Logo
@@ -21,11 +33,14 @@ export default function Home() {
         resizeMode="contain"
       />
       <RankText>현재 랭크:</RankText>
-      <Rank>Bronze</Rank>
-      <ExpBar step={5} steps={10} />
+      <Rank>{data?.isMe?.rank}</Rank>
+      <ExpBar
+        step={data?.isMe?.exp ? data.isMe.exp : 0}
+        steps={data?.isMe?.maxExp ? data.isMe.maxExp : 10}
+      />
       <TimeContainer>
-        <DateText>CurrentDate</DateText>
-        <TimeText>00:00:00</TimeText>
+        <DateText>{currentDate}</DateText>
+        <TimeText>{data?.isMe?.todayTime}</TimeText>
       </TimeContainer>
       <GoalText
         placeholder="   오늘 다짐 한마디 적어볼까요:)"

@@ -44,7 +44,7 @@ export default function Login({ navigation, route }: LoginScreenProps) {
     const {
       login: { ok, token, error },
     } = data;
-    console.log(data);
+    console.log("onComplete", data);
     if (!ok) {
       setError("loginResult", {
         message: "가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.",
