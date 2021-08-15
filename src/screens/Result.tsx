@@ -14,8 +14,9 @@ import styled from "styled-components/native";
 import { screenXY, useSelectTheme } from "../styles";
 import ConfirmBtn from "../components/ConfirmBtn";
 import useUser from "../hooks/useUser";
-import { isMe, isMe_isMe } from "../__generated__/isMe";
+
 import { useEffect } from "react";
+import { Rank } from "../components/Rank";
 
 export default function Result({ route, navigation }: any) {
   const theme = useSelectTheme();
@@ -23,11 +24,6 @@ export default function Result({ route, navigation }: any) {
   const [goals, setGoals] = useState("");
 
   const { data, refetch } = useUser();
-  const leftExp = data!.isMe!.maxExp - data!.isMe!.exp;
-
-  useEffect(() => {
-    refetch();
-  }, []);
 
   return (
     <HomeLayout>
@@ -36,7 +32,10 @@ export default function Result({ route, navigation }: any) {
         <BaseText>분 도전 성공!</BaseText>
       </CompleteMsgContainer>
       <NextRankText>
-        다음 랭크까지 {leftExp}
+        다음 랭크까지{" "}
+        {data?.isMe.maxExp && data?.isMe?.exp
+          ? data.isMe.maxExp - data.isMe.exp
+          : 0}
         시간 남았어요. 힘내요!
       </NextRankText>
       <ExpBar
@@ -44,7 +43,9 @@ export default function Result({ route, navigation }: any) {
         steps={data?.isMe?.maxExp ? data.isMe.maxExp : 10}
       />
       <RankText>나의 랭크:</RankText>
-      <Rank>{data?.isMe?.rank}</Rank>
+      <Rank rank={data?.isMe ? data.isMe.rank : "Bronze"}>
+        {data?.isMe?.rank}
+      </Rank>
       {/* <Text style={[styles.text, { paddingTop: 40 }]}>이번주 성취:</Text> */}
       <PerformanceContainer>
         <View style={{ alignItems: "center" }}>
@@ -73,7 +74,7 @@ export default function Result({ route, navigation }: any) {
         <WeekEntry day={"수"} hours={2.5} nums={3} />
         <WeekEntry day={"목"} hours={3.5} nums={4} />
         <WeekEntry day={"금"} hours={4} nums={4} />
-        <WeekEntry day={"토"} hours={2} nums={2} />
+        <WeekEntry day={"토"} hours={3} nums={2} />
       </LastWeekContainer>
       {/* </View> */}
       <CommentContainer>
@@ -109,12 +110,6 @@ const NextRankText = styled(BaseText)`
 
 const RankText = styled(BaseText)`
   padding-top: 20px;
-  font-size: 16px;
-`;
-
-const Rank = styled(BaseText)`
-  padding-top: 15px;
-  color: brown;
   font-size: 16px;
 `;
 

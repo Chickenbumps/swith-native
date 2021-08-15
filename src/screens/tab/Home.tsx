@@ -1,31 +1,50 @@
+import { gql, useQuery } from "@apollo/client";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import styled from "styled-components/native";
 import ExpBar from "../../components/ExpBar";
 import HomeLayout from "../../components/HomeLayout";
+import { Rank } from "../../components/Rank";
 import WeekEntry from "../../components/WeekEntry";
 import useUser from "../../hooks/useUser";
 import { screenXY, useSelectTheme } from "../../styles";
+import moment from "moment";
+// import "moment/locale/en-au";
+import { seeTimes, seeTimesVariables } from "../../__generated__/seeTimes";
+
+const SEE_TIMES_QUERY = gql`
+  query seeTimes($to: String!, $from: String!) {
+    seeTimes(to: $to, from: $from) {
+      id
+      timeValue
+      dayName
+      updatedAt
+    }
+  }
+`;
 
 export default function Home() {
   const theme = useSelectTheme();
-  const [currentDate, setCurrentDate] = useState("");
-  const { data, refetch } = useUser();
+  const { data } = useUser();
 
-  const getCurrentDate = () => {
-    let week = new Array("일", "월", "화", "수", "목", "금", "토");
-    let date = new Date().getDate();
-    let month = new Date().getMonth() + 1;
-    let year = new Date().getFullYear();
-    let today = new Date().getDay();
-    let dayLabel = week[today];
-    setCurrentDate(year + "." + month + "." + date + "(" + dayLabel + ")");
-  };
-  useEffect(() => {
-    getCurrentDate();
-    refetch();
-  }, [currentDate]);
+  const { data: daysData, error } = useQuery<seeTimes, seeTimesVariables>(
+    SEE_TIMES_QUERY,
+    {
+      variables: {
+        to: moment().subtract(7, "days").format("YYYYMMDD"),
+        from: moment().subtract(1, "days").format("YYYYMMDD"),
+      },
+    }
+  );
+
+  const test = moment().subtract(7, "days").format("YYYYMMDD");
+
+  console.log(moment());
+  const hour = Math.floor(data?.isMe?.todayTime ? data?.isMe?.todayTime : 0);
+  const minute =
+    ((data?.isMe?.todayTime ? data?.isMe?.todayTime : 0) - hour) * 60;
+
   return (
     <HomeLayout>
       <Logo
@@ -33,19 +52,24 @@ export default function Home() {
         resizeMode="contain"
       />
       <RankText>현재 랭크:</RankText>
-      <Rank>{data?.isMe?.rank}</Rank>
+      <Rank rank={data?.isMe ? data.isMe.rank : "Bronze"}>
+        {data?.isMe?.rank}
+      </Rank>
       <ExpBar
         step={data?.isMe?.exp ? data.isMe.exp : 0}
         steps={data?.isMe?.maxExp ? data.isMe.maxExp : 10}
       />
       <TimeContainer>
-        <DateText>{currentDate}</DateText>
-        <TimeText>{data?.isMe?.todayTime}</TimeText>
+        <DateText>{moment().format("YYYY.MM.D(dddd)")}</DateText>
+        <TimeText>
+          {moment(`${hour}:${minute}`, "HH:mm:ss").format("HH:mm:ss")}
+        </TimeText>
       </TimeContainer>
       <GoalText
         placeholder="   오늘 다짐 한마디 적어볼까요:)"
         placeholderTextColor={theme.bgColor}
       />
+
       <ObserverContainer>
         <ObserverText>감시자:</ObserverText>
         <Observer>댕댕이</Observer>
@@ -90,11 +114,6 @@ const RankText = styled.Text`
   font-size: 16px;
 `;
 
-const Rank = styled.Text`
-  color: brown;
-  font-weight: bold;
-  font-size: 16px;
-`;
 const TimeContainer = styled.View`
   margin-top: 40px;
   width: ${screenXY.width}px;

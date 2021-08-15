@@ -21,6 +21,7 @@
     "expo-linear-gradient": "~9.2.0",
     "expo-status-bar": "~1.0.4",
     "graphql": "^15.5.1",
+    "moment": "^2.29.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-hook-form": "^7.12.2",
@@ -28,6 +29,7 @@
     "react-native-gesture-handler": "^1.10.3",
     "react-native-reanimated": "^2.2.0",
     "react-native-web": "~0.13.12",
+    "save": "^2.4.0",
     "styled-components": "^5.3.0",
     "styled-components-react-native": "^1.0.0"
   },

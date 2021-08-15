@@ -1,4 +1,5 @@
 import { gql, useQuery, useReactiveVar } from "@apollo/client";
+import { useEffect } from "react";
 
 import { isLoggedInVar } from "../apollo";
 import { isMe } from "../__generated__/isMe";
@@ -14,16 +15,15 @@ const IS_ME_QUERY = gql`
       exp
       maxExp
       todayTime
-      sunday
-      monday
-      tuesday
-      wednesday
-      thursday
-      friday
-      saturday
       weekTime
       monthTime
       totalTime
+      time {
+        id
+        timeValue
+        updatedAt
+        dayName
+      }
     }
   }
 `;
@@ -34,6 +34,9 @@ function useUser() {
     skip: !hasToken,
   });
 
+  useEffect(() => {
+    refetch();
+  }, [data]);
   return { data, refetch };
 }
 

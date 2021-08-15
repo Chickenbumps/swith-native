@@ -115,9 +115,9 @@ export default function Plan({ route, navigation }: any) {
         toValue: 0,
         duration: 300,
         useNativeDriver: true,
-      }).start(() => {
-        updateTime({ variables: { time: duration } });
-        updateExp({ variables: { exp: duration } });
+      }).start(async () => {
+        await updateTime({ variables: { time: duration } });
+        await updateExp({ variables: { exp: duration } });
         navigation.replace("Result", { duration: duration });
       });
     });
