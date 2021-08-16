@@ -18,6 +18,9 @@ const IS_ME_QUERY = gql`
       weekTime
       monthTime
       totalTime
+      totalNumberOfTime
+      timePerNumber
+      numberPerTime
       time {
         id
         timeValue

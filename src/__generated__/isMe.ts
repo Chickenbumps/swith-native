@@ -11,7 +11,7 @@ export interface isMe_isMe_time {
   __typename: "Time";
   id: number;
   timeValue: number;
-  updatedAt: any;
+  updatedAt: string;
   dayName: string;
 }
 
@@ -28,6 +28,9 @@ export interface isMe_isMe {
   weekTime: number | null;
   monthTime: number | null;
   totalTime: number | null;
+  totalNumberOfTime: number | null;
+  timePerNumber: number | null;
+  numberPerTime: number | null;
   time: isMe_isMe_time[] | null;
 }
 

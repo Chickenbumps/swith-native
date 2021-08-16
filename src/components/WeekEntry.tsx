@@ -33,7 +33,7 @@ const WeekContainer = styled.View`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 7px;
+  margin: 3px;
 `;
 
 const DayText = styled.Text`
@@ -45,13 +45,14 @@ const DayText = styled.Text`
 const HourContainer = styled.View`
   background-color: ${(props) => props.theme.bgColor};
   border-radius: 5px;
-  width: 35px;
-  height: 35px;
+  width: 36px;
+  height: 36px;
   align-items: center;
   justify-content: center;
 `;
 const HourText = styled.Text`
   color: ${(props) => props.theme.txtColor};
+  font-size: 12px;
   font-weight: bold;
 `;
 

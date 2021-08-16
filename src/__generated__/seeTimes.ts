@@ -11,6 +11,7 @@ export interface seeTimes_seeTimes {
   __typename: "Time";
   id: number;
   timeValue: number;
+  timeNumber: number;
   dayName: string;
   updatedAt: string;
 }

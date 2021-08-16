@@ -12,12 +12,14 @@ import { screenXY, useSelectTheme } from "../../styles";
 import moment from "moment";
 // import "moment/locale/en-au";
 import { seeTimes, seeTimesVariables } from "../../__generated__/seeTimes";
+import { ScrollView } from "react-native";
 
 const SEE_TIMES_QUERY = gql`
   query seeTimes($to: String!, $from: String!) {
     seeTimes(to: $to, from: $from) {
       id
       timeValue
+      timeNumber
       dayName
       updatedAt
     }
@@ -26,9 +28,9 @@ const SEE_TIMES_QUERY = gql`
 
 export default function Home() {
   const theme = useSelectTheme();
-  const { data } = useUser();
+  const { data: userData } = useUser();
 
-  const { data: daysData, error } = useQuery<seeTimes, seeTimesVariables>(
+  const { data: weekData } = useQuery<seeTimes, seeTimesVariables>(
     SEE_TIMES_QUERY,
     {
       variables: {
@@ -37,68 +39,76 @@ export default function Home() {
       },
     }
   );
-
+  const weekName = ["일", "월", "화", "수", "목", "금", "토"];
+  console.log(moment().format());
   const test = moment().subtract(7, "days").format("YYYYMMDD");
-
-  console.log(moment());
-  const hour = Math.floor(data?.isMe?.todayTime ? data?.isMe?.todayTime : 0);
+  const hour = Math.floor(
+    userData?.isMe?.todayTime ? userData?.isMe?.todayTime : 0
+  );
   const minute =
-    ((data?.isMe?.todayTime ? data?.isMe?.todayTime : 0) - hour) * 60;
+    ((userData?.isMe?.todayTime ? userData?.isMe?.todayTime : 0) - hour) * 60;
 
   return (
-    <HomeLayout>
-      <Logo
-        source={require("../../../assets/image/logo.png")}
-        resizeMode="contain"
-      />
-      <RankText>현재 랭크:</RankText>
-      <Rank rank={data?.isMe ? data.isMe.rank : "Bronze"}>
-        {data?.isMe?.rank}
-      </Rank>
-      <ExpBar
-        step={data?.isMe?.exp ? data.isMe.exp : 0}
-        steps={data?.isMe?.maxExp ? data.isMe.maxExp : 10}
-      />
-      <TimeContainer>
-        <DateText>{moment().format("YYYY.MM.D(dddd)")}</DateText>
-        <TimeText>
-          {moment(`${hour}:${minute}`, "HH:mm:ss").format("HH:mm:ss")}
-        </TimeText>
-      </TimeContainer>
-      <GoalText
-        placeholder="   오늘 다짐 한마디 적어볼까요:)"
-        placeholderTextColor={theme.bgColor}
-      />
+    <ScrollView style={{ flex: 1, backgroundColor: theme.bgColor }}>
+      <HomeLayout>
+        <Logo
+          source={require("../../../assets/image/logo.png")}
+          resizeMode="contain"
+        />
+        <RankText>현재 랭크:</RankText>
+        <Rank rank={userData?.isMe ? userData.isMe.rank : "Bronze"}>
+          {userData?.isMe?.rank}
+        </Rank>
+        <ExpBar
+          step={userData?.isMe?.exp ? userData.isMe.exp : 0}
+          steps={userData?.isMe?.maxExp ? userData.isMe.maxExp : 10}
+        />
+        <TimeContainer>
+          <DateText>{moment().format("YYYY.MM.D(dddd)")}</DateText>
+          <TimeText>
+            {moment(`${hour}:${minute}`, "HH:mm:ss").format("HH:mm:ss")}
+          </TimeText>
+        </TimeContainer>
+        <GoalText
+          placeholder="   오늘 다짐 한마디 적어볼까요:)"
+          placeholderTextColor={theme.bgColor}
+        />
 
-      <ObserverContainer>
-        <ObserverText>감시자:</ObserverText>
-        <Observer>댕댕이</Observer>
-      </ObserverContainer>
-      <GotoStudyBtn>
-        <LinearGradient
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            width: screenXY.width,
-            height: 70,
-            borderRadius: 13,
-          }}
-          colors={[theme.txtColor, theme.activeColor]}
-        >
-          <GotoStudyText>다음 공부 하러가기</GotoStudyText>
-        </LinearGradient>
-      </GotoStudyBtn>
-      <LastweekContainer>
-        <WeekEntry day={"일"} hours={4.5} nums={9} />
-        <WeekEntry day={"월"} hours={1} nums={4} />
-        <WeekEntry day={"화"} hours={2} nums={6} />
-        <WeekEntry day={"수"} hours={2.5} nums={3} />
-        <WeekEntry day={"목"} hours={3.5} nums={4} />
-        <WeekEntry day={"금"} hours={4} nums={4} />
-        <WeekEntry day={"토"} hours={2} nums={2} />
-      </LastweekContainer>
-    </HomeLayout>
+        <ObserverContainer>
+          <ObserverText>감시자:</ObserverText>
+          <Observer>댕댕이</Observer>
+        </ObserverContainer>
+        <GotoStudyBtn>
+          <LinearGradient
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              width: screenXY.width,
+              height: 70,
+              borderRadius: 13,
+            }}
+            colors={[theme.txtColor, theme.activeColor]}
+          >
+            <GotoStudyText>다음 공부 하러가기</GotoStudyText>
+          </LinearGradient>
+        </GotoStudyBtn>
+        <LastweekContainer>
+          {weekName.map((value, index) => (
+            <WeekEntry
+              key={index}
+              day={value}
+              hours={
+                weekData?.seeTimes ? weekData?.seeTimes[index]?.timeValue : 0
+              }
+              nums={
+                weekData?.seeTimes ? weekData?.seeTimes[index]?.timeNumber : 0
+              }
+            />
+          ))}
+        </LastweekContainer>
+      </HomeLayout>
+    </ScrollView>
   );
 }
 

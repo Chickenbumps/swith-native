@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { View } from "react-native";
 
 import WeekEntry from "../components/WeekEntry";
 import ExpBar from "../components/ExpBar";
@@ -14,17 +8,49 @@ import styled from "styled-components/native";
 import { screenXY, useSelectTheme } from "../styles";
 import ConfirmBtn from "../components/ConfirmBtn";
 import useUser from "../hooks/useUser";
-
-import { useEffect } from "react";
 import { Rank } from "../components/Rank";
+import { gql, useQuery } from "@apollo/client";
+import { seeTimes, seeTimesVariables } from "../__generated__/seeTimes";
+import moment from "moment";
+import { useSpring, animated, config } from "@react-spring/native";
+
+const SEE_TIMES_QUERY = gql`
+  query seeTimes($to: String!, $from: String!) {
+    seeTimes(to: $to, from: $from) {
+      id
+      timeValue
+      timeNumber
+      dayName
+      updatedAt
+    }
+  }
+`;
 
 export default function Result({ route, navigation }: any) {
   const theme = useSelectTheme();
-  const dayIndex = new Date().getDay();
   const [goals, setGoals] = useState("");
+  const { data: userData } = useUser();
+  const weekName = ["일", "월", "화", "수", "목", "금", "토"];
 
-  const { data, refetch } = useUser();
-
+  const { data: weekData, error } = useQuery<seeTimes, seeTimesVariables>(
+    SEE_TIMES_QUERY,
+    {
+      variables: {
+        to: moment().subtract(7, "days").format("YYYYMMDD"),
+        from: moment().subtract(1, "days").format("YYYYMMDD"),
+      },
+    }
+  );
+  const [flip, set] = useState(false);
+  const { number } = useSpring({
+    reset: true,
+    reverse: flip,
+    from: { number: 0 },
+    number: 1,
+    delay: 200,
+    config: config.molasses,
+    onRest: () => set(!flip),
+  });
   return (
     <HomeLayout>
       <CompleteMsgContainer>
@@ -33,32 +59,40 @@ export default function Result({ route, navigation }: any) {
       </CompleteMsgContainer>
       <NextRankText>
         다음 랭크까지{" "}
-        {data?.isMe.maxExp && data?.isMe?.exp
-          ? data.isMe.maxExp - data.isMe.exp
+        {userData?.isMe.maxExp && userData?.isMe?.exp
+          ? userData.isMe.maxExp - userData.isMe.exp
           : 0}
         시간 남았어요. 힘내요!
       </NextRankText>
       <ExpBar
-        step={data?.isMe?.exp ? data.isMe.exp : 0}
-        steps={data?.isMe?.maxExp ? data.isMe.maxExp : 10}
+        step={userData?.isMe?.exp ? userData.isMe.exp : 0}
+        steps={userData?.isMe?.maxExp ? userData.isMe.maxExp : 10}
       />
       <RankText>나의 랭크:</RankText>
-      <Rank rank={data?.isMe ? data.isMe.rank : "Bronze"}>
-        {data?.isMe?.rank}
+      <Rank rank={userData?.isMe ? userData.isMe.rank : "Bronze"}>
+        {userData?.isMe?.rank}
       </Rank>
+
+      {/* <GoldMedal /> */}
+
+      {/* <animated.Text>{number.to((n) => n.toFixed(2))}</animated.Text> */}
       {/* <Text style={[styles.text, { paddingTop: 40 }]}>이번주 성취:</Text> */}
       <PerformanceContainer>
         <View style={{ alignItems: "center" }}>
-          <BaseText>평균시간</BaseText>
-          <BaseText>36분</BaseText>
+          <BaseText>시간/횟수</BaseText>
+          <BaseText>
+            {userData?.isMe ? userData.isMe.timePerNumber : 0}
+          </BaseText>
         </View>
         <View style={{ alignItems: "center" }}>
-          <BaseText>성공횟수</BaseText>
-          <BaseText>36회</BaseText>
+          <BaseText>횟수/시간</BaseText>
+          <BaseText>
+            {userData?.isMe ? userData.isMe.numberPerTime : 0}
+          </BaseText>
         </View>
         <View style={{ alignItems: "center" }}>
-          <BaseText>전체시간</BaseText>
-          <BaseText>36분</BaseText>
+          <BaseText>총 공부시간</BaseText>
+          <BaseText>{userData?.isMe ? userData.isMe.totalTime : 0}</BaseText>
         </View>
       </PerformanceContainer>
 
@@ -68,13 +102,18 @@ export default function Result({ route, navigation }: any) {
         </Text> */}
 
       <LastWeekContainer>
-        <WeekEntry day={"일"} hours={4.5} nums={9} />
-        <WeekEntry day={"월"} hours={1} nums={4} />
-        <WeekEntry day={"화"} hours={2} nums={6} />
-        <WeekEntry day={"수"} hours={2.5} nums={3} />
-        <WeekEntry day={"목"} hours={3.5} nums={4} />
-        <WeekEntry day={"금"} hours={4} nums={4} />
-        <WeekEntry day={"토"} hours={3} nums={2} />
+        {weekName.map((value, index) => (
+          <WeekEntry
+            key={index}
+            day={value}
+            hours={
+              weekData?.seeTimes ? weekData?.seeTimes[index]?.timeValue : 0
+            }
+            nums={
+              weekData?.seeTimes ? weekData?.seeTimes[index]?.timeNumber : 0
+            }
+          />
+        ))}
       </LastWeekContainer>
       {/* </View> */}
       <CommentContainer>
@@ -95,7 +134,7 @@ const CompleteMsgContainer = styled.View`
 `;
 const BaseText = styled.Text`
   font-weight: bold;
-  font-size: 25px;
+  font-size: 20px;
   color: ${(props) => props.theme.txtColor};
 `;
 const DurationNumberText = styled(BaseText)`
