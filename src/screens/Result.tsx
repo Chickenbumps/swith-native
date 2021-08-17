@@ -13,6 +13,7 @@ import { gql, useQuery } from "@apollo/client";
 import { seeTimes, seeTimesVariables } from "../__generated__/seeTimes";
 import moment from "moment";
 import { useSpring, animated, config } from "@react-spring/native";
+import Medal from "../components/Medal";
 
 const SEE_TIMES_QUERY = gql`
   query seeTimes($to: String!, $from: String!) {
@@ -73,7 +74,16 @@ export default function Result({ route, navigation }: any) {
         {userData?.isMe?.rank}
       </Rank>
 
-      {/* <GoldMedal /> */}
+      <Medal
+        maxExp={
+          userData?.isMe && userData.isMe.maxExp !== null
+            ? userData.isMe.maxExp
+            : 0
+        }
+        exp={
+          userData?.isMe && userData.isMe.exp !== null ? userData.isMe.exp : 0
+        }
+      />
 
       {/* <animated.Text>{number.to((n) => n.toFixed(2))}</animated.Text> */}
       {/* <Text style={[styles.text, { paddingTop: 40 }]}>이번주 성취:</Text> */}

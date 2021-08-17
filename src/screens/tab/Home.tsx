@@ -13,6 +13,7 @@ import moment from "moment";
 // import "moment/locale/en-au";
 import { seeTimes, seeTimesVariables } from "../../__generated__/seeTimes";
 import { ScrollView } from "react-native";
+import Medal from "../../components/Medal";
 
 const SEE_TIMES_QUERY = gql`
   query seeTimes($to: String!, $from: String!) {
@@ -59,6 +60,16 @@ export default function Home() {
         <Rank rank={userData?.isMe ? userData.isMe.rank : "Bronze"}>
           {userData?.isMe?.rank}
         </Rank>
+        <Medal
+          maxExp={
+            userData?.isMe && userData.isMe.maxExp !== null
+              ? userData.isMe.maxExp
+              : 0
+          }
+          exp={
+            userData?.isMe && userData.isMe.exp !== null ? userData.isMe.exp : 0
+          }
+        />
         <ExpBar
           step={userData?.isMe?.exp ? userData.isMe.exp : 0}
           steps={userData?.isMe?.maxExp ? userData.isMe.maxExp : 10}
