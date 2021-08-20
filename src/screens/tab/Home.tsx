@@ -12,7 +12,7 @@ import { screenXY, useSelectTheme } from "../../styles";
 import moment from "moment";
 // import "moment/locale/en-au";
 import { seeTimes, seeTimesVariables } from "../../__generated__/seeTimes";
-import { ScrollView } from "react-native";
+import { ScrollView, TouchableOpacity } from "react-native";
 import Medal from "../../components/Medal";
 
 const SEE_TIMES_QUERY = gql`
@@ -40,8 +40,10 @@ export default function Home() {
       },
     }
   );
+  const dtime = moment().format("YYYY-MM-DD");
+  // console.log(moment().format("YYYY-MM-DD"));
+
   const weekName = ["일", "월", "화", "수", "목", "금", "토"];
-  console.log(moment().format());
   const test = moment().subtract(7, "days").format("YYYYMMDD");
   const hour = Math.floor(
     userData?.isMe?.todayTime ? userData?.isMe?.todayTime : 0
@@ -52,10 +54,6 @@ export default function Home() {
   return (
     <ScrollView style={{ flex: 1, backgroundColor: theme.bgColor }}>
       <HomeLayout>
-        <Logo
-          source={require("../../../assets/image/logo.png")}
-          resizeMode="contain"
-        />
         <RankText>현재 랭크:</RankText>
         <Rank rank={userData?.isMe ? userData.isMe.rank : "Bronze"}>
           {userData?.isMe?.rank}
@@ -87,7 +85,9 @@ export default function Home() {
 
         <ObserverContainer>
           <ObserverText>감시자:</ObserverText>
-          <Observer>댕댕이</Observer>
+          <TouchableOpacity>
+            <Observer>댕댕이</Observer>
+          </TouchableOpacity>
         </ObserverContainer>
         <GotoStudyBtn>
           <LinearGradient

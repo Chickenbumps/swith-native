@@ -39,7 +39,7 @@ function useUser() {
 
   useEffect(() => {
     refetch();
-    return;
+    return () => {};
   }, [data]);
   return { data, refetch };
 }

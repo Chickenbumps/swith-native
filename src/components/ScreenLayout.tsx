@@ -10,7 +10,6 @@ export default function ScreenLayout({ loading, children }: any) {
         backgroundColor: theme.bgColor,
         flex: 1,
         alignItems: "center",
-        justifyContent: "center",
       }}
     >
       {loading ? <ActivityIndicator color={theme.txtColor} /> : children}

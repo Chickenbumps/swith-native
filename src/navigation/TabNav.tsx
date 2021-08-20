@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../screens/tab/Home";
 import Analytics from "../screens/tab/Analytics";
@@ -16,7 +16,6 @@ export default function TabNav() {
   return (
     <Tab.Navigator
       screenOptions={{
-        headerShown: false,
         tabBarActiveTintColor: theme.txtColor,
       }}
     >
@@ -31,12 +30,22 @@ export default function TabNav() {
               color={theme.txtColor}
             />
           ),
+          headerTitle: () => (
+            <Image
+              source={require("../../assets/image/logo.png")}
+              style={{ width: 100, height: 30 }}
+            />
+          ),
+          headerStyle: {
+            shadowColor: "transparent",
+          },
         }}
       />
       <Tab.Screen
         name="Analytics"
         component={Analytics}
         options={{
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Ionicons
               name={focused ? "stats-chart" : "stats-chart-outline"}
@@ -50,6 +59,7 @@ export default function TabNav() {
         name="Plan"
         component={Plan}
         options={{
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Ionicons
               name={focused ? "stopwatch" : "stopwatch-outline"}
@@ -63,6 +73,7 @@ export default function TabNav() {
         name="Group"
         component={Group}
         options={{
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Ionicons
               name={focused ? "people" : "people-outline"}
@@ -76,6 +87,7 @@ export default function TabNav() {
         name="Profile"
         component={Profile}
         options={{
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Ionicons
               name={focused ? "person" : "person-outline"}

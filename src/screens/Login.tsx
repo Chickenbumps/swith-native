@@ -4,7 +4,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import React, { useRef } from "react";
 
 import { useForm } from "react-hook-form";
-import { TextInput } from "react-native";
+import { Alert, TextInput } from "react-native";
 import styled from "styled-components/native";
 import { logUserIn } from "../apollo";
 import AuthButton from "../components/auth/AuthButton";
@@ -29,7 +29,7 @@ type LoginScreenProps = StackScreenProps<LoggedOutNavStackParamList, "Login">;
 
 export default function Login({ navigation, route }: LoginScreenProps) {
   const theme = useSelectTheme();
-  const { handleSubmit, setError, formState, control } = useForm({
+  const { handleSubmit, setError, formState, control, setValue } = useForm({
     mode: "onChange",
     defaultValues: {
       username: route?.params?.username,
@@ -46,9 +46,7 @@ export default function Login({ navigation, route }: LoginScreenProps) {
     } = data;
 
     if (!ok) {
-      setError("loginResult", {
-        message: "가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.",
-      });
+      Alert.alert(`${error}`);
     } else {
       logUserIn(token);
     }

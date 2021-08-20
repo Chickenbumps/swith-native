@@ -25,6 +25,8 @@ import {
   updateTimeVariables,
 } from "../../__generated__/updateTime";
 import { updateExp, updateExpVariables } from "../../__generated__/updateExp";
+import { StackScreenProps } from "@react-navigation/stack";
+import { LoggedInNavStackParamList } from "../../navigation/Router";
 
 const { width, height } = Dimensions.get("screen");
 const minTimers = [...Array(24).keys()].map((i) => i);
@@ -49,8 +51,8 @@ const UPDATE_EXP_MUTATION = gql`
     }
   }
 `;
-
-export default function Plan({ route, navigation }: any) {
+type PlanScreenProps = StackScreenProps<LoggedInNavStackParamList, "Plan">;
+export default function Plan({ route, navigation }: PlanScreenProps) {
   const theme = useSelectTheme();
   const scrollX = useRef(new Animated.Value(0)).current;
   const inputRef = useRef<TextInput>(null);
@@ -74,7 +76,7 @@ export default function Plan({ route, navigation }: any) {
       });
     });
 
-    // route.params?.faceDetected ? animation() : null;
+    route.params?.faceDetected ? animation() : null;
     return () => {
       textInputAnimation.removeListener(listener);
       textInputAnimation.removeAllListeners();
@@ -106,7 +108,7 @@ export default function Plan({ route, navigation }: any) {
           useNativeDriver: true,
         }),
       ]),
-      Animated.delay(300),
+      // Animated.delay(300),
     ]).start(() => {
       Vibration.cancel();
       Vibration.vibrate();
@@ -170,8 +172,7 @@ export default function Plan({ route, navigation }: any) {
       >
         <TouchableOpacity
           onPress={() => {
-            animation();
-            // navigation.navigate("Camera");
+            navigation.navigate("CameraScreen");
           }}
         >
           <StartButton />

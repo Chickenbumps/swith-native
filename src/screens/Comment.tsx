@@ -1,10 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-export default function Camera() {
+export default function Comment() {
   return (
     <View>
-      <Text>Camera</Text>
+      <Text>Comment</Text>
     </View>
   );
 }
