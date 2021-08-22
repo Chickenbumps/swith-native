@@ -26,7 +26,7 @@ export default function LoggedInNav() {
       <Stack.Screen
         name="Result"
         component={Result}
-        options={{ headerShown: false }}
+        options={{ headerShown: false, gestureEnabled: false }}
       />
       <Stack.Screen
         name="CameraScreen"

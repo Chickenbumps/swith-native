@@ -26,7 +26,10 @@ export default function CameraScreen({ route, navigation }: CameraScreenProps) {
     setFaces(faces);
     if (faces.length) {
       setFaces([]);
-      navigation.navigate("Plan", { faceDetected: true });
+      navigation.navigate("Plan", {
+        faceDetected: true,
+        second: route.params.second,
+      });
     }
   };
 

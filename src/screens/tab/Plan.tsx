@@ -1,10 +1,4 @@
-import React, {
-  useRef,
-  useState,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-} from "react";
+import React, { useRef, useState, useCallback, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -16,7 +10,6 @@ import {
   Animated,
   TouchableOpacity,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import styled from "styled-components/native";
 import { useSelectTheme } from "../../styles";
 import { gql, useMutation } from "@apollo/client";
@@ -51,15 +44,20 @@ const UPDATE_EXP_MUTATION = gql`
     }
   }
 `;
+
 type PlanScreenProps = StackScreenProps<LoggedInNavStackParamList, "Plan">;
 export default function Plan({ route, navigation }: PlanScreenProps) {
   const theme = useSelectTheme();
   const scrollX = useRef(new Animated.Value(0)).current;
+  const scrollY = useRef(new Animated.Value(0)).current;
   const inputRef = useRef<TextInput>(null);
   const timerAnimation = useRef(new Animated.Value(height)).current;
   const buttonAnimation = useRef(new Animated.Value(0)).current;
   const textInputAnimation = useRef(new Animated.Value(timers[0])).current;
   const [duration, setDuration] = useState(timers[0]);
+  const [isRunning, setIsRunning] = useState(false);
+
+  const [isStop, setIsStop] = useState(false);
 
   const [updateTime, { data, loading }] = useMutation<
     updateTime,
@@ -69,61 +67,136 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
   const [updateExp] = useMutation<updateExp, updateExpVariables>(
     UPDATE_EXP_MUTATION
   );
+
   useEffect(() => {
     const listener = textInputAnimation.addListener(({ value }) => {
       inputRef?.current?.setNativeProps({
         text: Math.ceil(value).toString(),
       });
     });
-
-    route.params?.faceDetected ? animation() : null;
+    if (route.params?.faceDetected) {
+      setIsRunning(true);
+      if (!route.params?.second) {
+        setTimeout(() => {
+          setIsStop(true);
+          setIsRunning(false);
+          console.log("isRunning", isRunning);
+          console.log("stopstop");
+          navigation.navigate("CameraScreen", { second: true });
+          if (route.params?.second) {
+            setIsRunning(true);
+          }
+        }, 3000);
+      }
+    } else {
+      null;
+    }
     return () => {
       textInputAnimation.removeListener(listener);
       textInputAnimation.removeAllListeners();
     };
-  }, [route.params?.faceDetected]);
-
-  const animation = useCallback(() => {
+  }, [route.params?.faceDetected, route.params?.second]);
+  useEffect(() => {
     textInputAnimation.setValue(duration);
-    Animated.sequence([
-      Animated.timing(buttonAnimation, {
-        toValue: 1,
-        duration: 300,
+  }, [duration]);
+
+  const anime = Animated.sequence([
+    Animated.timing(buttonAnimation, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }),
+    Animated.timing(timerAnimation, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }),
+    Animated.parallel([
+      Animated.timing(textInputAnimation, {
+        toValue: 0,
+        duration: duration * 1000,
         useNativeDriver: true,
       }),
       Animated.timing(timerAnimation, {
-        toValue: 1,
-        duration: 300,
+        toValue: height,
+        duration: duration * 1000,
         useNativeDriver: true,
       }),
+    ]),
+  ]);
+
+  const animation = useCallback(() => {
+    console.log(parseFloat(JSON.stringify(textInputAnimation)));
+    textInputAnimation.setValue(parseFloat(JSON.stringify(textInputAnimation)));
+    console.log(isStop);
+    if (isRunning && !isStop) {
+      console.log("11111");
+      anime.start(() => {
+        Vibration.cancel();
+        Vibration.vibrate();
+        console.log("t2:", textInputAnimation);
+
+        if (parseFloat(JSON.stringify(textInputAnimation)) === 0) {
+          console.log("In");
+          textInputAnimation.setValue(duration);
+          Animated.timing(buttonAnimation, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: true,
+          }).start(async () => {
+            // await updateTime({ variables: { time: duration } });
+            // await updateExp({ variables: { exp: duration } });
+            navigation.replace("Result", { duration: duration });
+          });
+        }
+      });
+    } else if (isRunning && isStop) {
+      console.log("22222");
       Animated.parallel([
         Animated.timing(textInputAnimation, {
           toValue: 0,
-          duration: duration * 1000,
+          duration: parseFloat(JSON.stringify(textInputAnimation)) * 1000,
           useNativeDriver: true,
         }),
         Animated.timing(timerAnimation, {
           toValue: height,
-          duration: duration * 1000,
+          duration: parseFloat(JSON.stringify(textInputAnimation)) * 1000,
           useNativeDriver: true,
         }),
-      ]),
-      // Animated.delay(300),
-    ]).start(() => {
-      Vibration.cancel();
-      Vibration.vibrate();
-      textInputAnimation.setValue(duration);
-      Animated.timing(buttonAnimation, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }).start(async () => {
-        await updateTime({ variables: { time: duration } });
-        await updateExp({ variables: { exp: duration } });
-        navigation.replace("Result", { duration: duration });
+      ]).start(() => {
+        Vibration.cancel();
+        Vibration.vibrate();
+        console.log("t2:", textInputAnimation);
+
+        if (parseFloat(JSON.stringify(textInputAnimation)) === 0) {
+          console.log("In");
+          textInputAnimation.setValue(duration);
+          Animated.timing(buttonAnimation, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: true,
+          }).start(async () => {
+            // await updateTime({ variables: { time: duration } });
+            // await updateExp({ variables: { exp: duration } });
+            navigation.replace("Result", { duration: duration });
+          });
+        }
       });
-    });
-  }, [duration]);
+    } else if (!isRunning) {
+      console.log("33333");
+      textInputAnimation.stopAnimation((e) => console.log("text", e));
+      timerAnimation.stopAnimation((e) => console.log("timer", e));
+    }
+  }, [duration, isRunning]);
+
+  useEffect(() => {
+    console.log("t1:", textInputAnimation);
+    animation();
+  }, [isRunning, duration]);
+
+  const onStart = () => {
+    navigation.navigate("CameraScreen", { second: false });
+  };
 
   const opacity = buttonAnimation.interpolate({
     inputRange: [0, 1],
@@ -141,6 +214,21 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
   return (
     <Container>
       <StatusBar />
+      <TouchableOpacity
+        onPress={() => {
+          setIsRunning(!isRunning);
+          setIsStop(true);
+        }}
+        style={{ justifyContent: "center", top: 10 }}
+      >
+        <Text
+          style={{
+            fontSize: 50,
+          }}
+        >
+          pause
+        </Text>
+      </TouchableOpacity>
       <Animated.View
         style={[
           StyleSheet.absoluteFillObject,
@@ -170,11 +258,7 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
           },
         ]}
       >
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("CameraScreen");
-          }}
-        >
+        <TouchableOpacity onPress={() => onStart()}>
           <StartButton />
         </TouchableOpacity>
       </Animated.View>
@@ -219,6 +303,7 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
           onMomentumScrollEnd={(e) => {
             const index = Math.round(e.nativeEvent.contentOffset.x / ITEM_SIZE);
             setDuration(timers[index]);
+            textInputAnimation.setValue(duration);
           }}
           contentContainerStyle={{ paddingHorizontal: ITEM_SPACING }}
           snapToInterval={ITEM_SIZE}

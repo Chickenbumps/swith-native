@@ -17,11 +17,14 @@ export type LoggedInNavStackParamList = {
   Home: undefined;
   Plan: {
     faceDetected: boolean;
+    second?: boolean;
   };
   Result: {
     duration: number;
   };
-  CameraScreen: undefined;
+  CameraScreen: {
+    second?: boolean;
+  };
   Analytics: undefined;
   Group: undefined;
   Profile: undefined;

@@ -19,7 +19,7 @@ const ButtonText = styled.Text`
 
 interface AuthButtonProps {
   onPress: () => any;
-  disabled: boolean;
+  disabled?: boolean;
   text: string;
   loading?: boolean;
 }

@@ -112,7 +112,7 @@ export default function CommentList({ onPress }: any) {
     >
       <Animated.FlatList
         data={data?.seeComments}
-        keyExtractor={(item, index) => "" + item.id + index}
+        keyExtractor={(item, index) => item.id.toString() + index}
         horizontal
         snapToInterval={FULL_SIZE}
         decelerationRate="fast"
@@ -183,7 +183,8 @@ const InnerContainer = styled.View`
 `;
 
 const BottomContainer = styled(InnerContainer)`
-  margin-top: 80px;
+  position: absolute;
+  margin-top: 160px;
 `;
 
 const DayText = styled.Text`
@@ -206,7 +207,9 @@ const Payload = styled.Text`
   padding: 10px;
 `;
 
-const DeleteButton = styled.TouchableOpacity``;
+const DeleteButton = styled.TouchableOpacity`
+  margin-left: 40px;
+`;
 
 const MoreButton = styled.TouchableOpacity``;
 const MoreText = styled.Text`
