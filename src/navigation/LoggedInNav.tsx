@@ -32,6 +32,7 @@ export default function LoggedInNav() {
         name="CameraScreen"
         component={CameraScreen}
         options={{
+          gestureEnabled: false,
           headerTransparent: true,
           headerTitle: "",
           headerLeft: () => (

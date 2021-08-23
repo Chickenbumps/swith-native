@@ -56,9 +56,7 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
   const textInputAnimation = useRef(new Animated.Value(timers[0])).current;
   const [duration, setDuration] = useState(timers[0]);
   const [isRunning, setIsRunning] = useState(false);
-
   const [isStop, setIsStop] = useState(false);
-
   const [updateTime, { data, loading }] = useMutation<
     updateTime,
     updateTimeVariables
@@ -77,6 +75,8 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
     if (route.params?.faceDetected) {
       setIsRunning(true);
       if (!route.params?.second) {
+        const randNum = Math.floor(Math.random() * duration) * 60000 + 5000;
+        console.log(randNum);
         setTimeout(() => {
           setIsStop(true);
           setIsRunning(false);
@@ -86,7 +86,7 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
           if (route.params?.second) {
             setIsRunning(true);
           }
-        }, 3000);
+        }, randNum);
       }
     } else {
       null;
@@ -96,6 +96,7 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
       textInputAnimation.removeAllListeners();
     };
   }, [route.params?.faceDetected, route.params?.second]);
+
   useEffect(() => {
     textInputAnimation.setValue(duration);
   }, [duration]);
@@ -114,12 +115,12 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
     Animated.parallel([
       Animated.timing(textInputAnimation, {
         toValue: 0,
-        duration: duration * 1000,
+        duration: duration * 60000,
         useNativeDriver: true,
       }),
       Animated.timing(timerAnimation, {
         toValue: height,
-        duration: duration * 1000,
+        duration: duration * 60000,
         useNativeDriver: true,
       }),
     ]),
@@ -155,12 +156,12 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
       Animated.parallel([
         Animated.timing(textInputAnimation, {
           toValue: 0,
-          duration: parseFloat(JSON.stringify(textInputAnimation)) * 1000,
+          duration: parseFloat(JSON.stringify(textInputAnimation)) * 60000,
           useNativeDriver: true,
         }),
         Animated.timing(timerAnimation, {
           toValue: height,
-          duration: parseFloat(JSON.stringify(textInputAnimation)) * 1000,
+          duration: parseFloat(JSON.stringify(textInputAnimation)) * 60000,
           useNativeDriver: true,
         }),
       ]).start(() => {

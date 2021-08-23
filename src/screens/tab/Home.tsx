@@ -35,7 +35,7 @@ export default function Home() {
     SEE_TIMES_QUERY,
     {
       variables: {
-        to: moment().subtract(7, "days").format("YYYYMMDD"),
+        to: moment().subtract(8, "days").format("YYYYMMDD"),
         from: moment().subtract(1, "days").format("YYYYMMDD"),
       },
     }
