@@ -4,10 +4,12 @@ import React from "react";
 import { Text, TouchableOpacity } from "react-native";
 import CameraScreen from "../screens/CameraScreen";
 import Comment from "../screens/Comment";
+import CreateGroup from "../screens/CreateGroup";
 import EditProfile from "../screens/EditProfile";
 import Result from "../screens/Result";
 import { useSelectTheme } from "../styles";
 import TabNav from "./TabNav";
+import { Ionicons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
 
@@ -56,6 +58,20 @@ export default function LoggedInNav() {
       />
       <Stack.Screen name="Comment" component={Comment} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen
+        name="CreateGroup"
+        component={CreateGroup}
+        options={{
+          headerBackTitleVisible: false,
+          headerBackImage: () => (
+            <Ionicons
+              name="chevron-back-outline"
+              size={28}
+              color={theme.txtColor}
+            />
+          ),
+        }}
+      />
     </Stack.Navigator>
   );
 }

@@ -19,6 +19,7 @@ import CommentList from "../CommentList";
 import { useNavigation } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { LoggedInNavStackParamList } from "../../navigation/Router";
+import ScreenLayout from "../../components/ScreenLayout";
 
 const CREATE_COMMENT_MUTATION = gql`
   mutation createComment($payload: String!) {
@@ -37,7 +38,7 @@ type ProfileScreenProps = StackScreenProps<
 export default function Profile({ navigation }: ProfileScreenProps) {
   const theme = useSelectTheme();
   const { handleSubmit, register, setValue, getValues, watch } = useForm();
-  const { data: userData, refetch } = useUser();
+  const { data: userData, loading: userLoading } = useUser();
   const [createComment, { loading }] = useMutation<
     createComment,
     createCommentVariables
@@ -65,7 +66,7 @@ export default function Profile({ navigation }: ProfileScreenProps) {
   };
 
   return (
-    <SafeAreaView style={{ backgroundColor: theme.bgColor, flex: 1 }}>
+    <ScreenLayout loading={userLoading}>
       <SettingIcon onPress={() => navigation.navigate("EditProfile")}>
         <Ionicons name="cog-outline" size={24} color={theme.txtColor} />
       </SettingIcon>
@@ -104,7 +105,7 @@ export default function Profile({ navigation }: ProfileScreenProps) {
       </View>
 
       <CommentList onPress={() => navigation.navigate("Comment")} />
-    </SafeAreaView>
+    </ScreenLayout>
   );
 }
 

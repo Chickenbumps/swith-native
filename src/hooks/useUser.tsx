@@ -33,7 +33,7 @@ const IS_ME_QUERY = gql`
 
 function useUser() {
   const hasToken = useReactiveVar(isLoggedInVar);
-  const { error, data, refetch } = useQuery<isMe>(IS_ME_QUERY, {
+  const { error, data, refetch, loading } = useQuery<isMe>(IS_ME_QUERY, {
     skip: !hasToken,
   });
 
@@ -41,7 +41,7 @@ function useUser() {
     refetch();
     return () => {};
   }, [data]);
-  return { data, refetch };
+  return { data, refetch, loading };
 }
 
 export default useUser;

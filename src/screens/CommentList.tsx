@@ -76,7 +76,7 @@ export default function CommentList({ onPress }: any) {
     },
   });
 
-  const refreshFunc = async () => {
+  const onRefresh = async () => {
     setRefreshing(true);
     await refetch();
     setRefreshing(false);
@@ -106,64 +106,70 @@ export default function CommentList({ onPress }: any) {
         <RefreshControl
           tintColor={theme.activeColor}
           refreshing={refreshing}
-          onRefresh={refreshFunc}
+          onRefresh={onRefresh}
         />
       }
     >
-      <Animated.FlatList
-        data={data?.seeComments}
-        keyExtractor={(item, index) => item.id.toString() + index}
-        horizontal
-        snapToInterval={FULL_SIZE}
-        decelerationRate="fast"
-        showsHorizontalScrollIndicator={false}
-        onEndReachedThreshold={0.05}
-        refreshing={refreshing}
-        onRefresh={refreshFunc}
-        //@ts-ignore
-        refreshControl={<RefreshControl tintColor={theme.activeColor} />}
-        onEndReached={() =>
-          fetchMore({
-            variables: {
-              offset: data?.seeComments?.length,
-            },
-          })
-        }
-        renderItem={({ item, index }) => {
-          const year = item.createdAt.slice(0, 4);
-          const month = item.createdAt.slice(5, 7);
-          const day = item.createdAt.slice(8, 10);
-          return loading ? (
-            <ActivityIndicator color={theme.activeColor} />
-          ) : (
-            <Container>
-              <InnerContainer>
-                <UserInfo>
-                  {userData?.isMe.avatar ? (
-                    <Avatar
-                      source={{
-                        uri: userData.isMe.avatar,
-                      }}
-                    />
-                  ) : null}
-                  <Username>{userData?.isMe.username}</Username>
-                </UserInfo>
-                <MoreButton onPress={onPress}>
-                  <MoreText>더보기</MoreText>
-                </MoreButton>
-              </InnerContainer>
-              <Payload>{item.payload}</Payload>
+      {loading ? (
+        <ActivityIndicator color={theme.activeColor} />
+      ) : (
+        <Animated.FlatList
+          data={data?.seeComments}
+          keyExtractor={(item, index) => item.id.toString() + index}
+          horizontal
+          snapToInterval={FULL_SIZE}
+          decelerationRate="fast"
+          showsHorizontalScrollIndicator={false}
+          onEndReachedThreshold={0.05}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          refreshControl={
+            <RefreshControl
+              tintColor={theme.activeColor}
+              refreshing={refreshing}
+            />
+          }
+          onEndReached={() =>
+            fetchMore({
+              variables: {
+                offset: data?.seeComments?.length,
+              },
+            })
+          }
+          renderItem={({ item, index }) => {
+            const year = item.createdAt.slice(0, 4);
+            const month = item.createdAt.slice(5, 7);
+            const day = item.createdAt.slice(8, 10);
+            return (
+              <Container>
+                <InnerContainer>
+                  <UserInfo>
+                    {userData?.isMe.avatar ? (
+                      <Avatar
+                        source={{
+                          uri: userData.isMe.avatar,
+                        }}
+                      />
+                    ) : null}
+                    <Username>{userData?.isMe.username}</Username>
+                  </UserInfo>
+                  <MoreButton onPress={onPress}>
+                    <MoreText>더보기</MoreText>
+                  </MoreButton>
+                </InnerContainer>
+                <Payload>{item.payload}</Payload>
 
-              <BottomContainer>
-                <DayText>{`${year}년${month}월${day}일`}</DayText>
-                <DeleteButton onPress={() => onDeleteComment(item.id)}>
-                  <Ionicons name="trash-outline" size={22} color="tomato" />
-                </DeleteButton>
-              </BottomContainer>
-            </Container>
-          );
-        }}
-      />
+                <BottomContainer>
+                  <DayText>{`${year}년${month}월${day}일`}</DayText>
+                  <DeleteButton onPress={() => onDeleteComment(item.id)}>
+                    <Ionicons name="trash-outline" size={22} color="tomato" />
+                  </DeleteButton>
+                </BottomContainer>
+              </Container>
+            );
+          }}
+        />
+      )}
     </ScrollView>
   );
 }
