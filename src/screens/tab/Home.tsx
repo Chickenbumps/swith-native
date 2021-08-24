@@ -35,14 +35,17 @@ export default function Home() {
     SEE_TIMES_QUERY,
     {
       variables: {
-        to: moment().subtract(8, "days").format("YYYYMMDD"),
-        from: moment().subtract(1, "days").format("YYYYMMDD"),
+        to: moment().subtract(moment().day(), "days").format("YYYYMMDD"),
+        from: moment().format("YYYYMMDD"),
       },
     }
   );
+  // console.log(moment().day());
   const dtime = moment().format("YYYY-MM-DD");
   // console.log(moment().format("YYYY-MM-DD"));
 
+  // 0 1 2 3 4 5 6
+  //
   const weekName = ["일", "월", "화", "수", "목", "금", "토"];
   const test = moment().subtract(7, "days").format("YYYYMMDD");
   const hour = Math.floor(
@@ -78,10 +81,6 @@ export default function Home() {
             {moment(`${hour}:${minute}`, "HH:mm:ss").format("HH:mm:ss")}
           </TimeText>
         </TimeContainer>
-        <GoalText
-          placeholder="   오늘 다짐 한마디 적어볼까요:)"
-          placeholderTextColor={theme.bgColor}
-        />
 
         <ObserverContainer>
           <ObserverText>감시자:</ObserverText>
@@ -104,20 +103,31 @@ export default function Home() {
             <GotoStudyText>다음 공부 하러가기</GotoStudyText>
           </LinearGradient>
         </GotoStudyBtn>
-        <LastweekContainer>
+        <WeekStudy>이번주 공부량</WeekStudy>
+        <WeekContainer>
           {weekName.map((value, index) => (
             <WeekEntry
               key={index}
+              index={index}
               day={value}
+              date={
+                weekData?.seeTimes[index]
+                  ? weekData.seeTimes[index].updatedAt
+                  : "0"
+              }
               hours={
-                weekData?.seeTimes ? weekData?.seeTimes[index]?.timeValue : 0
+                weekData?.seeTimes[index]
+                  ? weekData?.seeTimes[index]?.timeValue
+                  : 0
               }
               nums={
-                weekData?.seeTimes ? weekData?.seeTimes[index]?.timeNumber : 0
+                weekData?.seeTimes[index]
+                  ? weekData?.seeTimes[index]?.timeNumber
+                  : 0
               }
             />
           ))}
-        </LastweekContainer>
+        </WeekContainer>
       </HomeLayout>
     </ScrollView>
   );
@@ -154,15 +164,7 @@ const TimeText = styled.Text`
   line-height: 56px;
   text-align: center;
 `;
-const GoalText = styled.TextInput`
-  width: ${screenXY.width}px;
-  height: 30px;
-  margin-top: 40px;
-  border-radius: 9px;
-  color: ${(props) => props.theme.bgColor};
-  background-color: ${(props) => props.theme.txtColor};
-  font-weight: bold;
-`;
+
 const ObserverContainer = styled.View`
   flex-direction: row;
   margin-top: 40px;
@@ -180,13 +182,17 @@ const Observer = styled.Text`
 `;
 
 const GotoStudyBtn = styled.TouchableOpacity`
-  margin-top: 40px;
+  margin-top: 30px;
 `;
 const GotoStudyText = styled.Text`
   color: ${(props) => props.theme.bgColor};
   font-weight: bold;
 `;
-const LastweekContainer = styled.View`
+
+const WeekStudy = styled(ObserverText)`
+  margin-top: 30px;
+`;
+const WeekContainer = styled.View`
   width: ${screenXY.width}px;
   height: 106px;
   background-color: ${(props) => props.theme.txtColor};
@@ -194,5 +200,5 @@ const LastweekContainer = styled.View`
   align-items: center;
   justify-content: center;
   border-radius: 13px;
-  margin-top: 40px;
+  margin-top: 10px;
 `;

@@ -7,7 +7,15 @@
 
 ## daily comment
 
-- [] Layout
+- [o] Layout
 - [] Component(title,description)
 - [] Photo upload
 - [] Icon
+
+## Profile EditScreen
+
+## Group Screen
+
+## Analytics Screen
+
+## Observer Selection

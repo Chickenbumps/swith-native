@@ -177,8 +177,8 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
             duration: 300,
             useNativeDriver: true,
           }).start(async () => {
-            // await updateTime({ variables: { time: duration } });
-            // await updateExp({ variables: { exp: duration } });
+            await updateTime({ variables: { time: duration } });
+            await updateExp({ variables: { exp: duration } });
             navigation.replace("Result", { duration: duration });
           });
         }

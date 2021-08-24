@@ -33,7 +33,7 @@ export default function TabNav() {
           headerTitle: () => (
             <Image
               source={require("../../assets/image/logo.png")}
-              style={{ width: 100, height: 30 }}
+              style={{ width: 120, height: 30 }}
             />
           ),
           headerStyle: {
