@@ -10,11 +10,13 @@
 - [o] Layout
 - [] Component(title,description)
 - [] Photo upload
-- [] Icon
+- [o] Icon
 
 ## Profile EditScreen
 
 ## Group Screen
+
+- [o] My group list
 
 ## CreateGroup Screen
 

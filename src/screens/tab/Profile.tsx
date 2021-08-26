@@ -3,8 +3,6 @@ import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import styled from "styled-components/native";
-import { logUserOut } from "../../apollo";
-
 import useUser from "../../hooks/useUser";
 import { Ionicons } from "@expo/vector-icons";
 import { screenXY, useSelectTheme } from "../../styles";
@@ -16,7 +14,6 @@ import {
   createCommentVariables,
 } from "../../__generated__/createComment";
 import CommentList from "../CommentList";
-import { useNavigation } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { LoggedInNavStackParamList } from "../../navigation/Router";
 import ScreenLayout from "../../components/ScreenLayout";

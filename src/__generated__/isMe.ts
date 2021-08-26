@@ -18,7 +18,7 @@ export interface isMe_isMe_time {
 export interface isMe_isMe {
   __typename: "User";
   id: number;
-  username: string | null;
+  username: string;
   avatar: string | null;
   bio: string | null;
   rank: string | null;

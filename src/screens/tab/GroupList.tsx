@@ -1,11 +1,15 @@
 import { gql, useQuery } from "@apollo/client";
+import { StackScreenProps } from "@react-navigation/stack";
 import React from "react";
+import { useLayoutEffect } from "react";
 import { useState } from "react";
 import { RefreshControl } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import styled from "styled-components/native";
 import GroupItem from "../../components/GroupItem";
 import ScreenLayout from "../../components/ScreenLayout";
+import useUser from "../../hooks/useUser";
+import { LoggedInNavStackParamList } from "../../navigation/Router";
 import { useSelectTheme } from "../../styles";
 import { seeGroups, seeGroups_seeGroups } from "../../__generated__/seeGroups";
 
@@ -30,9 +34,14 @@ const SEE_GROUPS_QUERY = gql`
     }
   }
 `;
+type GroupListScreenProps = StackScreenProps<
+  LoggedInNavStackParamList,
+  "GroupList"
+>;
 
-export default function Group() {
+export default function GroupList({ navigation }: GroupListScreenProps) {
   const theme = useSelectTheme();
+  const { data: userData } = useUser();
   const { data: groupsData, loading, refetch } = useQuery<seeGroups>(
     SEE_GROUPS_QUERY
   );
@@ -55,6 +64,7 @@ export default function Group() {
           <RefreshControl
             tintColor={theme.activeColor}
             refreshing={refreshing}
+            onRefresh={onRefresh}
           />
         }
         renderItem={({
@@ -69,7 +79,14 @@ export default function Group() {
               title={group.title}
               description={group.description}
               members={group.members}
+              unreadMessage={3}
               key={index}
+              onPress={() =>
+                navigation.navigate("Group", {
+                  id: group.id,
+                  username: userData!.isMe!.username,
+                })
+              }
             />
           );
         }}

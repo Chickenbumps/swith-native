@@ -26,10 +26,15 @@ export type LoggedInNavStackParamList = {
     second?: boolean;
   };
   Analytics: undefined;
-  Group: undefined;
+  GroupList: undefined;
   Profile: undefined;
   EditProfile: undefined;
   Comment: undefined;
+  CreateGroup: undefined;
+  Group: {
+    id: number;
+    username: string;
+  };
 };
 
 export default function Router() {

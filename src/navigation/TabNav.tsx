@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../screens/tab/Home";
 import Analytics from "../screens/tab/Analytics";
 import Plan from "../screens/tab/Plan";
-import Group from "../screens/tab/Group";
+import GroupList from "../screens/tab/GroupList";
 import Profile from "../screens/tab/Profile";
 import { Ionicons } from "@expo/vector-icons";
 import { useSelectTheme } from "../styles";
@@ -72,8 +72,8 @@ export default function TabNav() {
         }}
       />
       <Tab.Screen
-        name="Group"
-        component={Group}
+        name="GroupList"
+        component={GroupList}
         options={{
           headerTitle: "나의 그룹 리스트",
           headerTintColor: theme.txtColor,

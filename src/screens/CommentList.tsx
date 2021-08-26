@@ -48,7 +48,6 @@ const DELETE_COMMENT_MUTATION = gql`
 
 export default function CommentList({ onPress }: any) {
   const theme = useSelectTheme();
-  const scrollX = useRef(new Animated.Value(0)).current;
   const { data: userData } = useUser();
   const [refreshing, setRefreshing] = useState(false);
   const [deleteComment, { loading: mutaionLoading }] = useMutation(
@@ -111,7 +110,7 @@ export default function CommentList({ onPress }: any) {
       }
     >
       {loading ? (
-        <ActivityIndicator color={theme.activeColor} />
+        <ActivityIndicator color={theme.activeColor} size="large" />
       ) : (
         <Animated.FlatList
           data={data?.seeComments}
@@ -199,8 +198,8 @@ const DayText = styled.Text`
 `;
 
 const Avatar = styled.Image`
-  width: 30;
-  height: 30;
+  width: 30px;
+  height: 30px;
 `;
 const UserInfo = styled.View`
   flex-direction: row;

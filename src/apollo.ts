@@ -3,10 +3,16 @@ import {
   createHttpLink,
   InMemoryCache,
   makeVar,
+  split,
 } from "@apollo/client";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { setContext } from "@apollo/client/link/context";
-import { offsetLimitPagination } from "@apollo/client/utilities";
+import {
+  getMainDefinition,
+  offsetLimitPagination,
+} from "@apollo/client/utilities";
+import { WebSocketLink } from "@apollo/client/link/ws";
+
 export const isLoggedInVar = makeVar(false);
 export const darkModeVar = makeVar(false);
 export const tokenVar = makeVar<string | null>(null);
@@ -28,6 +34,16 @@ export const logUserOut = async () => {
     throw new Error(`Logout error:${e}`);
   }
 };
+
+const wsLink = new WebSocketLink({
+  uri: "ws://3443-221-150-231-140.ngrok.io/graphql",
+  options: {
+    reconnect: true,
+    connectionParams: () => ({
+      token: tokenVar(),
+    }),
+  },
+});
 
 const httpLink = createHttpLink({
   uri: "http://3443-221-150-231-140.ngrok.io/graphql",
@@ -51,9 +67,22 @@ export const cache = new InMemoryCache({
     },
   },
 });
+const concatHttpLink = authLink.concat(httpLink);
+
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
+    );
+  },
+  wsLink,
+  concatHttpLink
+);
 
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: splitLink,
   cache: cache,
 });
 

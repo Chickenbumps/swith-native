@@ -17,7 +17,11 @@ export default function ScreenLayout({ loading, children }: any) {
         flex: 1,
       }}
     >
-      {loading ? <ActivityIndicator color={theme.txtColor} /> : children}
+      {loading ? (
+        <ActivityIndicator color={theme.txtColor} size="large" />
+      ) : (
+        children
+      )}
     </SafeAreaView>
   );
 }

@@ -10,7 +10,7 @@ import WeekEntry from "../../components/WeekEntry";
 import useUser from "../../hooks/useUser";
 import { screenXY, useSelectTheme } from "../../styles";
 import moment from "moment";
-// import "moment/locale/en-au";
+moment.locale("ko");
 import { seeTimes, seeTimesVariables } from "../../__generated__/seeTimes";
 import { ScrollView, TouchableOpacity } from "react-native";
 import Medal from "../../components/Medal";

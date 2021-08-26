@@ -10,6 +10,7 @@ import Result from "../screens/Result";
 import { useSelectTheme } from "../styles";
 import TabNav from "./TabNav";
 import { Ionicons } from "@expo/vector-icons";
+import Group from "../screens/Group";
 
 const Stack = createStackNavigator();
 
@@ -63,6 +64,21 @@ export default function LoggedInNav() {
         component={CreateGroup}
         options={{
           headerBackTitleVisible: false,
+          headerBackImage: () => (
+            <Ionicons
+              name="chevron-back-outline"
+              size={28}
+              color={theme.txtColor}
+            />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="Group"
+        component={Group}
+        options={{
+          headerBackTitleVisible: false,
+          title: "그룹",
           headerBackImage: () => (
             <Ionicons
               name="chevron-back-outline"
