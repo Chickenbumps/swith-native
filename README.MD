@@ -14,9 +14,14 @@
 
 ## Profile EditScreen
 
-## Group Screen
+## GroupList Screen
 
 - [o] My group list
+
+## Group Screen
+
+- [o] Group chat
+- - [] 합류한 이후 메시지만 표시
 
 ## CreateGroup Screen
 

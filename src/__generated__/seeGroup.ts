@@ -11,7 +11,7 @@ export interface seeGroup_seeGroup_members {
   __typename: "User";
   id: number;
   username: string;
-  avatar: string | null;
+  avatar: string;
 }
 
 export interface seeGroup_seeGroup_messages_user {
@@ -48,14 +48,15 @@ export interface seeGroup_seeGroup {
   title: string;
   description: string | null;
   members: seeGroup_seeGroup_members[];
-  messages: seeGroup_seeGroup_messages[] | null;
+  messages: seeGroup_seeGroup_messages[];
   inviter: seeGroup_seeGroup_inviter;
 }
 
 export interface seeGroup {
-  seeGroup: seeGroup_seeGroup | null;
+  seeGroup: seeGroup_seeGroup;
 }
 
 export interface seeGroupVariables {
   id: number;
+  offset: number;
 }

@@ -36,8 +36,8 @@ import moment from "moment";
 import { useLayoutEffect } from "react";
 
 const SEE_GROUP_QUERY = gql`
-  query seeGroup($id: Int!) {
-    seeGroup(id: $id) {
+  query seeGroup($id: Int!, $offset: Int!) {
+    seeGroup(id: $id, offset: $offset) {
       id
       title
       description
@@ -99,14 +99,16 @@ export default function Group({ route, navigation }: GroupScreenProps) {
   const [refreshing, setRefreshing] = useState(false);
   const theme = useSelectTheme();
   const { data: meData } = useUser();
-  const { data, error, refetch, subscribeToMore } = useQuery<
+  const { data, error, refetch, subscribeToMore, fetchMore } = useQuery<
     seeGroup,
     seeGroupVariables
   >(SEE_GROUP_QUERY, {
     variables: {
       id: route.params.id,
+      offset: 0,
     },
   });
+
   const { handleSubmit, watch, setValue, register, getValues } = useForm();
 
   useLayoutEffect(() => {
@@ -122,7 +124,23 @@ export default function Group({ route, navigation }: GroupScreenProps) {
         data: { updateMessage: message },
       },
     } = options;
+    // console.log(message);
     if (message.id) {
+      const incomingMessage = client.cache.writeFragment({
+        fragment: gql`
+          fragment NewMessage on Message {
+            id
+            payload
+            user {
+              username
+              avatar
+            }
+            createdAt
+            read
+          }
+        `,
+        data: message,
+      });
       client.cache.modify({
         id: `Group:${route.params.id}`,
         fields: {
@@ -131,7 +149,7 @@ export default function Group({ route, navigation }: GroupScreenProps) {
             if (isExist) {
               return [...prev];
             }
-            return [...prev, message];
+            return [message, ...prev];
           },
         },
       });
@@ -179,8 +197,8 @@ export default function Group({ route, navigation }: GroupScreenProps) {
     cache.modify({
       id: `Group:${route.params.id}`,
       fields: {
-        messages(prev: any) {
-          return [...prev, messageObj];
+        messages(prev: seeGroup_seeGroup_messages[]) {
+          return [...prev, message];
         },
       },
     });
@@ -196,11 +214,13 @@ export default function Group({ route, navigation }: GroupScreenProps) {
   const onRefresh = async () => {
     setRefreshing(true);
     await refetch();
+    await fetchMore({
+      variables: {
+        offset: data?.seeGroup?.messages?.length,
+      },
+    });
     setRefreshing(false);
   };
-
-  const reverseMessage = [...(data?.seeGroup?.messages ?? [])];
-  reverseMessage.reverse();
 
   const onValid = ({ message }: any) => {
     if (!mutationLoading) {
@@ -222,10 +242,19 @@ export default function Group({ route, navigation }: GroupScreenProps) {
       <ScreenLayout>
         <FlatList
           inverted
-          data={reverseMessage}
-          keyExtractor={(item, index) => item.id.toString()}
+          data={data?.seeGroup.messages}
+          keyExtractor={(item, index) => `Message:${item.id}`}
           refreshing={refreshing}
           onRefresh={onRefresh}
+          onEndReachedThreshold={1}
+          scrollsToTop
+          onEndReached={() =>
+            fetchMore({
+              variables: {
+                offset: data?.seeGroup?.messages?.length,
+              },
+            })
+          }
           refreshControl={
             <RefreshControl
               tintColor={theme.activeColor}
@@ -238,6 +267,7 @@ export default function Group({ route, navigation }: GroupScreenProps) {
           }: {
             item: seeGroup_seeGroup_messages;
           }) => {
+            const time = message.createdAt.slice(11, 16);
             return (
               <MessageContainer
                 isMine={message.user.username === route.params.username}
@@ -254,6 +284,11 @@ export default function Group({ route, navigation }: GroupScreenProps) {
                   >
                     <Message>{message.payload}</Message>
                   </MessageView>
+                  <TimeVIew
+                    isMine={message.user.username === route.params.username}
+                  >
+                    <Time>{time}</Time>
+                  </TimeVIew>
                 </Column>
               </MessageContainer>
             );
@@ -325,4 +360,12 @@ const MessageView = styled.View<MCprop>`
 
 const Message = styled.Text`
   font-size: 16px;
+`;
+
+const TimeVIew = styled.View<MCprop>`
+  align-items: ${(props) => (props.isMine ? "flex-start" : "flex-end")};
+`;
+
+const Time = styled.Text`
+  color: ${(props) => props.theme.phColor};
 `;
