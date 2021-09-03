@@ -14,14 +14,16 @@
 
 ## Profile EditScreen
 
+- [] 일기작성 cache
+
 ## GroupList Screen
 
 - [o] My group list
 
-## Group Screen
+## GroupChat Screen
 
-- [o] Group chat
-- - [] 합류한 이후 메시지만 표시
+- [] 합류한 이후 메시지만 표시
+- [] 날짜변하면 표시
 
 ## CreateGroup Screen
 

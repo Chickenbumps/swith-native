@@ -15,6 +15,20 @@ export interface isMe_isMe_time {
   dayName: string;
 }
 
+export interface isMe_isMe_observers {
+  __typename: "User";
+  id: number;
+  username: string;
+  avatar: string | null;
+}
+
+export interface isMe_isMe_subjects {
+  __typename: "User";
+  id: number;
+  username: string;
+  avatar: string | null;
+}
+
 export interface isMe_isMe {
   __typename: "User";
   id: number;
@@ -31,7 +45,10 @@ export interface isMe_isMe {
   totalNumberOfTime: number | null;
   timePerNumber: number | null;
   numberPerTime: number | null;
-  time: isMe_isMe_time[] | null;
+  time: isMe_isMe_time[];
+  observers: isMe_isMe_observers[];
+  subjects: isMe_isMe_subjects[];
+  totalFollowing: number;
 }
 
 export interface isMe {

@@ -14,6 +14,8 @@ moment.locale("ko");
 import { seeTimes, seeTimesVariables } from "../../__generated__/seeTimes";
 import { ScrollView, TouchableOpacity } from "react-native";
 import Medal from "../../components/Medal";
+import { StackScreenProps } from "@react-navigation/stack";
+import { LoggedInNavStackParamList } from "../../navigation/Router";
 
 const SEE_TIMES_QUERY = gql`
   query seeTimes($to: String!, $from: String!) {
@@ -27,10 +29,10 @@ const SEE_TIMES_QUERY = gql`
   }
 `;
 
-export default function Home() {
+type HomeScreenProps = StackScreenProps<LoggedInNavStackParamList, "Home">;
+export default function Home({ navigation, route }: HomeScreenProps) {
   const theme = useSelectTheme();
-  const { data: userData } = useUser();
-
+  const { data: meData, refetch } = useUser();
   const { data: weekData } = useQuery<seeTimes, seeTimesVariables>(
     SEE_TIMES_QUERY,
     {
@@ -44,36 +46,39 @@ export default function Home() {
   const dtime = moment().format("YYYY-MM-DD");
   // console.log(moment().format("YYYY-MM-DD"));
 
-  // 0 1 2 3 4 5 6
-  //
   const weekName = ["일", "월", "화", "수", "목", "금", "토"];
   const test = moment().subtract(7, "days").format("YYYYMMDD");
   const hour = Math.floor(
-    userData?.isMe?.todayTime ? userData?.isMe?.todayTime : 0
+    meData?.isMe?.todayTime ? meData?.isMe?.todayTime : 0
   );
   const minute =
-    ((userData?.isMe?.todayTime ? userData?.isMe?.todayTime : 0) - hour) * 60;
+    ((meData?.isMe?.todayTime ? meData?.isMe?.todayTime : 0) - hour) * 60;
 
+  useEffect(() => {
+    console.log("route:", route.params?.observers);
+    console.log("meData:", meData?.isMe.observers);
+    refetch();
+  }, [route.params?.observers]);
+
+  const goToObserver = () => {
+    return navigation.navigate("Observer");
+  };
   return (
     <ScrollView style={{ flex: 1, backgroundColor: theme.bgColor }}>
       <HomeLayout>
         <RankText>현재 랭크:</RankText>
-        <Rank rank={userData?.isMe ? userData.isMe.rank : "Bronze"}>
-          {userData?.isMe?.rank}
+        <Rank rank={meData?.isMe ? meData.isMe.rank : "Bronze"}>
+          {meData?.isMe?.rank}
         </Rank>
         <Medal
           maxExp={
-            userData?.isMe && userData.isMe.maxExp !== null
-              ? userData.isMe.maxExp
-              : 0
+            meData?.isMe && meData.isMe.maxExp !== null ? meData.isMe.maxExp : 0
           }
-          exp={
-            userData?.isMe && userData.isMe.exp !== null ? userData.isMe.exp : 0
-          }
+          exp={meData?.isMe && meData.isMe.exp !== null ? meData.isMe.exp : 0}
         />
         <ExpBar
-          step={userData?.isMe?.exp ? userData.isMe.exp : 0}
-          steps={userData?.isMe?.maxExp ? userData.isMe.maxExp : 10}
+          step={meData?.isMe?.exp ? meData.isMe.exp : 0}
+          steps={meData?.isMe?.maxExp ? meData.isMe.maxExp : 10}
         />
         <TimeContainer>
           <DateText>{moment().format("YYYY.MM.D(dddd)")}</DateText>
@@ -83,10 +88,16 @@ export default function Home() {
         </TimeContainer>
 
         <ObserverContainer>
-          <ObserverText>감시자:</ObserverText>
-          <TouchableOpacity>
-            <Observer>댕댕이</Observer>
+          <TouchableOpacity onPress={goToObserver}>
+            <ObserverText>감시자:</ObserverText>
           </TouchableOpacity>
+          {route.params?.observers
+            ? route.params?.observers?.map((observer, index) => (
+                <Observer key={index}>{`${observer?.username}`} </Observer>
+              ))
+            : meData?.isMe?.observers?.map((observer, index) => (
+                <Observer key={index}>{`${observer?.username}`} </Observer>
+              ))}
         </ObserverContainer>
         <GotoStudyBtn>
           <LinearGradient
@@ -178,7 +189,7 @@ const Observer = styled.Text`
   font-weight: bold;
   font-size: 16px;
   color: ${(props) => props.theme.activeColor};
-  top: 1px; // why??
+  /* top: 1px; // why?? */
 `;
 
 const GotoStudyBtn = styled.TouchableOpacity`

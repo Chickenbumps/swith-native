@@ -36,7 +36,7 @@ export const logUserOut = async () => {
 };
 
 const wsLink = new WebSocketLink({
-  uri: "ws://243f-221-150-231-140.ngrok.io/graphql",
+  uri: "ws://6201-221-150-231-140.ngrok.io/graphql",
   options: {
     reconnect: true,
     connectionParams: () => ({
@@ -46,7 +46,7 @@ const wsLink = new WebSocketLink({
 });
 
 const httpLink = createHttpLink({
-  uri: "http://243f-221-150-231-140.ngrok.io/graphql",
+  uri: "http://6201-221-150-231-140.ngrok.io/graphql",
 });
 
 const authLink = setContext((request, prevContext) => {
@@ -67,11 +67,7 @@ export const cache = new InMemoryCache({
     },
     Group: {
       fields: {
-        messages: {
-          merge(existing = [], incoming) {
-            return [...existing, ...incoming];
-          },
-        },
+        messages: offsetLimitPagination(),
       },
     },
   },

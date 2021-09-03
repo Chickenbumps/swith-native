@@ -23,6 +23,11 @@ const SEE_GROUPS_QUERY = gql`
         id
         username
         avatar
+        isObserver
+        observers {
+          id
+          username
+        }
       }
       inviter {
         id

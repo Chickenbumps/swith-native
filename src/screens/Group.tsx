@@ -198,6 +198,10 @@ export default function Group({ route, navigation }: GroupScreenProps) {
       id: `Group:${route.params.id}`,
       fields: {
         messages(prev: seeGroup_seeGroup_messages[]) {
+          const isExist = prev.find((item) => item.id === message.id);
+          if (isExist) {
+            return [...prev];
+          }
           return [...prev, message];
         },
       },
@@ -243,7 +247,7 @@ export default function Group({ route, navigation }: GroupScreenProps) {
         <FlatList
           inverted
           data={data?.seeGroup.messages}
-          keyExtractor={(item, index) => `Message:${item.id}`}
+          keyExtractor={(item, index) => index.toString()}
           refreshing={refreshing}
           onRefresh={onRefresh}
           onEndReachedThreshold={1}
@@ -305,6 +309,7 @@ export default function Group({ route, navigation }: GroupScreenProps) {
             onChangeText={(text) => setValue("message", text)}
             onSubmitEditing={handleSubmit(onValid)}
             autoFocus
+            autoCorrect={false}
           />
         </InputContainer>
       </ScreenLayout>

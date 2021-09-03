@@ -14,7 +14,9 @@ export type LoggedOutNavStackParamList = {
 };
 
 export type LoggedInNavStackParamList = {
-  Home: undefined;
+  Home: {
+    observers?: any[] | undefined;
+  };
   Plan: {
     faceDetected: boolean;
     second?: boolean;
@@ -35,6 +37,7 @@ export type LoggedInNavStackParamList = {
     id: number;
     username: string;
   };
+  Observer: undefined;
 };
 
 export default function Router() {

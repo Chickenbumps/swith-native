@@ -11,6 +11,7 @@ import { useSelectTheme } from "../styles";
 import TabNav from "./TabNav";
 import { Ionicons } from "@expo/vector-icons";
 import Group from "../screens/Group";
+import Observer from "../screens/Observer";
 
 const Stack = createStackNavigator();
 
@@ -86,6 +87,22 @@ export default function LoggedInNav() {
               color={theme.txtColor}
             />
           ),
+        }}
+      />
+      <Stack.Screen
+        name="Observer"
+        component={Observer}
+        options={{
+          headerTitle: "감시자",
+          headerTintColor: theme.txtColor,
+          headerBackTitleVisible: false,
+          // headerBackImage: () => (
+          //   <Ionicons
+          //     name="chevron-back-outline"
+          //     size={28}
+          //     color={theme.txtColor}
+          //   />
+          // ),
         }}
       />
     </Stack.Navigator>

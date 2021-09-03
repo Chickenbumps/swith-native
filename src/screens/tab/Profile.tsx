@@ -81,11 +81,11 @@ export default function Profile({ navigation }: ProfileScreenProps) {
         <FollowWrapper>
           <FollowItem>
             <FollowText>팔로워</FollowText>
-            <FollowText>2</FollowText>
+            <FollowText>{userData?.isMe.totalFollowers}</FollowText>
           </FollowItem>
           <FollowItem>
             <FollowText>팔로잉</FollowText>
-            <FollowText>3</FollowText>
+            <FollowText>{userData?.isMe.totalFollowing}</FollowText>
           </FollowItem>
         </FollowWrapper>
       </UserInfo>
@@ -98,6 +98,7 @@ export default function Profile({ navigation }: ProfileScreenProps) {
           autoCapitalize="none"
           onChangeText={(text) => setValue("payload", text)}
           onSubmitEditing={handleSubmit(onValid)}
+          autoCorrect={false}
         />
       </View>
 

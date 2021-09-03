@@ -27,6 +27,18 @@ const IS_ME_QUERY = gql`
         updatedAt
         dayName
       }
+      observers {
+        id
+        username
+        avatar
+      }
+      subjects {
+        id
+        username
+        avatar
+      }
+      totalFollowers
+      totalFollowing
     }
   }
 `;
@@ -40,7 +52,7 @@ function useUser() {
   useEffect(() => {
     refetch();
     return () => {};
-  }, [data]);
+  }, [data, data?.isMe.observers]);
   return { data, refetch, loading };
 }
 
