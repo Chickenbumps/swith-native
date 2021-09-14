@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Camera } from "expo-camera";
 import * as FaceDetector from "expo-face-detector";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -22,6 +22,7 @@ export default function CameraScreen({ route, navigation }: CameraScreenProps) {
     const { granted } = await Camera.requestCameraPermissionsAsync();
     setCameraHasPermission(granted);
   };
+
   const handleFacesDetected = ({ faces }: any) => {
     setFaces(faces);
     if (faces.length) {
@@ -30,12 +31,14 @@ export default function CameraScreen({ route, navigation }: CameraScreenProps) {
         faceDetected: true,
         second: route.params.second,
       });
+    } else if (!faces.length && route.params.second) {
+      // console.log("ttttt");
     }
   };
 
   useEffect(() => {
     getPermissions();
-  }, []);
+  }, [route]);
 
   return (
     <Container>

@@ -20,6 +20,7 @@ import {
 import { updateExp, updateExpVariables } from "../../__generated__/updateExp";
 import { StackScreenProps } from "@react-navigation/stack";
 import { LoggedInNavStackParamList } from "../../navigation/Router";
+import { schedulePushNotification } from "../../components/PushNotification";
 
 const { width, height } = Dimensions.get("screen");
 const minTimers = [...Array(24).keys()].map((i) => i);
@@ -65,7 +66,22 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
   const [updateExp] = useMutation<updateExp, updateExpVariables>(
     UPDATE_EXP_MUTATION
   );
-  const randNum = Math.random() * duration * 60000 + 5000;
+  const randNum = Math.random() * duration * 60000 + 500;
+  const [failTest, setFailTest] = useState(0);
+
+  function failTimer() {
+    console.log("start??");
+    const fail = setTimeout(async () => {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Result", params: { duration: 0 } }],
+      });
+      await schedulePushNotification();
+    }, 6000);
+    //@ts-ignore
+    setFailTest(fail);
+    console.log("next", fail);
+  }
 
   useEffect(() => {
     const listener = textInputAnimation.addListener(({ value }) => {
@@ -80,13 +96,16 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
         setTimeout(() => {
           setIsStop(true);
           setIsRunning(false);
+          console.log("Fail Timer Start.");
           console.log("isRunning", isRunning);
           console.log("stopstop");
           navigation.navigate("CameraScreen", { second: true });
-          if (route.params?.second) {
-            setIsRunning(true);
-          }
+          console.log("route:", route.params.second);
+          failTimer();
         }, randNum);
+      }
+      if (route.params?.second) {
+        clearTimeout(failTest);
       }
     } else {
       null;
@@ -127,18 +146,18 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
   ]);
 
   const animation = useCallback(() => {
-    console.log(parseFloat(JSON.stringify(textInputAnimation)));
+    // console.log(parseFloat(JSON.stringify(textInputAnimation)));
     textInputAnimation.setValue(parseFloat(JSON.stringify(textInputAnimation)));
-    console.log(isStop);
+    // console.log(isStop);
     if (isRunning && !isStop) {
-      console.log("11111");
+      // console.log("11111");
       anime.start(() => {
         Vibration.cancel();
         Vibration.vibrate();
-        console.log("t2:", textInputAnimation);
+        // console.log("t2:", textInputAnimation);
 
         if (parseFloat(JSON.stringify(textInputAnimation)) === 0) {
-          console.log("In");
+          // console.log("In");
           textInputAnimation.setValue(duration);
           Animated.timing(buttonAnimation, {
             toValue: 0,
@@ -153,6 +172,7 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
       });
     } else if (isRunning && isStop) {
       console.log("22222");
+      console.log(isRunning);
       Animated.parallel([
         Animated.timing(textInputAnimation, {
           toValue: 0,
@@ -167,10 +187,10 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
       ]).start(() => {
         Vibration.cancel();
         Vibration.vibrate();
-        console.log("t2:", textInputAnimation);
+        // console.log("t2:", textInputAnimation);
 
         if (parseFloat(JSON.stringify(textInputAnimation)) === 0) {
-          console.log("In");
+          // console.log("In");
           textInputAnimation.setValue(duration);
           Animated.timing(buttonAnimation, {
             toValue: 0,
@@ -184,14 +204,14 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
         }
       });
     } else if (!isRunning) {
-      console.log("33333");
+      // console.log("33333");
       textInputAnimation.stopAnimation((e) => console.log("text", e));
       timerAnimation.stopAnimation((e) => console.log("timer", e));
     }
   }, [duration, isRunning]);
 
   useEffect(() => {
-    console.log("t1:", textInputAnimation);
+    // console.log("t1:", textInputAnimation);
     animation();
   }, [isRunning, duration]);
 

@@ -75,6 +75,7 @@ export default function Home({ navigation, route }: HomeScreenProps) {
   const goToObserver = () => {
     return navigation.navigate("Observer");
   };
+
   return (
     <ScrollView style={{ flex: 1, backgroundColor: theme.bgColor }}>
       <HomeLayout loading={loading}>

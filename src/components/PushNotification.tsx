@@ -11,7 +11,7 @@ Notifications.setNotificationHandler({
   }),
 });
 
-const schedulePushNotification = async () => {
+export const schedulePushNotification = async () => {
   await Notifications.scheduleNotificationAsync({
     content: {
       title: "SWITH",
@@ -51,7 +51,6 @@ const registerForPushNotificationsAsnyc = async () => {
       lightColor: "#FF231F7C",
     });
   }
-
   return token;
 };
 
@@ -65,8 +64,9 @@ export default function PushNotification() {
     const token = registerForPushNotificationsAsnyc();
     setPushToken(token);
     notificationListener.current = Notifications.addNotificationReceivedListener(
-      (notification) => {
-        setNotification(notification);
+      (noti) => {
+        console.log("noti", noti);
+        setNotification(noti);
       }
     );
     responseListener.current = Notifications.addNotificationResponseReceivedListener(
