@@ -1,9 +1,15 @@
 import React from "react";
-import { KeyboardAvoidingView, Platform } from "react-native";
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import styled from "styled-components/native";
+import { useSelectTheme } from "../styles";
 import DismissKeyboard from "./DismissKeyboard";
 
 export default function HomeLayout({ children }: any) {
+  const theme = useSelectTheme();
   return (
     <DismissKeyboard>
       <Container>
@@ -11,7 +17,11 @@ export default function HomeLayout({ children }: any) {
           behavior="position"
           keyboardVerticalOffset={Platform.OS == "ios" ? 50 : 0}
         >
-          {children}
+          {children.loading ? (
+            <ActivityIndicator color={theme.txtColor} size="large" />
+          ) : (
+            children
+          )}
         </KeyboardAvoidingView>
       </Container>
     </DismissKeyboard>

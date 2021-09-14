@@ -38,6 +38,7 @@ export type LoggedInNavStackParamList = {
     username: string;
   };
   Observer: undefined;
+  Notification: undefined;
 };
 
 export default function Router() {

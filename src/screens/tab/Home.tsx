@@ -16,7 +16,8 @@ import { ScrollView, TouchableOpacity } from "react-native";
 import Medal from "../../components/Medal";
 import { StackScreenProps } from "@react-navigation/stack";
 import { LoggedInNavStackParamList } from "../../navigation/Router";
-
+import { useLayoutEffect } from "react";
+import { Ionicons } from "@expo/vector-icons";
 const SEE_TIMES_QUERY = gql`
   query seeTimes($to: String!, $from: String!) {
     seeTimes(to: $to, from: $from) {
@@ -32,7 +33,7 @@ const SEE_TIMES_QUERY = gql`
 type HomeScreenProps = StackScreenProps<LoggedInNavStackParamList, "Home">;
 export default function Home({ navigation, route }: HomeScreenProps) {
   const theme = useSelectTheme();
-  const { data: meData, refetch } = useUser();
+  const { data: meData, refetch, loading } = useUser();
   const { data: weekData } = useQuery<seeTimes, seeTimesVariables>(
     SEE_TIMES_QUERY,
     {
@@ -55,8 +56,19 @@ export default function Home({ navigation, route }: HomeScreenProps) {
     ((meData?.isMe?.todayTime ? meData?.isMe?.todayTime : 0) - hour) * 60;
 
   useEffect(() => {
-    console.log("route:", route.params?.observers);
-    console.log("meData:", meData?.isMe.observers);
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          style={{ marginRight: 20 }}
+          // onPress={navigation.navigate("PushNotification")}
+        >
+          <Ionicons name="notifications" size={24} color={theme.txtColor} />
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
+
+  useEffect(() => {
     refetch();
   }, [route.params?.observers]);
 
@@ -65,7 +77,7 @@ export default function Home({ navigation, route }: HomeScreenProps) {
   };
   return (
     <ScrollView style={{ flex: 1, backgroundColor: theme.bgColor }}>
-      <HomeLayout>
+      <HomeLayout loading={loading}>
         <RankText>현재 랭크:</RankText>
         <Rank rank={meData?.isMe ? meData.isMe.rank : "Bronze"}>
           {meData?.isMe?.rank}

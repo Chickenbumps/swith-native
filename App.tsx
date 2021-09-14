@@ -10,6 +10,7 @@ import Router from "./src/navigation/Router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeProvider } from "styled-components";
 import { lightTheme } from "./src/styles";
+import PushNotification from "./src/components/PushNotification";
 
 export default function App() {
   const [loading, setLoading] = useState(true);

@@ -12,6 +12,7 @@ import TabNav from "./TabNav";
 import { Ionicons } from "@expo/vector-icons";
 import Group from "../screens/Group";
 import Observer from "../screens/Observer";
+import PushNotification from "../components/PushNotification";
 
 const Stack = createStackNavigator();
 
@@ -105,6 +106,7 @@ export default function LoggedInNav() {
           // ),
         }}
       />
+      <Stack.Screen name="PushNotification" component={PushNotification} />
     </Stack.Navigator>
   );
 }

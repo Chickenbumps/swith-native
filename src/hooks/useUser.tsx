@@ -52,7 +52,7 @@ function useUser() {
   useEffect(() => {
     refetch();
     return () => {};
-  }, [data, data?.isMe.observers]);
+  }, [data]);
   return { data, refetch, loading };
 }
 

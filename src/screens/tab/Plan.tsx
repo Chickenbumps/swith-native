@@ -65,6 +65,7 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
   const [updateExp] = useMutation<updateExp, updateExpVariables>(
     UPDATE_EXP_MUTATION
   );
+  const randNum = Math.random() * duration * 60000 + 5000;
 
   useEffect(() => {
     const listener = textInputAnimation.addListener(({ value }) => {
@@ -75,7 +76,6 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
     if (route.params?.faceDetected) {
       setIsRunning(true);
       if (!route.params?.second) {
-        const randNum = Math.floor(Math.random() * duration) * 60000 + 5000;
         console.log(randNum);
         setTimeout(() => {
           setIsStop(true);
@@ -145,8 +145,8 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
             duration: 300,
             useNativeDriver: true,
           }).start(async () => {
-            // await updateTime({ variables: { time: duration } });
-            // await updateExp({ variables: { exp: duration } });
+            await updateTime({ variables: { time: duration } });
+            await updateExp({ variables: { exp: duration } });
             navigation.replace("Result", { duration: duration });
           });
         }

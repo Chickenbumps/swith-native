@@ -42,16 +42,8 @@ export default function Result({ route, navigation }: any) {
       },
     }
   );
-  const [flip, set] = useState(false);
-  const { number } = useSpring({
-    reset: true,
-    reverse: flip,
-    from: { number: 0 },
-    number: 1,
-    delay: 200,
-    config: config.molasses,
-    onRest: () => set(!flip),
-  });
+
+  // console.log("userData", userData?.isMe);
   return (
     <HomeLayout>
       <CompleteMsgContainer>
@@ -115,12 +107,22 @@ export default function Result({ route, navigation }: any) {
         {weekName.map((value, index) => (
           <WeekEntry
             key={index}
+            index={index}
             day={value}
+            date={
+              weekData?.seeTimes[index]
+                ? weekData.seeTimes[index].updatedAt
+                : "0"
+            }
             hours={
-              weekData?.seeTimes ? weekData?.seeTimes[index]?.timeValue : 0
+              weekData?.seeTimes[index]
+                ? weekData?.seeTimes[index]?.timeValue
+                : 0
             }
             nums={
-              weekData?.seeTimes ? weekData?.seeTimes[index]?.timeNumber : 0
+              weekData?.seeTimes[index]
+                ? weekData?.seeTimes[index]?.timeNumber
+                : 0
             }
           />
         ))}
