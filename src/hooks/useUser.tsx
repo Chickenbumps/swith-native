@@ -8,7 +8,9 @@ const IS_ME_QUERY = gql`
   query isMe {
     isMe {
       id
+      name
       username
+      email
       avatar
       bio
       rank

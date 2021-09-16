@@ -81,6 +81,7 @@ export default function Profile({ navigation }: ProfileScreenProps) {
         <FollowWrapper>
           <FollowItem>
             <FollowText>팔로워</FollowText>
+
             <FollowText>{userData?.isMe.totalFollowers}</FollowText>
           </FollowItem>
           <FollowItem>

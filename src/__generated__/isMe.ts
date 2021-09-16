@@ -19,21 +19,23 @@ export interface isMe_isMe_observers {
   __typename: "User";
   id: number;
   username: string;
-  avatar: string | null;
+  avatar: string;
 }
 
 export interface isMe_isMe_subjects {
   __typename: "User";
   id: number;
   username: string;
-  avatar: string | null;
+  avatar: string;
 }
 
 export interface isMe_isMe {
   __typename: "User";
   id: number;
+  name: string;
   username: string;
-  avatar: string | null;
+  email: string;
+  avatar: string;
   bio: string | null;
   rank: string | null;
   exp: number | null;
@@ -48,6 +50,7 @@ export interface isMe_isMe {
   time: isMe_isMe_time[];
   observers: isMe_isMe_observers[];
   subjects: isMe_isMe_subjects[];
+  totalFollowers: number;
   totalFollowing: number;
 }
 
