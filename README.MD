@@ -9,8 +9,8 @@
 <table>
   <tr><td><strong>Login</strong></td><td><strong>CreatAccount</strong></td></tr>
   <tr>
-    <td><p align="center"><img src="./screenshot/login.png" width="375 " height="812" /></p></td>
-    <td><p align="center"><img src="./screenshot/createAccount.png" width="375 " height="812" /></p></td>
+    <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/accountInput.PNG" width="375 " height="812" /></p></td>
+    <td><p align="center"><img src="screenshot/createAccount.png" width="375 " height="812" /></p></td>
   </tr>
   <tr><td><strong>Home</strong></td><td><strong>Plan</strong></td></tr>
   <tr>
