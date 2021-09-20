@@ -2,13 +2,13 @@
 
 # Mechanism
 
-![Mechanism](./screenshot/mechanism.png){: height:"50"}
+![Mechanism](./screenshot/mechanism.png)
 
 # Screen
 
 - ## Login
 
-  <img src="./screenshot/login.png" width="3.75" height="8.12">
+  ![Home](./screenshot/login.png)
 
 - ## CreateAccouunt
 
