@@ -8,11 +8,11 @@
 
 - ## Login
 
-  <img src="./screenshot/로그인.png" width="3.75" height="8.12">
+  <img src="./screenshot/login.png" width="3.75" height="8.12">
 
 - ## CreateAccouunt
 
-  ![Home](./screenshot/회원가입.png)
+  ![Home](./screenshot/createAccount.png)
 
 - ## Home
-  ![Home](./screenshot/홈화면.png)
+  ![Home](./screenshot/Home.png)
