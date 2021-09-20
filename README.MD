@@ -28,7 +28,7 @@
   </tr>
 <tr><td><strong>Group</strong></td><td><strong>GroupChat</strong></td></tr>
   <tr>
-    <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/group.PNG.png" width="375 " height="812" /></p></td>
+    <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/group.PNG" width="375 " height="812" /></p></td>
     <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/groupChat.PNG" width="375 " height="812" /></p></td>
   </tr>
   <tr><td><strong>Profile</strong></td><td><strong>EditProfile</strong></td></tr>
