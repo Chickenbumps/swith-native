@@ -29,7 +29,7 @@ export default function ScreenLayout({
           justifyContent: "center",
           alignItems: "center",
           flex: 1,
-          backgroundColor: theme.bgColor,
+          // backgroundColor: theme.bgColor,
         },
         style,
       ]}

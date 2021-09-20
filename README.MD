@@ -1,32 +1,18 @@
-# swith native
+<!-- Image -->
 
-## login screen
+# Mechanism
 
-- [] Error handle
-- [] Css layout
+![Mechanism](./screenshot/mechanism.png){: height:"50"}
 
-## daily comment
+# Screen
 
-- [o] Layout
-- [] Component(title,description)
-- [] Photo upload
-- [o] Icon
+- ## Login
 
-## Profile EditScreen
+  <img src="./screenshot/로그인.png" width="3.75" height="8.12">
 
-- [] 일기작성 cache
+- ## CreateAccouunt
 
-## GroupList Screen
+  ![Home](./screenshot/회원가입.png)
 
-- [o] My group list
-
-## GroupChat Screen
-
-- [] 합류한 이후 메시지만 표시
-- [] 날짜변하면 표시
-
-## CreateGroup Screen
-
-## Analytics Screen
-
-## Observer Selection
+- ## Home
+  ![Home](./screenshot/홈화면.png)

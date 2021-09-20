@@ -240,7 +240,7 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
           setIsRunning(!isRunning);
           setIsStop(true);
         }}
-        style={{ justifyContent: "center", top: 10 }}
+        style={{ alignItems: "center", top: 50 }}
       >
         <Text
           style={{

@@ -9,7 +9,7 @@ export default function EditProfile() {
   const { data: userData, loading } = useUser();
 
   return (
-    <ScreenLayout style={{ backgroundColor: "white" }} loading={loading}>
+    <ScreenLayout loading={loading}>
       <BasicInfo>
         <Avatar source={{ uri: userData?.isMe.avatar }} />
         <Username>{userData?.isMe.username}</Username>

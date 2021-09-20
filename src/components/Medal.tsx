@@ -69,7 +69,7 @@ function MedalComponent({
   });
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ justifyContent: "center", alignItems: "center" }}>
       <Svg
         height={radius * 2}
         width={radius * 2}

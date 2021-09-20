@@ -52,7 +52,7 @@ const UnreadMessage = styled.Text`
 `;
 
 const GroupTitle = styled.Text`
-  color: ${(props) => props.theme.activeColor};
+  color: ${(props) => props.theme.txtColor};
   font-size: 18px;
 `;
 

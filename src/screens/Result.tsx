@@ -37,8 +37,8 @@ export default function Result({ route, navigation }: any) {
     SEE_TIMES_QUERY,
     {
       variables: {
-        to: moment().subtract(7, "days").format("YYYYMMDD"),
-        from: moment().subtract(1, "days").format("YYYYMMDD"),
+        to: moment().subtract(moment().day(), "days").format("YYYYMMDD"),
+        from: moment().format("YYYYMMDD"),
       },
     }
   );
@@ -48,7 +48,7 @@ export default function Result({ route, navigation }: any) {
     <HomeLayout>
       <CompleteMsgContainer>
         <DurationNumberText>{route.params.duration}</DurationNumberText>
-        <BaseText>분 도전 성공!</BaseText>
+        <BaseText>시간 도전 성공!</BaseText>
       </CompleteMsgContainer>
       <NextRankText>
         다음 랭크까지{" "}
@@ -65,7 +65,6 @@ export default function Result({ route, navigation }: any) {
       <Rank rank={userData?.isMe ? userData.isMe.rank : "Bronze"}>
         {userData?.isMe?.rank}
       </Rank>
-
       <Medal
         maxExp={
           userData?.isMe && userData.isMe.maxExp !== null

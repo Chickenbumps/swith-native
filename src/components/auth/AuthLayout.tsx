@@ -24,5 +24,5 @@ const Container = styled.View`
   flex: 1;
   align-items: center;
   background-color: ${(props) => props.theme.bgColor};
-  padding: 200px 30px;
+  padding: 150px 30px;
 `;

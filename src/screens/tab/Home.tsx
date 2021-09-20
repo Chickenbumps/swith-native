@@ -34,15 +34,15 @@ type HomeScreenProps = StackScreenProps<LoggedInNavStackParamList, "Home">;
 export default function Home({ navigation, route }: HomeScreenProps) {
   const theme = useSelectTheme();
   const { data: meData, refetch, loading } = useUser();
-  const { data: weekData } = useQuery<seeTimes, seeTimesVariables>(
-    SEE_TIMES_QUERY,
-    {
-      variables: {
-        to: moment().subtract(moment().day(), "days").format("YYYYMMDD"),
-        from: moment().format("YYYYMMDD"),
-      },
-    }
-  );
+  const { data: weekData, refetch: timeRefetch } = useQuery<
+    seeTimes,
+    seeTimesVariables
+  >(SEE_TIMES_QUERY, {
+    variables: {
+      to: moment().subtract(moment().day(), "days").format("YYYYMMDD"),
+      from: moment().format("YYYYMMDD"),
+    },
+  });
   // console.log(moment().day());
   const dtime = moment().format("YYYY-MM-DD");
   // console.log(moment().format("YYYY-MM-DD"));
@@ -70,7 +70,8 @@ export default function Home({ navigation, route }: HomeScreenProps) {
 
   useEffect(() => {
     refetch();
-  }, [route.params?.observers]);
+    timeRefetch();
+  }, [route.params?.observers, meData?.isMe.todayTime]);
 
   const goToObserver = () => {
     return navigation.navigate("Observer");
