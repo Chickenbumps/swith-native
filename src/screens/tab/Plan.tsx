@@ -70,7 +70,7 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
   const [failTest, setFailTest] = useState(0);
 
   function failTimer() {
-    console.log("start??");
+    console.log("start");
     const fail = setTimeout(async () => {
       navigation.reset({
         index: 0,

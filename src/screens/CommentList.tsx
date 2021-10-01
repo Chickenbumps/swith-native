@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   View,
 } from "react-native";
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import useUser from "../hooks/useUser";
 import {
   seeComments,
@@ -16,6 +16,8 @@ import {
 import { useSelectTheme } from "../styles";
 import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
+import { useEffect } from "react";
+import { reloadVar } from "../apollo";
 
 const SPACE = 12;
 
@@ -100,6 +102,13 @@ export default function CommentList({ onPress }: any) {
       ]);
     }
   };
+
+  const reload = useReactiveVar(reloadVar);
+  useEffect(() => {
+    refetch();
+    console.log("reloaded");
+  }, [reload]);
+
   return loading ? (
     <View
       style={{

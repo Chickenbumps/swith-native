@@ -60,7 +60,22 @@ export default function LoggedInNav() {
         }}
       />
       <Stack.Screen name="Comment" component={Comment} />
-      <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfile}
+        options={{
+          headerBackTitleVisible: false,
+          headerTransparent: true,
+          headerBackImage: () => (
+            <Ionicons
+              name="chevron-back-outline"
+              size={28}
+              color={theme.txtColor}
+            />
+          ),
+          headerTitle: "",
+        }}
+      />
       <Stack.Screen
         name="CreateGroup"
         component={CreateGroup}

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -7,7 +7,7 @@ import useUser from "../../hooks/useUser";
 import { Ionicons } from "@expo/vector-icons";
 import { screenXY, useSelectTheme } from "../../styles";
 
-import { gql, useMutation } from "@apollo/client";
+import { gql, makeVar, useMutation, useReactiveVar } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import {
   createComment,
@@ -17,6 +17,7 @@ import CommentList from "../CommentList";
 import { StackScreenProps } from "@react-navigation/stack";
 import { LoggedInNavStackParamList } from "../../navigation/Router";
 import ScreenLayout from "../../components/ScreenLayout";
+import { reloadVar } from "../../apollo";
 
 const CREATE_COMMENT_MUTATION = gql`
   mutation createComment($payload: String!) {
@@ -34,6 +35,7 @@ type ProfileScreenProps = StackScreenProps<
 
 export default function Profile({ navigation }: ProfileScreenProps) {
   const theme = useSelectTheme();
+
   const { handleSubmit, register, setValue, getValues, watch } = useForm();
   const { data: userData, loading: userLoading } = useUser();
   const [createComment, { loading }] = useMutation<
@@ -47,6 +49,8 @@ export default function Profile({ navigation }: ProfileScreenProps) {
       if (!ok) {
         Alert.alert(`${error}`);
         // throw new Error(`코멘트 작성에러:${error}`);
+      } else if (ok) {
+        reloadVar(true);
       }
     },
   });

@@ -14,6 +14,12 @@
 
 ## Profile EditScreen
 
+## Result Screen
+
+- [o] weekData update 안되는거 해결하기
+
+## Profile Screen
+
 - [] 일기작성 cache
 
 ## GroupList Screen
