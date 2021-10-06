@@ -17,6 +17,7 @@ export const isLoggedInVar = makeVar(false);
 export const darkModeVar = makeVar(false);
 export const tokenVar = makeVar<string | null>(null);
 export const reloadVar = makeVar(false);
+export const modalVisibleVar = makeVar(false);
 const TOKEN = "token";
 
 export const logUserIn = async (token: any) => {
@@ -36,7 +37,7 @@ export const logUserOut = async () => {
 };
 
 const wsLink = new WebSocketLink({
-  uri: "ws://8f86-221-150-231-140.ngrok.io/graphql",
+  uri: "ws://3420-221-150-231-140.ngrok.io/graphql",
   options: {
     reconnect: true,
     connectionParams: () => ({
@@ -46,7 +47,7 @@ const wsLink = new WebSocketLink({
 });
 
 const httpLink = createHttpLink({
-  uri: "http://8f86-221-150-231-140.ngrok.io/graphql",
+  uri: "http://3420-221-150-231-140.ngrok.io/graphql",
 });
 
 const authLink = setContext((request, prevContext) => {

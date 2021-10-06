@@ -99,10 +99,14 @@ export default function Group({ route, navigation }: GroupScreenProps) {
   const [refreshing, setRefreshing] = useState(false);
   const theme = useSelectTheme();
   const { data: meData } = useUser();
-  const { data, error, refetch, subscribeToMore, fetchMore } = useQuery<
-    seeGroup,
-    seeGroupVariables
-  >(SEE_GROUP_QUERY, {
+  const {
+    data,
+    error,
+    refetch,
+    subscribeToMore,
+    fetchMore,
+    loading: groupLoading,
+  } = useQuery<seeGroup, seeGroupVariables>(SEE_GROUP_QUERY, {
     variables: {
       id: route.params.id,
       offset: 0,
@@ -243,7 +247,7 @@ export default function Group({ route, navigation }: GroupScreenProps) {
       behavior="padding"
       keyboardVerticalOffset={90}
     >
-      <ScreenLayout>
+      <ScreenLayout loading={groupLoading}>
         <FlatList
           inverted
           data={data?.seeGroup.messages}

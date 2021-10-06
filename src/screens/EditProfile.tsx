@@ -1,33 +1,20 @@
-import React from "react";
-import { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Modal,
-  TouchableHighlight,
-} from "react-native";
+import { useReactiveVar } from "@apollo/client";
+import React, { useState } from "react";
+import { Text, TouchableOpacity, TouchableHighlight } from "react-native";
 import styled from "styled-components/native";
-import { logUserOut } from "../apollo";
+import { logUserOut, modalVisibleVar } from "../apollo";
 import CustomModal from "../components/CustomModal";
 import ScreenLayout from "../components/ScreenLayout";
 import useUser from "../hooks/useUser";
 
 export default function EditProfile() {
   const { data: userData, loading } = useUser();
-  const [modalVisible, setModalVisible] = useState(false);
+  const modalVisible = useReactiveVar(modalVisibleVar);
+  const [editPart, setEditPart] = useState("name");
 
   return (
     <ScreenLayout loading={loading}>
-      <CustomModal visible={modalVisible}>
-        <ModalContainer>
-          <Text>Modal</Text>
-          <TouchableOpacity onPress={() => setModalVisible(false)}>
-            <Text>close</Text>
-          </TouchableOpacity>
-        </ModalContainer>
-      </CustomModal>
+      <CustomModal part={editPart} />
 
       <BasicInfo>
         <Avatar source={{ uri: userData?.isMe.avatar }} />
@@ -39,15 +26,27 @@ export default function EditProfile() {
       <UserSetting>
         <Wrapper>
           <Component>이름</Component>
-          <TouchableHighlight onPress={() => setModalVisible(true)}>
+          <TouchableHighlight
+            onPress={() => {
+              modalVisibleVar(true);
+              setEditPart("name");
+            }}
+          >
             <Component>{userData?.isMe.name}</Component>
           </TouchableHighlight>
         </Wrapper>
         <Wrapper>
           <Component>소개</Component>
-          <Component>
-            {userData?.isMe?.bio ? userData.isMe.bio : null}
-          </Component>
+          <TouchableHighlight
+            onPress={() => {
+              modalVisibleVar(true);
+              setEditPart("bio");
+            }}
+          >
+            <Component>
+              {userData?.isMe?.bio ? userData.isMe.bio : "반갑습니다"}
+            </Component>
+          </TouchableHighlight>
         </Wrapper>
         <Wrapper>
           <Component>감시자 설정</Component>
@@ -111,15 +110,3 @@ const Index = styled(Component)`
 `;
 
 const AccountSetting = styled(UserSetting)``;
-
-const ModalContainer = styled.View`
-  background-color: white;
-  padding: 22px;
-  justify-content: center;
-  align-self: center;
-  align-items: center;
-  width: 200px;
-  height: 100px;
-  border-radius: 4px;
-  border-color: rgba(0, 0, 0, 0.1);
-`;

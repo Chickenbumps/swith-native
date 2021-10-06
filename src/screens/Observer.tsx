@@ -62,7 +62,9 @@ type ObserverScreenProps = StackScreenProps<
 
 export default function Observer({ navigation }: ObserverScreenProps) {
   const theme = useSelectTheme();
-  const { data, error } = useQuery<seeGroups>(SEE_GROUPS_QUERY);
+  const { data, error, loading: groupLoading } = useQuery<seeGroups>(
+    SEE_GROUPS_QUERY
+  );
   const { data: meData, refetch } = useUser();
   const allMember = data?.seeGroups?.map((group) =>
     group.members.filter((member) => member.id !== meData?.isMe.id)
@@ -156,9 +158,10 @@ export default function Observer({ navigation }: ObserverScreenProps) {
       ),
     });
   }, [navigation, myData?.observers]);
+  4;
 
   return (
-    <ScreenLayout>
+    <ScreenLayout loading={groupLoading}>
       <CurrentObserverView>
         <CurrentObserverText>감시자 목록:</CurrentObserverText>
         {myData?.observers?.map((observer, index) => (
