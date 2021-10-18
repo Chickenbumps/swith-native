@@ -14,6 +14,8 @@ import { seeTimes, seeTimesVariables } from "../__generated__/seeTimes";
 import moment from "moment";
 import { useSpring, animated, config } from "@react-spring/native";
 import Medal from "../components/Medal";
+import { StackScreenProps } from "@react-navigation/stack";
+import { LoggedInNavStackParamList } from "../navigation/Router";
 
 const SEE_TIMES_QUERY = gql`
   query seeTimes($to: String!, $from: String!) {
@@ -27,7 +29,9 @@ const SEE_TIMES_QUERY = gql`
   }
 `;
 
-export default function Result({ route, navigation }: any) {
+type ResultScreenProps = StackScreenProps<LoggedInNavStackParamList, "Result">;
+
+export default function Result({ route, navigation }: ResultScreenProps) {
   const theme = useSelectTheme();
   const [goals, setGoals] = useState("");
   const { data: userData } = useUser();

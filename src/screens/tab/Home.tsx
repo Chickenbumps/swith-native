@@ -71,7 +71,7 @@ export default function Home({ navigation, route }: HomeScreenProps) {
   useEffect(() => {
     refetch();
     timeRefetch();
-  }, [route.params?.observers, meData?.isMe.todayTime]);
+  }, [route?.params?.observers, meData?.isMe?.todayTime]);
 
   const goToObserver = () => {
     return navigation.navigate("Observer");

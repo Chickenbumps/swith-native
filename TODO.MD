@@ -1,5 +1,7 @@
 # swith native
 
+## lottie + 안내화면
+
 ## login screen
 
 - [] Error handle
@@ -9,7 +11,8 @@
 
 - [o] Layout
 - [] Component(title,description)
-- [] Photo upload
+- [o] Photo upload
+- [] Try image-crop-picker after detetch from expo.
 - [o] Icon
 
 ## Profile EditScreen

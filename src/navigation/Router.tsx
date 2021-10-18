@@ -14,6 +14,7 @@ export type LoggedOutNavStackParamList = {
 };
 
 export type LoggedInNavStackParamList = {
+  Tab: undefined;
   Home: {
     observers?: any[] | undefined;
   };
@@ -39,6 +40,7 @@ export type LoggedInNavStackParamList = {
   };
   Observer: undefined;
   Notification: undefined;
+  SelectPhoto: undefined;
 };
 
 export default function Router() {

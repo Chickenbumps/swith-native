@@ -1,8 +1,6 @@
 import { gql, useMutation, useReactiveVar } from "@apollo/client";
 import React, { useState } from "react";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Modal from "react-native-modal";
 import styled from "styled-components/native";
 import { modalVisibleVar } from "../apollo";
@@ -50,7 +48,7 @@ export default function CustomModal({ part, children }: any) {
       ? "소개"
       : part === "password"
       ? "비밀번호"
-      : "";
+      : "아바타";
 
   const onValid = (data: editProfileVariables) => {
     console.log(data);
@@ -122,17 +120,19 @@ export default function CustomModal({ part, children }: any) {
           selectionColor={theme.txtColor}
           hasError={Boolean(formState.errors.name)}
         />
-        <TouchableOpacity
-          onPress={() => {
-            modalVisibleVar(false);
-            handleSubmit(onValid);
-          }}
-        >
-          <Text>변경</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => modalVisibleVar(false)}>
-          <Text>취소</Text>
-        </TouchableOpacity>
+        <BtnContainer>
+          <Btn
+            onPress={() => {
+              modalVisibleVar(false);
+              handleSubmit(onValid);
+            }}
+          >
+            <BtnText>변경</BtnText>
+          </Btn>
+          <Btn onPress={() => modalVisibleVar(false)}>
+            <BtnText>취소</BtnText>
+          </Btn>
+        </BtnContainer>
       </ModalContainer>
     </Modal>
   );
@@ -141,6 +141,8 @@ export default function CustomModal({ part, children }: any) {
 const ModalText = styled.Text`
   align-self: flex-start;
   color: ${(props) => props.theme.txtColor};
+  font-weight: bold;
+  font-size: 16px;
   padding: 5px;
 `;
 
@@ -150,8 +152,24 @@ const ModalContainer = styled.View`
   justify-content: center;
   align-self: center;
   align-items: center;
-  width: 200px;
-  height: 100px;
+  width: 300px;
+  height: 150px;
   border-radius: 4px;
   border-color: rgba(0, 0, 0, 0.1);
+`;
+const BtnContainer = styled.View`
+  flex-direction: row;
+`;
+const Btn = styled.TouchableOpacity`
+  background-color: ${(props) => props.theme.txtColor};
+  margin: 5px;
+  border-radius: 10px;
+  height: 30px;
+  width: 40px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const BtnText = styled.Text`
+  color: ${(props) => props.theme.bgColor};
 `;

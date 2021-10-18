@@ -217,6 +217,7 @@ const DayText = styled.Text`
 const Avatar = styled.Image`
   width: 30px;
   height: 30px;
+  border-radius: 75px;
 `;
 const UserInfo = styled.View`
   flex-direction: row;

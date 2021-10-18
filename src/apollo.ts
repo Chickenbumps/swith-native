@@ -7,11 +7,13 @@ import {
 } from "@apollo/client";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { setContext } from "@apollo/client/link/context";
+import { onError } from "@apollo/client/link/error";
 import {
   getMainDefinition,
   offsetLimitPagination,
 } from "@apollo/client/utilities";
 import { WebSocketLink } from "@apollo/client/link/ws";
+import { createUploadLink } from "apollo-upload-client";
 
 export const isLoggedInVar = makeVar(false);
 export const darkModeVar = makeVar(false);
@@ -36,6 +38,15 @@ export const logUserOut = async () => {
   }
 };
 
+const onErrorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors) {
+    console.log(`GraphQL Error`, graphQLErrors);
+  }
+  if (networkError) {
+    console.log("Network Error", networkError);
+  }
+});
+
 const wsLink = new WebSocketLink({
   uri: "ws://3420-221-150-231-140.ngrok.io/graphql",
   options: {
@@ -46,7 +57,7 @@ const wsLink = new WebSocketLink({
   },
 });
 
-const httpLink = createHttpLink({
+const httpLink = createUploadLink({
   uri: "http://3420-221-150-231-140.ngrok.io/graphql",
 });
 
@@ -73,7 +84,7 @@ export const cache = new InMemoryCache({
     },
   },
 });
-const concatHttpLink = authLink.concat(httpLink);
+const concatHttpLink = authLink.concat(onErrorLink).concat(httpLink);
 
 const splitLink = split(
   ({ query }) => {
