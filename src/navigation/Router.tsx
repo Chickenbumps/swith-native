@@ -7,7 +7,7 @@ import LoggedOutNav from "./LoggedOutNav";
 
 export type LoggedOutNavStackParamList = {
   Login: {
-    username: string;
+    email: string;
     password: string;
   };
   CreateAccount: undefined;

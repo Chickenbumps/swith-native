@@ -16,8 +16,8 @@ import { colors, useSelectTheme } from "../styles";
 import { login, loginVariables, login_login } from "../__generated__/login";
 
 const LOGIN_MUTATION = gql`
-  mutation login($username: String!, $password: String!) {
-    login(username: $username, password: $password) {
+  mutation login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
       ok
       token
       error
@@ -32,13 +32,13 @@ export default function Login({ navigation, route }: LoginScreenProps) {
   const { handleSubmit, setError, formState, control, setValue } = useForm({
     mode: "onChange",
     defaultValues: {
-      username: route?.params?.username,
+      email: route?.params?.email,
       password: route?.params?.password,
       loginResult: "",
     },
   });
 
-  const usernameRef = useRef<TextInput>(null);
+  const emailRef = useRef<TextInput>(null);
   const passwordRef = useRef<TextInput>(null);
   const onCompleted = (data: login) => {
     const {
@@ -80,8 +80,8 @@ export default function Login({ navigation, route }: LoginScreenProps) {
         source={require("../../assets/image/logo.png")}
       />
       <AuthTextInput
-        name="username"
-        refName={usernameRef}
+        name="email"
+        refName={emailRef}
         control={control}
         rules={{
           required: {
@@ -89,15 +89,15 @@ export default function Login({ navigation, route }: LoginScreenProps) {
             message: "필수 정보입니다.",
           },
         }}
-        placeholder="아이디"
+        placeholder="이메일"
         placeholderTextColor={theme.phColor}
         selectionColor={theme.txtColor}
         returnKeyType="next"
         autoCapitalize="none"
         onSubmitEditing={() => nextRef(passwordRef)}
-        hasError={Boolean(formState.errors?.username)}
+        hasError={Boolean(formState.errors?.email)}
       />
-      <AuthFormError message={formState.errors?.username?.message} />
+      <AuthFormError message={formState.errors?.email?.message} />
 
       <AuthTextInput
         name="password"

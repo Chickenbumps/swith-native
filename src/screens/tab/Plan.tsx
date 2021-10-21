@@ -20,7 +20,16 @@ import {
 import { updateExp, updateExpVariables } from "../../__generated__/updateExp";
 import { StackScreenProps } from "@react-navigation/stack";
 import { LoggedInNavStackParamList } from "../../navigation/Router";
-import { schedulePushNotification } from "../../components/PushNotification";
+import {
+  registerForPushNotificationsAsnyc,
+  schedulePushNotification,
+  sendPushNotification,
+} from "../../components/PushNotification";
+import {
+  pushNotification,
+  pushNotificationVariables,
+} from "../../__generated__/pushNotification";
+import * as Notifications from "expo-notifications";
 
 const { width, height } = Dimensions.get("screen");
 const minTimers = [...Array(24).keys()].map((i) => i);
@@ -46,6 +55,24 @@ const UPDATE_EXP_MUTATION = gql`
   }
 `;
 
+const PUSH_NOTIFICATION = gql`
+  mutation pushNotification($username: String) {
+    pushNotification(username: $username) {
+      ok
+      message
+      error
+    }
+  }
+`;
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
 type PlanScreenProps = StackScreenProps<LoggedInNavStackParamList, "Plan">;
 export default function Plan({ route, navigation }: PlanScreenProps) {
   const theme = useSelectTheme();
@@ -66,6 +93,22 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
   const [updateExp] = useMutation<updateExp, updateExpVariables>(
     UPDATE_EXP_MUTATION
   );
+  const [pushNotification, { data: pushData }] = useMutation<
+    pushNotification,
+    pushNotificationVariables
+  >(PUSH_NOTIFICATION, {
+    onCompleted: (data) => {
+      const {
+        pushNotification: { ok, message, error },
+      } = data;
+      console.log("ok:", ok);
+      console.log("error:", error);
+      if (ok) {
+        sendPushNotification(message);
+      }
+    },
+  });
+
   const randNum = Math.random() * duration * 60000 + 500;
   const [failTest, setFailTest] = useState(0);
 
@@ -76,7 +119,13 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
         index: 0,
         routes: [{ name: "Result", params: { duration: 0 } }],
       });
-      await schedulePushNotification();
+      // const token: any = await registerForPushNotificationsAsnyc();
+      // console.log("token", token);
+      await pushNotification({
+        variables: {
+          username: "znjcm12",
+        },
+      });
     }, 6000);
     //@ts-ignore
     setFailTest(fail);

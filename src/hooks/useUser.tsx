@@ -1,4 +1,4 @@
-import { gql, useQuery, useReactiveVar } from "@apollo/client";
+import { gql, useLazyQuery, useQuery, useReactiveVar } from "@apollo/client";
 import { useEffect } from "react";
 
 import { isLoggedInVar } from "../apollo";
@@ -47,12 +47,16 @@ const IS_ME_QUERY = gql`
 
 function useUser() {
   const hasToken = useReactiveVar(isLoggedInVar);
-  const { error, data, refetch, loading } = useQuery<isMe>(IS_ME_QUERY, {
-    skip: !hasToken,
-  });
+  const { error, data, refetch, loading, subscribeToMore } = useQuery<isMe>(
+    IS_ME_QUERY,
+    {
+      skip: !hasToken,
+    }
+  );
 
   useEffect(() => {
     refetch();
+
     return () => {};
   }, [data]);
   return { data, refetch, loading };

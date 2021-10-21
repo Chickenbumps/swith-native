@@ -78,8 +78,8 @@ export default function CreateAccount({
       setError("createAccountResult", { message: `계정 생성 오류,${error}` });
     } else {
       Alert.alert("계정이 생성됐습니다. 로그인 하세요.");
-      const { username, password } = getValues();
-      navigation.navigate("Login", { username, password });
+      const { email, password } = getValues();
+      navigation.navigate("Login", { email, password });
     }
   };
 

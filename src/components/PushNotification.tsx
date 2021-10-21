@@ -22,7 +22,18 @@ export const schedulePushNotification = async () => {
   });
 };
 
-const registerForPushNotificationsAsnyc = async () => {
+export const sendPushNotification = async (message: any) => {
+  let response = await fetch("https://exp.host/--/api/v2/push/send", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(message),
+  });
+};
+
+export const registerForPushNotificationsAsnyc = async () => {
   let token;
   if (Constants.isDevice) {
     const {
@@ -35,10 +46,9 @@ const registerForPushNotificationsAsnyc = async () => {
     }
     if (finalStatus !== "granted") {
       alert("푸시 알림 실패");
-      return;
+      return "";
     }
-    token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
+    return (token = (await Notifications.getExpoPushTokenAsync()).data);
   } else {
     alert("푸시 알림을 받을 디바이스가 필요합니다.");
   }

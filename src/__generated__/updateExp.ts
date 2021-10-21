@@ -10,7 +10,7 @@
 export interface updateExp_updateExp {
   __typename: "UpdateExpResult";
   ok: boolean;
-  error: string | undefined;
+  error: string | null;
 }
 
 export interface updateExp {

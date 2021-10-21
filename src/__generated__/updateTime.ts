@@ -10,7 +10,7 @@
 export interface updateTime_updateTime {
   __typename: "UpdateTimeResult";
   ok: boolean;
-  error: string | undefined;
+  error: string | null;
 }
 
 export interface updateTime {

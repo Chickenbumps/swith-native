@@ -1,4 +1,4 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect } from "react";
 import { useState } from "react";

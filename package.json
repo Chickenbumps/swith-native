@@ -27,7 +27,10 @@
     "expo-linear-gradient": "~9.2.0",
     "expo-media-library": "~12.1.2",
     "expo-notifications": "~0.12.3",
+    "expo-server-sdk": "^3.6.0",
+    "expo-sms": "~9.2.3",
     "expo-status-bar": "~1.0.4",
+    "firebase": "8.2.3",
     "graphql": "^15.5.1",
     "moment": "^2.29.1",
     "react": "16.13.1",
@@ -44,7 +47,8 @@
     "styled-components": "^5.3.0",
     "styled-components-react-native": "^1.0.0",
     "subscriptions-transport-ws": "^0.9.19",
-    "svg-path-properties": "^1.0.11"
+    "svg-path-properties": "^1.0.11",
+    "tslib": "^2.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
