@@ -49,7 +49,7 @@ const DELETE_COMMENT_MUTATION = gql`
   }
 `;
 
-export default function CommentList({ onPress }: any) {
+export default function CommentList({ onPress, navigation }: any) {
   const theme = useSelectTheme();
   const { data: userData } = useUser();
   const [refreshing, setRefreshing] = useState(false);
@@ -219,7 +219,7 @@ const Avatar = styled.Image`
   height: 30px;
   border-radius: 75px;
 `;
-const UserInfo = styled.View`
+const UserInfo = styled.TouchableOpacity`
   flex-direction: row;
 `;
 const Username = styled.Text`

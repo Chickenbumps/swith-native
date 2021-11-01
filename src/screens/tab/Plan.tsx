@@ -1,4 +1,10 @@
-import React, { useRef, useState, useCallback, useEffect } from "react";
+import React, {
+  useRef,
+  useState,
+  useCallback,
+  useEffect,
+  useMemo,
+} from "react";
 import {
   StyleSheet,
   Text,
@@ -30,6 +36,7 @@ import {
   pushNotificationVariables,
 } from "../../__generated__/pushNotification";
 import * as Notifications from "expo-notifications";
+import useUser from "../../hooks/useUser";
 
 const { width, height } = Dimensions.get("screen");
 const minTimers = [...Array(24).keys()].map((i) => i);
@@ -85,6 +92,7 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
   const [duration, setDuration] = useState(timers[0]);
   const [isRunning, setIsRunning] = useState(false);
   const [isStop, setIsStop] = useState(false);
+  const { data: userData, loading: userLoading, refetch } = useUser();
   const [updateTime, { data, loading }] = useMutation<
     updateTime,
     updateTimeVariables
@@ -111,8 +119,8 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
 
   const randNum = Math.random() * duration * 60000 + 500;
   const [failTest, setFailTest] = useState(0);
-
-  function failTimer() {
+  const [testVar, setTestVar] = useState(false);
+  const failTimer = () => {
     console.log("start");
     const fail = setTimeout(async () => {
       navigation.reset({
@@ -123,14 +131,15 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
       // console.log("token", token);
       await pushNotification({
         variables: {
-          username: "znjcm12",
+          username: userData?.isMe.username,
         },
       });
     }, 6000);
+    setTestVar(true);
     //@ts-ignore
     setFailTest(fail);
     console.log("next", fail);
-  }
+  };
 
   useEffect(() => {
     const listener = textInputAnimation.addListener(({ value }) => {
@@ -194,7 +203,7 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
     ]),
   ]);
 
-  const animation = useCallback(() => {
+  const animation = useCallback(async () => {
     // console.log(parseFloat(JSON.stringify(textInputAnimation)));
     textInputAnimation.setValue(parseFloat(JSON.stringify(textInputAnimation)));
     // console.log(isStop);
@@ -208,14 +217,16 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
         if (parseFloat(JSON.stringify(textInputAnimation)) === 0) {
           // console.log("In");
           textInputAnimation.setValue(duration);
+
+          (async () => {
+            await updateTime({ variables: { time: duration } });
+            await updateExp({ variables: { exp: duration } });
+            await navigation.replace("Result", { duration: duration });
+          })();
           Animated.timing(buttonAnimation, {
             toValue: 0,
             duration: 300,
             useNativeDriver: true,
-          }).start(async () => {
-            await updateTime({ variables: { time: duration } });
-            await updateExp({ variables: { exp: duration } });
-            navigation.replace("Result", { duration: duration });
           });
         }
       });
@@ -241,14 +252,18 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
         if (parseFloat(JSON.stringify(textInputAnimation)) === 0) {
           // console.log("In");
           textInputAnimation.setValue(duration);
+          (async () => {
+            await updateTime({ variables: { time: duration } });
+          })();
+          (async () => {
+            await updateExp({ variables: { exp: duration } });
+            await refetch();
+          })();
+          navigation.replace("Result", { duration: duration });
           Animated.timing(buttonAnimation, {
             toValue: 0,
             duration: 300,
             useNativeDriver: true,
-          }).start(async () => {
-            await updateTime({ variables: { time: duration } });
-            await updateExp({ variables: { exp: duration } });
-            navigation.replace("Result", { duration: duration });
           });
         }
       });
@@ -266,6 +281,10 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
 
   const onStart = () => {
     navigation.navigate("CameraScreen", { second: false });
+    navigation.setOptions({
+      //@ts-ignore
+      tabBarStyle: { display: "none" },
+    });
   };
 
   const opacity = buttonAnimation.interpolate({
@@ -284,7 +303,7 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
   return (
     <Container>
       <StatusBar />
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() => {
           setIsRunning(!isRunning);
           setIsStop(true);
@@ -298,7 +317,7 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
         >
           pause
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <Animated.View
         style={[
           StyleSheet.absoluteFillObject,

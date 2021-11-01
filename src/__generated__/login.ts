@@ -11,7 +11,7 @@ export interface login_login {
   __typename: "LoginResult";
   ok: boolean;
   token: string | null;
-  error: string | undefined;
+  error: string | null;
 }
 
 export interface login {
@@ -19,6 +19,6 @@ export interface login {
 }
 
 export interface loginVariables {
-  username: string;
+  email: string;
   password: string;
 }

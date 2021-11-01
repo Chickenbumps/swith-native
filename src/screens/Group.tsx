@@ -14,6 +14,7 @@ import {
   RefreshControl,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
@@ -247,7 +248,7 @@ export default function Group({ route, navigation }: GroupScreenProps) {
       behavior="padding"
       keyboardVerticalOffset={90}
     >
-      <ScreenLayout loading={groupLoading}>
+      <ScreenLayout loading={groupLoading} isKeyboard={false}>
         <FlatList
           inverted
           data={data?.seeGroup.messages}
@@ -255,7 +256,7 @@ export default function Group({ route, navigation }: GroupScreenProps) {
           refreshing={refreshing}
           onRefresh={onRefresh}
           onEndReachedThreshold={1}
-          scrollsToTop
+          // scrollsToTop
           onEndReached={() =>
             fetchMore({
               variables: {
@@ -281,7 +282,16 @@ export default function Group({ route, navigation }: GroupScreenProps) {
                 isMine={message.user.username === route.params.username}
               >
                 {message.user.username !== route.params.username ? (
-                  <Avatar source={{ uri: message.user.avatar }} />
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate("UserProfile", {
+                        username: message.user.username,
+                      });
+                      refetch();
+                    }}
+                  >
+                    <Avatar source={{ uri: message.user.avatar }} />
+                  </TouchableOpacity>
                 ) : null}
                 <Column>
                   {message.user.username !== route.params.username ? (

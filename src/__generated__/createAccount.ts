@@ -10,7 +10,7 @@
 export interface createAccount_createAccount {
   __typename: "CreateAccounteResult";
   ok: boolean;
-  error: string | undefined;
+  error: string | null;
 }
 
 export interface createAccount {
@@ -23,4 +23,5 @@ export interface createAccountVariables {
   email: string;
   password: string;
   passwordConfirm: string;
+  token?: string | null;
 }

@@ -1,6 +1,11 @@
 import { useMutation, useReactiveVar, gql, ApolloCache } from "@apollo/client";
 import React, { useEffect, useState } from "react";
-import { Text, TouchableOpacity, TouchableHighlight } from "react-native";
+import {
+  Text,
+  TouchableOpacity,
+  TouchableHighlight,
+  ScrollView,
+} from "react-native";
 import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 import { logUserOut, modalVisibleVar } from "../apollo";
@@ -38,7 +43,7 @@ type EditProfileScreenProps = StackScreenProps<
 
 export default function EditProfile({ navigation }: EditProfileScreenProps) {
   const theme = useSelectTheme();
-  const { data: userData, loading, refetch } = useUser();
+  const { data: userData, loading } = useUser();
   const modalVisible = useReactiveVar(modalVisibleVar);
   const [editPart, setEditPart] = useState("name");
   const [chosenPhoto, setChosenPhoto] = useState<any>(null);
@@ -105,75 +110,77 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
   };
 
   return (
-    <ScreenLayout loading={loading}>
-      <CustomModal part={editPart} />
+    <ScrollView style={{ flex: 1, backgroundColor: theme.bgColor }}>
+      <ScreenLayout loading={loading} isKeyboard={true}>
+        <CustomModal part={editPart} />
 
-      <BasicInfo>
-        <AvatarContainer onPress={() => getPermissions()}>
-          <Avatar source={{ uri: userData?.isMe.avatar }} />
-          <Ionicons
-            style={{ position: "absolute", left: 110, top: 110 }}
-            name="camera"
-            size={30}
-            color={theme.phColor}
-          />
-        </AvatarContainer>
-        <Username>{userData?.isMe.username}</Username>
-        <Email>{userData?.isMe.email}</Email>
-      </BasicInfo>
+        <BasicInfo>
+          <AvatarContainer onPress={() => getPermissions()}>
+            <Avatar source={{ uri: userData?.isMe.avatar }} />
+            <Ionicons
+              style={{ position: "absolute", left: 110, top: 110 }}
+              name="camera"
+              size={30}
+              color={theme.phColor}
+            />
+          </AvatarContainer>
+          <Username>{userData?.isMe.username}</Username>
+          <Email>{userData?.isMe.email}</Email>
+        </BasicInfo>
 
-      <Index>개인 설정</Index>
-      <UserSetting>
-        <Wrapper>
-          <Component>이름</Component>
-          <TouchableHighlight
-            onPress={() => {
-              modalVisibleVar(true);
-              setEditPart("name");
-            }}
-          >
-            <Component>{userData?.isMe.name}</Component>
-          </TouchableHighlight>
-        </Wrapper>
-        <Wrapper>
-          <Component>소개</Component>
-          <TouchableHighlight
-            onPress={() => {
-              modalVisibleVar(true);
-              setEditPart("bio");
-            }}
-          >
-            <Component>
-              {userData?.isMe?.bio ? userData.isMe.bio : "반갑습니다"}
-            </Component>
-          </TouchableHighlight>
-        </Wrapper>
-        <Wrapper>
-          <Component>프로필 사진</Component>
-          <TouchableHighlight onPress={() => selectPhoto()}>
-            <Component>
-              <Ionicons name="camera" size={28} />
-            </Component>
-          </TouchableHighlight>
-        </Wrapper>
-        <Wrapper>
-          <Component>감시자 설정</Component>
-          <Component>미구현</Component>
-        </Wrapper>
-        <Wrapper>
-          <Component>알림 설정</Component>
-          <Component>미구현</Component>
-        </Wrapper>
-      </UserSetting>
-      <Index>계정 설정</Index>
-      <AccountSetting>
-        <Wrapper>
-          <TouchableOpacity onPress={() => logUserOut()}>
-            <Component>로그 아웃</Component>
-          </TouchableOpacity>
-        </Wrapper>
-      </AccountSetting>
-    </ScreenLayout>
+        <Index>개인 설정</Index>
+        <UserSetting>
+          <Wrapper>
+            <Component>이름</Component>
+            <TouchableHighlight
+              onPress={() => {
+                modalVisibleVar(true);
+                setEditPart("name");
+              }}
+            >
+              <Component>{userData?.isMe.name}</Component>
+            </TouchableHighlight>
+          </Wrapper>
+          <Wrapper>
+            <Component>소개</Component>
+            <TouchableHighlight
+              onPress={() => {
+                modalVisibleVar(true);
+                setEditPart("bio");
+              }}
+            >
+              <Component>
+                {userData?.isMe?.bio ? userData.isMe.bio : "반갑습니다"}
+              </Component>
+            </TouchableHighlight>
+          </Wrapper>
+          <Wrapper>
+            <Component>프로필 사진</Component>
+            <TouchableHighlight onPress={() => selectPhoto()}>
+              <Component>
+                <Ionicons name="camera" size={28} />
+              </Component>
+            </TouchableHighlight>
+          </Wrapper>
+          <Wrapper>
+            <Component>감시자 설정</Component>
+            <Component>미구현</Component>
+          </Wrapper>
+          <Wrapper>
+            <Component>알림 설정</Component>
+            <Component>미구현</Component>
+          </Wrapper>
+        </UserSetting>
+        <Index>계정 설정</Index>
+        <AccountSetting>
+          <Wrapper>
+            <TouchableOpacity onPress={() => logUserOut()}>
+              <Component>로그 아웃</Component>
+            </TouchableOpacity>
+          </Wrapper>
+        </AccountSetting>
+      </ScreenLayout>
+    </ScrollView>
   );
 }
 

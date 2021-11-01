@@ -14,7 +14,8 @@ import Group from "../screens/Group";
 import Observer from "../screens/Observer";
 import PushNotification from "../components/PushNotification";
 import SelectPhoto from "../screens/SelectPhoto";
-
+import CommentList from "../screens/CommentList";
+import UserProfile from "../screens/UserProfile";
 const Stack = createStackNavigator();
 
 export default function LoggedInNav() {
@@ -124,6 +125,15 @@ export default function LoggedInNav() {
       />
       <Stack.Screen name="PushNotification" component={PushNotification} />
       <Stack.Screen name="SelectPhoto" component={SelectPhoto} />
+      <Stack.Screen name="CommentList" component={CommentList} />
+      <Stack.Screen
+        name="UserProfile"
+        component={UserProfile}
+        options={{
+          headerTitle: "",
+          headerTransparent: true,
+        }}
+      />
     </Stack.Navigator>
   );
 }

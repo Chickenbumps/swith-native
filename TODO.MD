@@ -24,6 +24,7 @@
 ## Profile Screen
 
 - [] 일기작성 cache
+- [o] 화면스크롤 되게 하기
 
 ## GroupList Screen
 

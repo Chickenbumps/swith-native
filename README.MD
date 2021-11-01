@@ -12,13 +12,14 @@
     <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/login.PNG" width="375 " height="812" /></p></td>
     <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/createAccount.PNG" width="375 " height="812" /></p></td>
   </tr>
-  <tr><td><strong>Home</strong></td><td><strong>Plan</strong></td></tr>
+  <tr><td><strong>Home</strong></td><td><strong>Observer</strong></td></tr>
   <tr>
     <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/home.PNG" width="375 " height="812" /></p></td>
-    <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/plan.PNG" width="375 " height="812" /></p></td>
+    <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/observerList.PNG" width="375 " height="812" /></p></td>
   </tr>
-  <tr><td><strong>Camera</strong></td></tr>
+  <tr><td><strong>Plan</strong></td></tr><td><strong>Camera</strong></td></tr>
   <tr>
+    <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/plan.PNG" width="375 " height="812" /></p></td>
     <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/camera.PNG" width="375 " height="812" /></p></td>
   </tr>
   <tr><td><strong>FocusTime</strong></td><td><strong>Result</strong></td></tr>
@@ -29,11 +30,16 @@
 <tr><td><strong>Group</strong></td><td><strong>GroupChat</strong></td></tr>
   <tr>
     <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/group.PNG" width="375 " height="812" /></p></td>
-    <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/groupChat.PNG" width="375 " height="812" /></p></td>
+    <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/chatInput.PNG" width="375 " height="812" /></p></td>
   </tr>
   <tr><td><strong>Profile</strong></td><td><strong>EditProfile</strong></td></tr>
   <tr>
     <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/profile.PNG" width="375 " height="812" /></p></td>
     <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/editProfile.PNG" width="375 " height="812" /></p></td>
+  </tr>
+  <tr><td><strong>Modal</strong></td><td><strong>UserProfile</strong></td></tr>
+  <tr>
+    <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/profileModal.PNG" width="375 " height="812" /></p></td>
+    <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/userProfile.PNG" width="375 " height="812" /></p></td>
   </tr>
 </table>

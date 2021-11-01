@@ -18,6 +18,8 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { LoggedInNavStackParamList } from "../../navigation/Router";
 import ScreenLayout from "../../components/ScreenLayout";
 import { reloadVar } from "../../apollo";
+import DismissKeyboard from "../../components/DismissKeyboard";
+import HomeLayout from "../../components/HomeLayout";
 
 const CREATE_COMMENT_MUTATION = gql`
   mutation createComment($payload: String!) {
@@ -67,9 +69,9 @@ export default function Profile({ navigation }: ProfileScreenProps) {
   };
 
   return (
-    <ScreenLayout loading={userLoading}>
+    <ScreenLayout loading={userLoading} isKeyboard={false}>
       <SettingIcon onPress={() => navigation.navigate("EditProfile")}>
-        <Ionicons name="cog-outline" size={24} color={theme.txtColor} />
+        <Ionicons name="cog-outline" size={28} color={theme.txtColor} />
       </SettingIcon>
       <UserInfo>
         {userData?.isMe.avatar ? (
@@ -82,6 +84,7 @@ export default function Profile({ navigation }: ProfileScreenProps) {
           <Avatar source={require("../../../assets/image/default.png")} />
         )}
         <Username>{userData?.isMe.username}</Username>
+        <Bio>{userData?.isMe.bio}</Bio>
         <FollowWrapper>
           <FollowItem>
             <FollowText>팔로워</FollowText>
@@ -117,6 +120,7 @@ const UserInfo = styled.View`
 `;
 const SettingIcon = styled.TouchableOpacity`
   margin-right: 20px;
+  margin-top: 5px;
   align-items: flex-end;
 `;
 
@@ -131,6 +135,8 @@ const Username = styled.Text`
   color: ${(props) => props.theme.txtColor};
   margin-top: 10px;
 `;
+
+const Bio = styled(Username)``;
 
 const FollowWrapper = styled.View`
   flex-direction: row;

@@ -11,8 +11,13 @@ import AuthButton from "../components/auth/AuthButton";
 import AuthFormError from "../components/auth/AuthFormError";
 import AuthLayout from "../components/auth/AuthLayout";
 import AuthTextInput from "../components/auth/AuthTextInput";
+import { registerForPushNotificationsAsnyc } from "../components/PushNotification";
 import { LoggedOutNavStackParamList } from "../navigation/Router";
 import { colors, useSelectTheme } from "../styles";
+import {
+  createPushToken,
+  createPushTokenVariables,
+} from "../__generated__/createPushToken";
 import { login, loginVariables, login_login } from "../__generated__/login";
 
 const LOGIN_MUTATION = gql`
@@ -25,10 +30,34 @@ const LOGIN_MUTATION = gql`
   }
 `;
 
+const CREATE_PUSH_TOKEN = gql`
+  mutation createPushToken($pushToken: String) {
+    createPushToken(pushToken: $pushToken) {
+      ok
+      error
+    }
+  }
+`;
+
 type LoginScreenProps = StackScreenProps<LoggedOutNavStackParamList, "Login">;
 
 export default function Login({ navigation, route }: LoginScreenProps) {
   const theme = useSelectTheme();
+  const [createPushToken, { data: createPushTokenResult }] = useMutation<
+    createPushToken,
+    createPushTokenVariables
+  >(CREATE_PUSH_TOKEN, {
+    onCompleted: (data: createPushToken) => {
+      const {
+        createPushToken: { ok, error },
+      } = data;
+      if (ok) {
+        console.log("성공적으로 푸쉬토큰 생성완료.");
+      } else {
+        console.error(`푸쉬토큰 생성에러:${error}`);
+      }
+    },
+  });
   const { handleSubmit, setError, formState, control, setValue } = useForm({
     mode: "onChange",
     defaultValues: {
@@ -40,7 +69,7 @@ export default function Login({ navigation, route }: LoginScreenProps) {
 
   const emailRef = useRef<TextInput>(null);
   const passwordRef = useRef<TextInput>(null);
-  const onCompleted = (data: login) => {
+  const onCompleted = async (data: login) => {
     const {
       login: { ok, token, error },
     } = data;
@@ -49,6 +78,12 @@ export default function Login({ navigation, route }: LoginScreenProps) {
       Alert.alert(`${error}`);
     } else {
       logUserIn(token);
+      const pushToken = await registerForPushNotificationsAsnyc();
+      createPushToken({
+        variables: {
+          pushToken: pushToken,
+        },
+      });
     }
   };
 

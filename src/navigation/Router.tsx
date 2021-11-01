@@ -41,6 +41,9 @@ export type LoggedInNavStackParamList = {
   Observer: undefined;
   Notification: undefined;
   SelectPhoto: undefined;
+  UserProfile: {
+    username: string;
+  };
 };
 
 export default function Router() {

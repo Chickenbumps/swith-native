@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "swith-native",
-    "slug": "swith-native",
+    "name": "SWITH",
+    "slug": "SWITH",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -25,6 +25,13 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "platforms": ["ios", "android"],
+    "notification": {
+      "icon": "./assets/icon1.png",
+      "color": "#311b92",
+      "iosDisplayInForeground": true,
+      "androidMode": "default"
     }
   }
 }

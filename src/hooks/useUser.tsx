@@ -41,6 +41,7 @@ const IS_ME_QUERY = gql`
       }
       totalFollowers
       totalFollowing
+      isFollowing
     }
   }
 `;
@@ -56,8 +57,6 @@ function useUser() {
 
   useEffect(() => {
     refetch();
-
-    return () => {};
   }, [data]);
   return { data, refetch, loading };
 }

@@ -161,7 +161,7 @@ export default function Observer({ navigation }: ObserverScreenProps) {
   4;
 
   return (
-    <ScreenLayout loading={groupLoading}>
+    <ScreenLayout loading={groupLoading} isKeyboard={false}>
       <CurrentObserverView>
         <CurrentObserverText>감시자 목록:</CurrentObserverText>
         {myData?.observers?.map((observer, index) => (
@@ -174,7 +174,13 @@ export default function Observer({ navigation }: ObserverScreenProps) {
         renderItem={({ item: member }: { item: seeGroups_seeGroups_members }) =>
           meData?.isMe.id !== member.id ? (
             <ObserverList>
-              <ObserverInfo>
+              <ObserverInfo
+                onPress={() =>
+                  navigation.navigate("UserProfile", {
+                    username: member.username,
+                  })
+                }
+              >
                 <Avatar source={{ uri: member?.avatar }} />
                 <ObserverText style={{ color: `${theme.txtColor}` }}>
                   {member.username}

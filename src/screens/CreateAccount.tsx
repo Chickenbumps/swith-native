@@ -9,6 +9,7 @@ import AuthButton from "../components/auth/AuthButton";
 import AuthFormError from "../components/auth/AuthFormError";
 import AuthLayout from "../components/auth/AuthLayout";
 import AuthTextInput from "../components/auth/AuthTextInput";
+import { registerForPushNotificationsAsnyc } from "../components/PushNotification";
 import { LoggedOutNavStackParamList } from "../navigation/Router";
 import { colors, useSelectTheme } from "../styles";
 import { EMAIL_EXP, PASSWORD_EXP, USERNAME_EXP } from "../variables";
@@ -24,6 +25,7 @@ const CREATE_ACCOUNT_MUTATION = gql`
     $email: String!
     $password: String!
     $passwordConfirm: String!
+    $token: String
   ) {
     createAccount(
       name: $name
@@ -31,6 +33,7 @@ const CREATE_ACCOUNT_MUTATION = gql`
       email: $email
       password: $password
       passwordConfirm: $passwordConfirm
+      token: $token
     ) {
       ok
       error
@@ -93,11 +96,17 @@ export default function CreateAccount({
     ref?.current?.focus();
   };
 
-  const onValid = (data: createAccountVariables) => {
+  const onValid = async (data: createAccountVariables) => {
+    const token = await registerForPushNotificationsAsnyc();
     if (!loading) {
       createAccount({
         variables: {
-          ...data,
+          name: data.name,
+          email: data.email,
+          username: data.username,
+          password: data.password,
+          passwordConfirm: data.passwordConfirm,
+          token: token,
         },
       });
     }
@@ -190,7 +199,7 @@ export default function CreateAccount({
         rules={{
           pattern: {
             value: PASSWORD_EXP,
-            message: "8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.",
+            message: "8-16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.",
           },
           required: {
             value: true,

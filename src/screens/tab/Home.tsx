@@ -1,7 +1,6 @@
 import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect } from "react";
-import { useState } from "react";
 import styled from "styled-components/native";
 import ExpBar from "../../components/ExpBar";
 import HomeLayout from "../../components/HomeLayout";
@@ -16,7 +15,6 @@ import { ScrollView, TouchableOpacity } from "react-native";
 import Medal from "../../components/Medal";
 import { StackScreenProps } from "@react-navigation/stack";
 import { LoggedInNavStackParamList } from "../../navigation/Router";
-import { useLayoutEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 const SEE_TIMES_QUERY = gql`
   query seeTimes($to: String!, $from: String!) {
@@ -102,18 +100,35 @@ export default function Home({ navigation, route }: HomeScreenProps) {
         </TimeContainer>
 
         <ObserverContainer>
-          <TouchableOpacity onPress={goToObserver}>
-            <ObserverText>감시자:</ObserverText>
-          </TouchableOpacity>
-          {route.params?.observers
+          <ObserverText>감시자:</ObserverText>
+
+          {route.params?.observers ? (
+            <Observer>{`${route.params.observers[0]?.username}`} </Observer>
+          ) : meData?.isMe.observers[0]?.username ? (
+            <Observer>{`${meData?.isMe.observers[0]?.username}`} </Observer>
+          ) : null}
+          {/* {route.params?.observers
             ? route.params?.observers?.map((observer, index) => (
                 <Observer key={index}>{`${observer?.username}`} </Observer>
               ))
             : meData?.isMe?.observers?.map((observer, index) => (
                 <Observer key={index}>{`${observer?.username}`} </Observer>
-              ))}
+              ))} */}
+          <TouchableOpacity onPress={goToObserver}>
+            <Ionicons
+              name="ellipsis-horizontal-circle-outline"
+              size={24}
+              color={theme.phColor}
+              style={{ bottom: 3 }}
+            />
+            {/* <ObserverText>더보기</ObserverText> */}
+          </TouchableOpacity>
         </ObserverContainer>
-        <GotoStudyBtn>
+        <GotoStudyBtn
+          onPress={() =>
+            navigation.navigate("Plan", { faceDetected: false, second: false })
+          }
+        >
           <LinearGradient
             style={{
               flexDirection: "row",
@@ -200,9 +215,10 @@ const ObserverText = styled.Text`
   color: ${(props) => props.theme.txtColor};
 `;
 const Observer = styled.Text`
-  font-weight: bold;
+  font-weight: 800;
   font-size: 16px;
-  color: ${(props) => props.theme.activeColor};
+  color: ${(props) => props.theme.txtColor};
+  margin-left: 5px;
   /* top: 1px; // why?? */
 `;
 

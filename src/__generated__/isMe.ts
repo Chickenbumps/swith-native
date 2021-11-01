@@ -52,6 +52,7 @@ export interface isMe_isMe {
   subjects: isMe_isMe_subjects[];
   totalFollowers: number;
   totalFollowing: number;
+  isFollowing: boolean;
 }
 
 export interface isMe {

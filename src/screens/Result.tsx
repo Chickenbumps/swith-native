@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 
 import WeekEntry from "../components/WeekEntry";
@@ -34,7 +34,7 @@ type ResultScreenProps = StackScreenProps<LoggedInNavStackParamList, "Result">;
 export default function Result({ route, navigation }: ResultScreenProps) {
   const theme = useSelectTheme();
   const [goals, setGoals] = useState("");
-  const { data: userData } = useUser();
+  const { data: userData, refetch } = useUser();
   const weekName = ["일", "월", "화", "수", "목", "금", "토"];
 
   const { data: weekData, error } = useQuery<seeTimes, seeTimesVariables>(
@@ -47,7 +47,13 @@ export default function Result({ route, navigation }: ResultScreenProps) {
     }
   );
 
-  // console.log("userData", userData?.isMe);
+  useEffect(() => {
+    (async () => {
+      await refetch();
+    })();
+    console.log("userData", userData?.isMe);
+    // console.log(route.params.duration);
+  }, [userData]);
   return (
     <HomeLayout>
       <CompleteMsgContainer>

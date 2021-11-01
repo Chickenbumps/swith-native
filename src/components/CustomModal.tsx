@@ -90,7 +90,14 @@ export default function CustomModal({ part, children }: any) {
   // });
 
   return (
-    <Modal animationIn="fadeIn" animationOut="fadeOut" isVisible={modalVisible}>
+    <Modal
+      animationIn="fadeInUp"
+      animationOut="fadeOutDown"
+      isVisible={modalVisible}
+      backdropColor="#66666D"
+      swipeDirection={["left", "right", "up", "down"]}
+      onSwipeComplete={() => modalVisibleVar(false)}
+    >
       <ModalContainer>
         <ModalText>{hanPart}</ModalText>
         <AuthTextInput
