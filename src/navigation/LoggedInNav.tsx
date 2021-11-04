@@ -83,6 +83,7 @@ export default function LoggedInNav() {
         component={CreateGroup}
         options={{
           headerBackTitleVisible: false,
+          headerTitle: "그룹 만들기",
           headerBackImage: () => (
             <Ionicons
               name="chevron-back-outline"

@@ -77,7 +77,7 @@ export default function Home({ navigation, route }: HomeScreenProps) {
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: theme.bgColor }}>
-      <HomeLayout loading={loading}>
+      <HomeLayout loading={loading} color={true}>
         <RankText>현재 랭크:</RankText>
         <Rank rank={meData?.isMe ? meData.isMe.rank : "Bronze"}>
           {meData?.isMe?.rank}

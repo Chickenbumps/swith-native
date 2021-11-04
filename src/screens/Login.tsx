@@ -14,6 +14,7 @@ import AuthTextInput from "../components/auth/AuthTextInput";
 import { registerForPushNotificationsAsnyc } from "../components/PushNotification";
 import { LoggedOutNavStackParamList } from "../navigation/Router";
 import { colors, useSelectTheme } from "../styles";
+import { EMAIL_EXP } from "../variables";
 import {
   createPushToken,
   createPushTokenVariables,
@@ -119,6 +120,10 @@ export default function Login({ navigation, route }: LoginScreenProps) {
         refName={emailRef}
         control={control}
         rules={{
+          pattern: {
+            value: EMAIL_EXP,
+            message: "이메일 주소를 다시 확인해주세요.",
+          },
           required: {
             value: true,
             message: "필수 정보입니다.",

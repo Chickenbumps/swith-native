@@ -29,7 +29,9 @@ export type LoggedInNavStackParamList = {
     second?: boolean;
   };
   Analytics: undefined;
-  GroupList: undefined;
+  GroupList: {
+    isCreated: boolean;
+  };
   Profile: undefined;
   EditProfile: undefined;
   Comment: undefined;

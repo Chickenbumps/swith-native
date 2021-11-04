@@ -1,6 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 import { StackScreenProps } from "@react-navigation/stack";
-import React from "react";
+import React, { useEffect } from "react";
 import { useLayoutEffect } from "react";
 import { useState } from "react";
 import { RefreshControl } from "react-native";
@@ -44,7 +44,7 @@ type GroupListScreenProps = StackScreenProps<
   "GroupList"
 >;
 
-export default function GroupList({ navigation }: GroupListScreenProps) {
+export default function GroupList({ navigation, route }: GroupListScreenProps) {
   const theme = useSelectTheme();
   const { data: userData } = useUser();
   const { data: groupsData, loading, refetch } = useQuery<seeGroups>(
@@ -58,8 +58,12 @@ export default function GroupList({ navigation }: GroupListScreenProps) {
     setRefreshing(false);
   };
 
+  useEffect(() => {
+    refetch();
+  }, [route.params?.isCreated]);
+
   return (
-    <ScreenLayout loading={loading}>
+    <ScreenLayout loading={loading} isKeyboard={false}>
       <FlatList
         data={groupsData?.seeGroups}
         keyExtractor={(item, index) => item.id.toString() + index}

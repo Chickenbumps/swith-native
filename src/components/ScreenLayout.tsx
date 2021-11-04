@@ -3,8 +3,6 @@ import {
   ActivityIndicator,
   SafeAreaView,
   StyleProp,
-  StyleSheet,
-  Text,
   View,
   ViewStyle,
 } from "react-native";
@@ -61,5 +59,3 @@ export default function ScreenLayout({
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({});

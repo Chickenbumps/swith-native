@@ -8,16 +8,16 @@ import styled from "styled-components/native";
 import { useSelectTheme } from "../styles";
 import DismissKeyboard from "./DismissKeyboard";
 
-export default function HomeLayout({ children }: any) {
+export default function HomeLayout({ children, color, loading }: any) {
   const theme = useSelectTheme();
   return (
     <DismissKeyboard>
-      <Container>
+      <Container color={color}>
         <KeyboardAvoidingView
           behavior="position"
           keyboardVerticalOffset={Platform.OS == "ios" ? 50 : 0}
         >
-          {children.loading ? (
+          {loading ? (
             <ActivityIndicator color={theme.txtColor} size="large" />
           ) : (
             children
@@ -27,9 +27,14 @@ export default function HomeLayout({ children }: any) {
     </DismissKeyboard>
   );
 }
-const Container = styled.View`
+
+interface ContainerProps {
+  color: boolean;
+}
+const Container = styled.View<ContainerProps>`
   flex: 1;
   align-items: center;
   justify-content: flex-start;
-  background-color: ${(props) => props.theme.bgColor};
+  background-color: ${(props) =>
+    props.color ? props.theme.bgColor : "#f1f3f5"};
 `;

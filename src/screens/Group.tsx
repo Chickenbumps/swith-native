@@ -35,6 +35,7 @@ import {
 } from "../__generated__/sendMessage";
 import moment from "moment";
 import { useLayoutEffect } from "react";
+import { Ionicons } from "@expo/vector-icons";
 
 const SEE_GROUP_QUERY = gql`
   query seeGroup($id: Int!, $offset: Int!) {
@@ -325,6 +326,9 @@ export default function Group({ route, navigation }: GroupScreenProps) {
             autoFocus
             autoCorrect={false}
           />
+          <SendIcon onPress={handleSubmit(onValid)}>
+            <Ionicons name="paper-plane-outline" size={26} />
+          </SendIcon>
         </InputContainer>
       </ScreenLayout>
     </KeyboardAvoidingView>
@@ -332,6 +336,8 @@ export default function Group({ route, navigation }: GroupScreenProps) {
 }
 
 const InputContainer = styled.View`
+  flex-direction: row;
+  padding-left: 30px;
   width: 95%;
   margin-top: 25px;
   margin-bottom: 5px;
@@ -344,6 +350,7 @@ const MessageInput = styled.TextInput`
   border-radius: 1000px;
   width: 90%;
   height: 30px;
+  padding-left: 10px;
 `;
 
 interface MCprop {
@@ -387,4 +394,8 @@ const TimeVIew = styled.View<MCprop>`
 
 const Time = styled.Text`
   color: ${(props) => props.theme.phColor};
+`;
+
+const SendIcon = styled.TouchableOpacity`
+  padding-left: 10px;
 `;

@@ -19,7 +19,6 @@ import { LoggedInNavStackParamList } from "../../navigation/Router";
 import ScreenLayout from "../../components/ScreenLayout";
 import { reloadVar } from "../../apollo";
 import DismissKeyboard from "../../components/DismissKeyboard";
-import HomeLayout from "../../components/HomeLayout";
 
 const CREATE_COMMENT_MUTATION = gql`
   mutation createComment($payload: String!) {
