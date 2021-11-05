@@ -36,6 +36,7 @@ import {
 import moment from "moment";
 import { useLayoutEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { DrawerActions } from "@react-navigation/routers";
 
 const SEE_GROUP_QUERY = gql`
   query seeGroup($id: Int!, $offset: Int!) {
@@ -120,6 +121,13 @@ export default function Group({ route, navigation }: GroupScreenProps) {
   useLayoutEffect(() => {
     navigation.setOptions({
       title: data?.seeGroup ? `${data?.seeGroup?.title}` : "그룹",
+      headerRight: () => (
+        <DrawerIcon
+          onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+        >
+          <Ionicons name="menu-outline" size={30} />
+        </DrawerIcon>
+      ),
     });
   }, [data]);
 
@@ -399,3 +407,5 @@ const Time = styled.Text`
 const SendIcon = styled.TouchableOpacity`
   padding-left: 10px;
 `;
+
+const DrawerIcon = styled.TouchableOpacity``;

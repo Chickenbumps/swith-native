@@ -91,7 +91,7 @@ export default function GroupList({ navigation, route }: GroupListScreenProps) {
               unreadMessage={3}
               key={index}
               onPress={() =>
-                navigation.navigate("Group", {
+                navigation.navigate("Drawer", {
                   id: group.id,
                   username: userData!.isMe!.username,
                 })

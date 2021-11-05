@@ -1,25 +1,8 @@
-import React, { useEffect, useState } from "react";
-import {
-  Alert,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { ScrollView } from "react-native";
 import styled from "styled-components/native";
-
 import { Ionicons } from "@expo/vector-icons";
-
-import {
-  gql,
-  makeVar,
-  useMutation,
-  useQuery,
-  useReactiveVar,
-} from "@apollo/client";
+import { gql, useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import { StackScreenProps } from "@react-navigation/stack";
 import ScreenLayout from "../components/ScreenLayout";
@@ -119,6 +102,20 @@ export default function UserProfile({
     }
   );
   const { data: meData } = useUser();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <BackBtn onPress={() => navigation.goBack()}>
+          <Ionicons
+            name="chevron-back-outline"
+            size={28}
+            color={theme.txtColor}
+          />
+        </BackBtn>
+      ),
+    });
+  }, [navigation]);
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: theme.bgColor }}>
@@ -229,3 +226,5 @@ const FollowBtnText = styled.Text`
   color: ${(props) => props.theme.bgColor};
   font-weight: bold;
 `;
+
+const BackBtn = styled.TouchableOpacity``;

@@ -11,7 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeProvider } from "styled-components";
 import { lightTheme } from "./src/styles";
 import firebase from "firebase";
-
+import "react-native-gesture-handler";
 import { firebaseConfig } from "./config/key";
 
 export default function App() {

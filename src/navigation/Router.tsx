@@ -15,6 +15,10 @@ export type LoggedOutNavStackParamList = {
 
 export type LoggedInNavStackParamList = {
   Tab: undefined;
+  Drawer: {
+    id: number;
+    username: string;
+  };
   Home: {
     observers?: any[] | undefined;
   };

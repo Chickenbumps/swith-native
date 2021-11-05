@@ -16,6 +16,7 @@ import PushNotification from "../components/PushNotification";
 import SelectPhoto from "../screens/SelectPhoto";
 import CommentList from "../screens/CommentList";
 import UserProfile from "../screens/UserProfile";
+import DrawerNav from "./DrawerNav";
 const Stack = createStackNavigator();
 
 export default function LoggedInNav() {
@@ -93,7 +94,7 @@ export default function LoggedInNav() {
           ),
         }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="Group"
         component={Group}
         options={{
@@ -106,6 +107,21 @@ export default function LoggedInNav() {
               color={theme.txtColor}
             />
           ),
+        }}
+      /> */}
+      <Stack.Screen
+        name="Drawer"
+        component={DrawerNav}
+        options={{
+          headerShown: false,
+          headerLeft: () => (
+            <Ionicons
+              name="chevron-back-outline"
+              size={28}
+              color={theme.txtColor}
+            />
+          ),
+          gestureEnabled: false,
         }}
       />
       <Stack.Screen
