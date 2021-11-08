@@ -14,7 +14,6 @@ type DrawerProps = StackScreenProps<LoggedInNavStackParamList, "Group">;
 
 export default function DrawerNav({ route, navigation }: DrawerProps) {
   const theme = useSelectTheme();
-  console.log("route:", route.params);
   return (
     <Drawer.Navigator
       drawerContent={(props) => (

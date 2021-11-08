@@ -270,16 +270,17 @@ export default function Group({ route, navigation }: GroupScreenProps) {
             fetchMore({
               variables: {
                 offset: data?.seeGroup?.messages?.length,
+                id: data?.seeGroup.id,
               },
             })
           }
-          refreshControl={
-            <RefreshControl
-              tintColor={theme.activeColor}
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-          }
+          // refreshControl={
+          //   <RefreshControl
+          //     tintColor={theme.activeColor}
+          //     refreshing={refreshing}
+          //     onRefresh={onRefresh}
+          //   />
+          // }
           renderItem={({
             item: message,
           }: {
@@ -377,7 +378,7 @@ const Column = styled.View`
 const Avatar = styled.Image`
   width: 30px;
   height: 30px;
-  border-radius: 10px;
+  border-radius: 75px;
 `;
 const Username = styled.Text`
   color: ${(props) => props.theme.txtColor};

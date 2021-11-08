@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../screens/tab/Home";
-import Analytics from "../screens/tab/Analytics";
+import Lanking from "../screens/tab/Lanking";
 import Plan from "../screens/tab/Plan";
 import GroupList from "../screens/tab/GroupList";
 import Profile from "../screens/tab/Profile";
@@ -44,13 +44,13 @@ export default function TabNav() {
         }}
       />
       <Tab.Screen
-        name="Analytics"
-        component={Analytics}
+        name="Lanking"
+        component={Lanking}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Ionicons
-              name={focused ? "stats-chart" : "stats-chart-outline"}
+              name={focused ? "medal" : "medal-outline"}
               size={24}
               color={theme.txtColor}
             />
@@ -77,6 +77,20 @@ export default function TabNav() {
         options={{
           headerTitle: "나의 그룹 리스트",
           headerTintColor: theme.txtColor,
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("SearchGroup");
+              }}
+            >
+              <Ionicons
+                name="search-outline"
+                size={28}
+                style={{ marginLeft: 10 }}
+                color={theme.txtColor}
+              />
+            </TouchableOpacity>
+          ),
           headerRight: () => (
             <TouchableOpacity
               onPress={() => {

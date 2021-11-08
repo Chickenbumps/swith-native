@@ -17,7 +17,7 @@ export interface seeGroups_seeGroups_members {
   __typename: "User";
   id: number;
   username: string;
-  avatar: string | undefined;
+  avatar: string;
   isObserver: boolean;
   observers: seeGroups_seeGroups_members_observers[];
 }
@@ -38,7 +38,8 @@ export interface seeGroups_seeGroups {
   __typename: "Group";
   id: number;
   title: string;
-  description: string;
+  description: string | null;
+  groupAvatar: string | null;
   members: seeGroups_seeGroups_members[];
   inviter: seeGroups_seeGroups_inviter;
 }

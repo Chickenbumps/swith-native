@@ -31,6 +31,7 @@
 ## GroupList Screen
 
 - [o] My group list
+- [] 그룹 가입제한 만들기
 
 ## GroupChat Screen
 

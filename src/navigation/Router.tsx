@@ -32,7 +32,7 @@ export type LoggedInNavStackParamList = {
   CameraScreen: {
     second?: boolean;
   };
-  Analytics: undefined;
+  Lanking: undefined;
   GroupList: {
     isCreated: boolean;
   };
@@ -49,6 +49,10 @@ export type LoggedInNavStackParamList = {
   SelectPhoto: undefined;
   UserProfile: {
     username: string;
+  };
+  SearchGroup: undefined;
+  GroupInfo: {
+    id: number;
   };
 };
 

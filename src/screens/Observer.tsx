@@ -67,7 +67,7 @@ export default function Observer({ navigation }: ObserverScreenProps) {
   );
   const { data: meData, refetch } = useUser();
   const allMember = data?.seeGroups?.map((group) =>
-    group.members.filter((member) => member.id !== meData?.isMe.id)
+    group?.members.filter((member) => member.id !== meData?.isMe.id)
   );
   const distictMember = Array.from(new Set(allMember?.flat()));
   const myData = data?.seeGroups[0]?.members.find(
@@ -236,7 +236,7 @@ const ObserverText = styled.Text`
 const Avatar = styled.Image`
   width: 30px;
   height: 30px;
-  border-radius: 10px;
+  border-radius: 75px;
 `;
 
 interface isExistProps {

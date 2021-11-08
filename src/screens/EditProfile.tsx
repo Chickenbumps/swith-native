@@ -43,7 +43,7 @@ type EditProfileScreenProps = StackScreenProps<
 
 export default function EditProfile({ navigation }: EditProfileScreenProps) {
   const theme = useSelectTheme();
-  const { data: userData, loading } = useUser();
+  const { data: userData, loading, refetch } = useUser();
   const modalVisible = useReactiveVar(modalVisibleVar);
   const [editPart, setEditPart] = useState("name");
   const [chosenPhoto, setChosenPhoto] = useState<any>(null);
@@ -66,7 +66,6 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
             },
           },
         });
-        // await refetch();
       }
     },
   });
@@ -75,16 +74,16 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: 0.01,
     });
     if (!result.cancelled) {
-      console.log("result", result.uri);
+      // console.log("result", result.uri);
       const file = new ReactNativeFile({
         uri: result.uri,
         name: `${userData?.isMe.id}.jpg`,
         type: "image/jpeg",
       });
-      // setChosenPhoto(result.uri);
+      setChosenPhoto(result.uri);
       editProfile({
         variables: {
           avatar: file,
@@ -111,7 +110,7 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: theme.bgColor }}>
-      <ScreenLayout loading={loading} isKeyboard={true}>
+      <ScreenLayout loading={loading} isKeyboard={false}>
         <CustomModal part={editPart} />
 
         <BasicInfo>

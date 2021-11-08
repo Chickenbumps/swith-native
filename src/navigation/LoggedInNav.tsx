@@ -17,6 +17,8 @@ import SelectPhoto from "../screens/SelectPhoto";
 import CommentList from "../screens/CommentList";
 import UserProfile from "../screens/UserProfile";
 import DrawerNav from "./DrawerNav";
+import SearchGroup from "../screens/SearchGroup";
+import GroupInfo from "../screens/GroupInfo";
 const Stack = createStackNavigator();
 
 export default function LoggedInNav() {
@@ -85,6 +87,36 @@ export default function LoggedInNav() {
         options={{
           headerBackTitleVisible: false,
           headerTitle: "그룹 만들기",
+          headerBackImage: () => (
+            <Ionicons
+              name="chevron-back-outline"
+              size={28}
+              color={theme.txtColor}
+            />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="SearchGroup"
+        component={SearchGroup}
+        options={{
+          headerBackTitleVisible: false,
+          headerTitle: "그룹 검색",
+          headerBackImage: () => (
+            <Ionicons
+              name="chevron-back-outline"
+              size={28}
+              color={theme.txtColor}
+            />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="GroupInfo"
+        component={GroupInfo}
+        options={{
+          headerBackTitleVisible: false,
+          headerTitle: "그룹 정보",
           headerBackImage: () => (
             <Ionicons
               name="chevron-back-outline"

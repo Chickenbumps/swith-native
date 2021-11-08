@@ -104,12 +104,12 @@ const InviteMemberText = styled.Text`
 const MemberView = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
-  padding: 5px 0;
+  padding: 8px 0;
 `;
 const Avatar = styled.Image`
   width: 35px;
   height: 35px;
-  border-radius: 10px;
+  border-radius: 75px;
 `;
 const Username = styled.Text`
   font-size: 16px;
@@ -125,4 +125,5 @@ const Me = styled.Text`
   border: 1px solid ${(props) => props.theme.txtColor};
   border-radius: 8px;
   margin-left: 10px;
+  margin-right: 2px;
 `;

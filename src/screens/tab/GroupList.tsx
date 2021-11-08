@@ -19,6 +19,7 @@ const SEE_GROUPS_QUERY = gql`
       id
       title
       description
+      groupAvatar
       members {
         id
         username
@@ -87,8 +88,9 @@ export default function GroupList({ navigation, route }: GroupListScreenProps) {
             <GroupItem
               title={group.title}
               description={group.description}
-              members={group.members}
+              memberNum={group.members.length}
               unreadMessage={3}
+              groupAvatar={group.groupAvatar}
               key={index}
               onPress={() =>
                 navigation.navigate("Drawer", {

@@ -6,6 +6,8 @@ import { LoggedInNavStackParamList } from "../navigation/Router";
 import { Ionicons } from "@expo/vector-icons";
 import styled from "styled-components/native";
 import { useSelectTheme } from "../styles";
+import { StyleSheet, View, Text } from "react-native";
+import Constants from "expo-constants";
 
 type CameraScreenProps = StackScreenProps<
   LoggedInNavStackParamList,
@@ -15,7 +17,7 @@ type CameraScreenProps = StackScreenProps<
 export default function CameraScreen({ route, navigation }: CameraScreenProps) {
   const [cameraHasPermission, setCameraHasPermission] = useState(false);
   const [type, setType] = useState(Camera.Constants.Type.back);
-  const [faces, setFaces] = useState([]);
+  const [faces, setFaces] = useState<any>([]);
   const cameraRef = useRef<Camera>(null);
   const theme = useSelectTheme();
   const getPermissions = async () => {
@@ -39,7 +41,33 @@ export default function CameraScreen({ route, navigation }: CameraScreenProps) {
   useEffect(() => {
     getPermissions();
   }, [route]);
-
+  const faceRender = ({ bounds, faceID, rollAngle, yawAngle }: any) => (
+    <View
+      key={faceID}
+      //@ts-ignore
+      transform={[
+        { perspective: 600 },
+        { rotateZ: `${rollAngle.toFixed(0)}deg` },
+        { rotateY: `${yawAngle.toFixed(0)}deg` },
+      ]}
+      style={[
+        styles.face,
+        {
+          ...bounds.size,
+          left: bounds.origin.x,
+          top: bounds.origin.y,
+        },
+      ]}
+    >
+      <Text style={styles.faceText}>rollAngle: {rollAngle.toFixed(0)}</Text>
+      <Text style={styles.faceText}>yawAngle: {yawAngle.toFixed(0)}</Text>
+    </View>
+  );
+  const visualFace = () => (
+    <View style={styles.visualFaceContainer} pointerEvents="none">
+      {faces.map((face: any) => faceRender(face))}
+    </View>
+  );
   return (
     <Container>
       <Camera
@@ -55,6 +83,8 @@ export default function CameraScreen({ route, navigation }: CameraScreenProps) {
           tracking: true,
         }}
       />
+
+      {faces.length ? visualFace() : undefined}
       <CameraReverseBtnView>
         <CameraReverseBtn
           onPress={() => {
@@ -88,3 +118,46 @@ const CameraReverseBtnView = styled.View`
   align-items: flex-end;
 `;
 const CameraReverseBtn = styled.TouchableOpacity``;
+
+const styles = StyleSheet.create({
+  visualFaceContainer: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    left: 0,
+    top: 0,
+  },
+  face: {
+    padding: 10,
+    borderWidth: 1,
+    borderRadius: 1,
+    position: "absolute",
+    borderColor: "#00B1D2",
+    justifyContent: "center",
+    backgroundColor: "transparent",
+  },
+  faceText: {
+    color: "#FEFEFE",
+    fontWeight: "bold",
+    textAlign: "center",
+    margin: 10,
+    backgroundColor: "transparent",
+  },
+  textcolor: {
+    color: "#FEFEFE",
+  },
+  topBar: {
+    flex: 0.2,
+    backgroundColor: "transparent",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    paddingTop: Constants.statusBarHeight + 1,
+  },
+
+  bottomBar: {
+    flex: 0.2,
+    backgroundColor: "transparent",
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+});

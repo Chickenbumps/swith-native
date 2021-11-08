@@ -48,7 +48,7 @@ const onErrorLink = onError(({ graphQLErrors, networkError }) => {
 });
 
 const wsLink = new WebSocketLink({
-  uri: "ws://13ba-221-150-231-140.ngrok.io/graphql",
+  uri: "wss://5940-221-150-231-140.ngrok.io graphql",
   options: {
     reconnect: true,
     connectionParams: () => ({
@@ -58,7 +58,7 @@ const wsLink = new WebSocketLink({
 });
 
 const httpLink = createUploadLink({
-  uri: "http://13ba-221-150-231-140.ngrok.io/graphql",
+  uri: "https://5940-221-150-231-140.ngrok.io/graphql",
 });
 
 const authLink = setContext((request, prevContext) => {

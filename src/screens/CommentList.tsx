@@ -214,13 +214,14 @@ const DayText = styled.Text`
   color: ${(props) => props.theme.txtColor};
 `;
 
+const UserInfo = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+`;
 const Avatar = styled.Image`
   width: 30px;
   height: 30px;
   border-radius: 75px;
-`;
-const UserInfo = styled.TouchableOpacity`
-  flex-direction: row;
 `;
 const Username = styled.Text`
   color: ${(props) => props.theme.txtColor};
