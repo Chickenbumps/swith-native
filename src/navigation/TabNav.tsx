@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../screens/tab/Home";
-import Lanking from "../screens/tab/Lanking";
+import Ranking from "../screens/tab/Ranking";
 import Plan from "../screens/tab/Plan";
 import GroupList from "../screens/tab/GroupList";
 import Profile from "../screens/tab/Profile";
@@ -44,8 +44,8 @@ export default function TabNav() {
         }}
       />
       <Tab.Screen
-        name="Lanking"
-        component={Lanking}
+        name="Ranking"
+        component={Ranking}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (

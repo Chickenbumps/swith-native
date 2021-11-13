@@ -32,7 +32,7 @@ export type LoggedInNavStackParamList = {
   CameraScreen: {
     second?: boolean;
   };
-  Lanking: undefined;
+  Ranking: undefined;
   GroupList: {
     isCreated: boolean;
   };
