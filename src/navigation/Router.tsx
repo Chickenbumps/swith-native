@@ -17,7 +17,7 @@ export type LoggedInNavStackParamList = {
   Tab: undefined;
   Drawer: {
     id: number;
-    username: string;
+    username: string | undefined;
   };
   Home: {
     observers?: any[] | undefined;
@@ -42,7 +42,7 @@ export type LoggedInNavStackParamList = {
   CreateGroup: undefined;
   Group: {
     id: number;
-    username: string;
+    username: string | undefined;
   };
   Observer: undefined;
   Notification: undefined;

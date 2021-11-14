@@ -39,12 +39,16 @@ export default function SearchGroup({ navigation }: SearchGroupScreenProps) {
   const [searchGroup, { data, loading, called }] = useLazyQuery<
     searchGroups,
     searchGroupsVariables
-  >(SEARCH_GROUPS_QUERY);
+  >(SEARCH_GROUPS_QUERY, {
+    onCompleted: (data: searchGroups) => {
+      console.log(data);
+    },
+  });
 
-  const onValid = ({ search }: any) => {
+  const onValid = (data: searchGroupsVariables) => {
     searchGroup({
       variables: {
-        title: search,
+        title: data.title,
       },
     });
   };
@@ -63,7 +67,7 @@ export default function SearchGroup({ navigation }: SearchGroupScreenProps) {
       <SearchView>
         <SearchBar
           ref={
-            register("search", {
+            register("title", {
               required: true,
               minLength: 2,
             }).ref
@@ -73,7 +77,7 @@ export default function SearchGroup({ navigation }: SearchGroupScreenProps) {
           returnKeyLabel="Search"
           autoCapitalize="none"
           autoCorrect={false}
-          onChangeText={(text) => setValue("search", text)}
+          onChangeText={(text) => setValue("title", text)}
           onSubmitEditing={handleSubmit(onValid)}
         />
         <SearchIcon onPress={handleSubmit(onValid)}>

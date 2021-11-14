@@ -75,11 +75,21 @@ export const cache = new InMemoryCache({
     Query: {
       fields: {
         seeComments: offsetLimitPagination(),
+        seeGroup: {
+          merge(existing, incoming) {
+            return incoming;
+          },
+        },
       },
     },
     Group: {
       fields: {
         messages: offsetLimitPagination(),
+        members: {
+          merge(existing, incoming) {
+            return incoming;
+          },
+        },
       },
     },
   },

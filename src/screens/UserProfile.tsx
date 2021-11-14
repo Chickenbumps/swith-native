@@ -131,33 +131,35 @@ export default function UserProfile({
             <Avatar source={require("../../assets/image/default.png")} />
           )}
           <Username>{userData?.seeProfile.username}</Username>
-          {userData?.seeProfile.isFollowing ? (
-            <FollowBtn
-              isFollow={false}
-              onPress={() =>
-                followToggle({
-                  variables: {
-                    username: route.params?.username,
-                  },
-                })
-              }
-            >
-              <FollowBtnText>팔로우 취소</FollowBtnText>
-            </FollowBtn>
-          ) : (
-            <FollowBtn
-              isFollow={true}
-              onPress={() =>
-                followToggle({
-                  variables: {
-                    username: route.params?.username,
-                  },
-                })
-              }
-            >
-              <FollowBtnText>팔로우 하기</FollowBtnText>
-            </FollowBtn>
-          )}
+          {route.params.username !== meData?.isMe.username ? (
+            userData?.seeProfile.isFollowing ? (
+              <FollowBtn
+                isFollow={false}
+                onPress={() =>
+                  followToggle({
+                    variables: {
+                      username: route.params?.username,
+                    },
+                  })
+                }
+              >
+                <FollowBtnText>팔로우 취소</FollowBtnText>
+              </FollowBtn>
+            ) : (
+              <FollowBtn
+                isFollow={true}
+                onPress={() =>
+                  followToggle({
+                    variables: {
+                      username: route.params?.username,
+                    },
+                  })
+                }
+              >
+                <FollowBtnText>팔로우 하기</FollowBtnText>
+              </FollowBtn>
+            )
+          ) : null}
           <Bio>{userData?.seeProfile.bio}</Bio>
           <FollowWrapper>
             <FollowItem>
