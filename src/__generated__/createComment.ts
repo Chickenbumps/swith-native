@@ -10,6 +10,7 @@
 export interface createComment_createComment {
   __typename: "CreateCommentResult";
   ok: boolean;
+  commentId: number;
   error: string | null;
 }
 
@@ -19,4 +20,5 @@ export interface createComment {
 
 export interface createCommentVariables {
   payload: string;
+  range: string;
 }
