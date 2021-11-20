@@ -7,9 +7,10 @@ import LoggedOutNav from "./LoggedOutNav";
 
 export type LoggedOutNavStackParamList = {
   Login: {
-    email: string;
-    password: string;
+    email?: string;
+    password?: string;
   };
+  Intro: undefined;
   CreateAccount: undefined;
 };
 
@@ -28,6 +29,7 @@ export type LoggedInNavStackParamList = {
   };
   Result: {
     duration: number;
+    isNavigated?: boolean;
   };
   CameraScreen: {
     second?: boolean;
@@ -36,9 +38,17 @@ export type LoggedInNavStackParamList = {
   GroupList: {
     isCreated: boolean;
   };
-  Profile: undefined;
+  Profile: {
+    isCreated: boolean;
+  };
   EditProfile: undefined;
-  Comment: undefined;
+  Comment: {
+    commentId: number;
+    payload: string;
+    username: string;
+    avatar: any;
+    range: string;
+  };
   CreateGroup: undefined;
   Group: {
     id: number;
@@ -54,6 +64,8 @@ export type LoggedInNavStackParamList = {
   GroupInfo: {
     id: number;
   };
+  CommentList: undefined;
+  DailyText: undefined;
 };
 
 export default function Router() {
