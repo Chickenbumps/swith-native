@@ -29,7 +29,11 @@ export default function WeekEntry({
       <DateText>{monthDay}</DateText>
       <DayText>{day}</DayText>
       <HourContainer>
-        <HourText>{isEqual ? hours : 0}h</HourText>
+        {hours >= 1 ? (
+          <HourText>{isEqual ? hours : 0}h</HourText>
+        ) : (
+          <HourText>{isEqual ? Math.round(hours * 60) : 0}m</HourText>
+        )}
       </HourContainer>
       <NumText>{isEqual ? nums : 0}회</NumText>
     </WeekContainer>

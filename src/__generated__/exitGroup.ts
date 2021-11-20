@@ -4,22 +4,20 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: kickMember
+// GraphQL mutation operation: exitGroup
 // ====================================================
 
-export interface kickMember_kickMember {
-  __typename: "KickMemberResult";
+export interface exitGroup_exitGroup {
+  __typename: "ExitGroupResult";
   ok: boolean;
-  kickedUserId: number;
-  message: any | null;
   error: string | null;
 }
 
-export interface kickMember {
-  kickMember: kickMember_kickMember;
+export interface exitGroup {
+  exitGroup: exitGroup_exitGroup;
 }
 
-export interface kickMemberVariables {
+export interface exitGroupVariables {
   groupId: number;
   memberId: number;
 }

@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   ScrollView,
+  Alert,
 } from "react-native";
 import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -77,7 +78,6 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
       quality: 0.01,
     });
     if (!result.cancelled) {
-      // console.log("result", result.uri);
       const file = new ReactNativeFile({
         uri: result.uri,
         name: `${userData?.isMe.id}.jpg`,
@@ -108,6 +108,17 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
     await getPermissions();
   };
 
+  const onPressLogOut = () => {
+    Alert.alert("정말 로그아웃 하시겠습니까?", "", [
+      {
+        text: "예",
+        onPress: () => logUserOut(),
+      },
+      {
+        text: "아니요",
+      },
+    ]);
+  };
   return (
     <ScrollView style={{ flex: 1, backgroundColor: theme.bgColor }}>
       <ScreenLayout loading={loading} isKeyboard={false}>
@@ -131,18 +142,18 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
         <UserSetting>
           <Wrapper>
             <Component>이름</Component>
-            <TouchableHighlight
+            <TouchableOpacity
               onPress={() => {
                 modalVisibleVar(true);
                 setEditPart("name");
               }}
             >
               <Component>{userData?.isMe.name}</Component>
-            </TouchableHighlight>
+            </TouchableOpacity>
           </Wrapper>
           <Wrapper>
             <Component>소개</Component>
-            <TouchableHighlight
+            <TouchableOpacity
               onPress={() => {
                 modalVisibleVar(true);
                 setEditPart("bio");
@@ -151,19 +162,21 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
               <Component>
                 {userData?.isMe?.bio ? userData.isMe.bio : "반갑습니다"}
               </Component>
-            </TouchableHighlight>
+            </TouchableOpacity>
           </Wrapper>
           <Wrapper>
             <Component>프로필 사진</Component>
-            <TouchableHighlight onPress={() => selectPhoto()}>
+            <TouchableOpacity onPress={() => selectPhoto()}>
               <Component>
                 <Ionicons name="camera" size={28} />
               </Component>
-            </TouchableHighlight>
+            </TouchableOpacity>
           </Wrapper>
           <Wrapper>
             <Component>감시자 설정</Component>
-            <Component>미구현</Component>
+            <TouchableOpacity onPress={() => navigation.navigate("Observer")}>
+              <Component>이동</Component>
+            </TouchableOpacity>
           </Wrapper>
           <Wrapper>
             <Component>알림 설정</Component>
@@ -173,9 +186,9 @@ export default function EditProfile({ navigation }: EditProfileScreenProps) {
         <Index>계정 설정</Index>
         <AccountSetting>
           <Wrapper>
-            <TouchableOpacity onPress={() => logUserOut()}>
+            <LogOutBtn onPress={() => onPressLogOut()}>
               <Component>로그 아웃</Component>
-            </TouchableOpacity>
+            </LogOutBtn>
           </Wrapper>
         </AccountSetting>
       </ScreenLayout>
@@ -228,3 +241,5 @@ const Index = styled(Component)`
 `;
 
 const AccountSetting = styled(UserSetting)``;
+
+const LogOutBtn = styled.TouchableOpacity``;

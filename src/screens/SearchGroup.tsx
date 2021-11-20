@@ -41,7 +41,7 @@ export default function SearchGroup({ navigation }: SearchGroupScreenProps) {
     searchGroupsVariables
   >(SEARCH_GROUPS_QUERY, {
     onCompleted: (data: searchGroups) => {
-      console.log(data);
+      // console.log(data);
     },
   });
 

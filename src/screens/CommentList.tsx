@@ -6,6 +6,7 @@ import {
   Alert,
   ActivityIndicator,
   View,
+  Text,
 } from "react-native";
 import { gql, useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import useUser from "../hooks/useUser";
@@ -18,6 +19,10 @@ import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect } from "react";
 import { reloadVar } from "../apollo";
+import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
+import { LoggedInNavStackParamList } from "../navigation/Router";
+import { useNavigation } from "@react-navigation/core";
+import { seeProfile, seeProfileVariables } from "../__generated__/seeProfile";
 
 const SPACE = 12;
 
@@ -25,17 +30,39 @@ const ITEM_WIDTH = 168;
 const ITEM_HEIGHT = ITEM_WIDTH * 1.2;
 const FULL_SIZE = ITEM_WIDTH + SPACE * 2;
 
+const SEE_PROFILE_QUERY = gql`
+  query seeProfile($username: String!) {
+    seeProfile(username: $username) {
+      id
+      username
+      avatar
+      bio
+      totalFollowers
+      totalFollowing
+      isFollowing
+      comments {
+        id
+        payload
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
 const SEE_COMMENTS_QUERY = gql`
-  query seeComments($offset: Int!) {
-    seeComments(offset: $offset) {
+  query seeComments($userId: Int!, $offset: Int!) {
+    seeComments(userId: $userId, offset: $offset) {
       id
       payload
       user {
+        avatar
         username
       }
       isMine
       createdAt
       updatedAt
+      range
     }
   }
 `;
@@ -49,10 +76,33 @@ const DELETE_COMMENT_MUTATION = gql`
   }
 `;
 
-export default function CommentList({ onPress, navigation }: any) {
+interface CommentListProps {
+  id: any;
+  username: any;
+  avatar: any;
+  isCreated?: boolean | undefined;
+}
+
+export default function CommentList({
+  id,
+  username,
+  avatar,
+  isCreated,
+}: CommentListProps) {
+  const navigation = useNavigation<any>();
   const theme = useSelectTheme();
-  const { data: userData } = useUser();
+  const { data: meData } = useUser();
   const [refreshing, setRefreshing] = useState(false);
+
+  const { data: seeProfileData } = useQuery<seeProfile, seeProfileVariables>(
+    SEE_PROFILE_QUERY,
+    {
+      variables: {
+        username,
+      },
+    }
+  );
+
   const [deleteComment, { loading: mutaionLoading }] = useMutation(
     DELETE_COMMENT_MUTATION,
     {
@@ -74,6 +124,7 @@ export default function CommentList({ onPress, navigation }: any) {
     seeCommentsVariables
   >(SEE_COMMENTS_QUERY, {
     variables: {
+      userId: id,
       offset: 0,
     },
   });
@@ -107,7 +158,7 @@ export default function CommentList({ onPress, navigation }: any) {
   useEffect(() => {
     refetch();
     console.log("reloaded");
-  }, [reload]);
+  }, [reload, isCreated]);
 
   return loading ? (
     <View
@@ -154,23 +205,35 @@ export default function CommentList({ onPress, navigation }: any) {
           })
         }
         renderItem={({ item, index }) => {
-          const year = item.createdAt.slice(0, 4);
-          const month = item.createdAt.slice(5, 7);
-          const day = item.createdAt.slice(8, 10);
-          return (
+          const year = item.updatedAt.slice(0, 4);
+          const month = item.updatedAt.slice(5, 7);
+          const day = item.updatedAt.slice(8, 10);
+          const isFollow = seeProfileData?.seeProfile.isFollowing;
+
+          return item.isMine && item.range === "Private" ? (
             <Container>
               <InnerContainer>
                 <UserInfo>
-                  {userData?.isMe.avatar ? (
+                  {meData?.isMe.avatar ? (
                     <Avatar
                       source={{
-                        uri: userData.isMe.avatar,
+                        uri: avatar,
                       }}
                     />
                   ) : null}
-                  <Username>{userData?.isMe.username}</Username>
+                  <Username>{username}</Username>
                 </UserInfo>
-                <MoreButton onPress={onPress}>
+                <MoreButton
+                  onPress={() =>
+                    navigation.navigate("Comment", {
+                      commentId: item.id,
+                      payload: item.payload,
+                      avatar: avatar,
+                      username: username,
+                      range: item.range,
+                    })
+                  }
+                >
                   <MoreText>더보기</MoreText>
                 </MoreButton>
               </InnerContainer>
@@ -178,12 +241,99 @@ export default function CommentList({ onPress, navigation }: any) {
 
               <BottomContainer>
                 <DayText>{`${year}년${month}월${day}일`}</DayText>
-                <DeleteButton onPress={() => onDeleteComment(item.id)}>
-                  <Ionicons name="trash-outline" size={22} color="tomato" />
-                </DeleteButton>
+                <RangeView range={item.range}>
+                  <RangeText range={item.range}>{item.range[0]}</RangeText>
+                </RangeView>
+                {meData?.isMe.id === id ? (
+                  <DeleteButton onPress={() => onDeleteComment(item.id)}>
+                    <Ionicons name="trash-outline" size={22} color="tomato" />
+                  </DeleteButton>
+                ) : null}
               </BottomContainer>
             </Container>
-          );
+          ) : isFollow && item.range === "Follower" ? (
+            <Container>
+              <InnerContainer>
+                <UserInfo>
+                  {meData?.isMe.avatar ? (
+                    <Avatar
+                      source={{
+                        uri: avatar,
+                      }}
+                    />
+                  ) : null}
+                  <Username>{username}</Username>
+                </UserInfo>
+                <MoreButton
+                  onPress={() =>
+                    navigation.navigate("Comment", {
+                      commentId: item.id,
+                      payload: item.payload,
+                      avatar: avatar,
+                      username: username,
+                      range: item.range,
+                    })
+                  }
+                >
+                  <MoreText>더보기</MoreText>
+                </MoreButton>
+              </InnerContainer>
+              <Payload>{item.payload}</Payload>
+
+              <BottomContainer>
+                <DayText>{`${year}년${month}월${day}일`}</DayText>
+                <RangeView range={item.range}>
+                  <RangeText range={item.range}>{item.range[0]}</RangeText>
+                </RangeView>
+                {meData?.isMe.id === id ? (
+                  <DeleteButton onPress={() => onDeleteComment(item.id)}>
+                    <Ionicons name="trash-outline" size={22} color="tomato" />
+                  </DeleteButton>
+                ) : null}
+              </BottomContainer>
+            </Container>
+          ) : item.range == "Public" ? (
+            <Container>
+              <InnerContainer>
+                <UserInfo>
+                  {meData?.isMe.avatar ? (
+                    <Avatar
+                      source={{
+                        uri: avatar,
+                      }}
+                    />
+                  ) : null}
+                  <Username>{username}</Username>
+                </UserInfo>
+                <MoreButton
+                  onPress={() =>
+                    navigation.navigate("Comment", {
+                      commentId: item.id,
+                      payload: item.payload,
+                      avatar: avatar,
+                      username: username,
+                      range: item.range,
+                    })
+                  }
+                >
+                  <MoreText>더보기</MoreText>
+                </MoreButton>
+              </InnerContainer>
+              <Payload>{item.payload}</Payload>
+
+              <BottomContainer>
+                <DayText>{`${year}년${month}월${day}일`}</DayText>
+                <RangeView range={item.range}>
+                  <RangeText range={item.range}>{item.range[0]}</RangeText>
+                </RangeView>
+                {meData?.isMe.id === id ? (
+                  <DeleteButton onPress={() => onDeleteComment(item.id)}>
+                    <Ionicons name="trash-outline" size={22} color="tomato" />
+                  </DeleteButton>
+                ) : null}
+              </BottomContainer>
+            </Container>
+          ) : null;
         }}
       />
     </ScrollView>
@@ -225,14 +375,45 @@ const Avatar = styled.Image`
 `;
 const Username = styled.Text`
   color: ${(props) => props.theme.txtColor};
+  margin-left: 5px;
+  font-weight: bold;
 `;
 const Payload = styled.Text`
   color: ${(props) => props.theme.activeColor};
   padding: 10px;
 `;
 
+interface RangeProps {
+  range: string;
+}
+const RangeView = styled.View<RangeProps>`
+  border: 1px solid
+    ${(props) =>
+      props.range === "Public"
+        ? props.theme.activeColor
+        : props.range === "Private"
+        ? "tomato"
+        : props.range === "Follower"
+        ? props.theme.txtColor
+        : null};
+  border-radius: 10px;
+  margin-left: 10px;
+  padding: 0 3px 0 3px;
+`;
+
+const RangeText = styled.Text<RangeProps>`
+  color: ${(props) =>
+    props.range === "Public"
+      ? props.theme.activeColor
+      : props.range === "Private"
+      ? "tomato"
+      : props.range === "Follower"
+      ? props.theme.txtColor
+      : null};
+`;
+
 const DeleteButton = styled.TouchableOpacity`
-  margin-left: 40px;
+  margin-left: 15px;
 `;
 
 const MoreButton = styled.TouchableOpacity``;

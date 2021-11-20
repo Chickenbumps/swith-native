@@ -20,6 +20,7 @@ const SEE_GROUPS_QUERY = gql`
       title
       description
       groupAvatar
+      unreadMessage
       members {
         id
         username
@@ -61,7 +62,7 @@ export default function GroupList({ navigation, route }: GroupListScreenProps) {
 
   useEffect(() => {
     refetch();
-  }, [route.params?.isCreated]);
+  }, [route.params]);
 
   return (
     <ScreenLayout loading={loading} isKeyboard={false}>
@@ -89,7 +90,7 @@ export default function GroupList({ navigation, route }: GroupListScreenProps) {
               title={group.title}
               description={group.description}
               memberNum={group.members.length}
-              unreadMessage={3}
+              unreadMessage={group.unreadMessage}
               groupAvatar={group.groupAvatar}
               key={index}
               onPress={() =>

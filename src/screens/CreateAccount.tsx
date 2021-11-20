@@ -247,7 +247,7 @@ export default function CreateAccount({
       />
       <AuthFormError message={formState.errors?.passwordConfirm?.message} />
       <AuthButton
-        text="Create Account"
+        text="계정 만들기"
         disabled={!formState.isValid || loading}
         onPress={handleSubmit(onValid)}
       />

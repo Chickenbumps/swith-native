@@ -7,121 +7,81 @@ import useUser from "../../hooks/useUser";
 import { Ionicons } from "@expo/vector-icons";
 import { screenXY, useSelectTheme } from "../../styles";
 
-import { gql, makeVar, useMutation, useReactiveVar } from "@apollo/client";
-import { useForm } from "react-hook-form";
-import {
-  createComment,
-  createCommentVariables,
-} from "../../__generated__/createComment";
 import CommentList from "../CommentList";
 import { StackScreenProps } from "@react-navigation/stack";
 import { LoggedInNavStackParamList } from "../../navigation/Router";
 import ScreenLayout from "../../components/ScreenLayout";
 import { reloadVar } from "../../apollo";
-import DismissKeyboard from "../../components/DismissKeyboard";
-
-const CREATE_COMMENT_MUTATION = gql`
-  mutation createComment($payload: String!) {
-    createComment(payload: $payload) {
-      ok
-      error
-    }
-  }
-`;
 
 type ProfileScreenProps = StackScreenProps<
   LoggedInNavStackParamList,
   "Profile"
 >;
 
-export default function Profile({ navigation }: ProfileScreenProps) {
+export default function Profile({ navigation, route }: ProfileScreenProps) {
   const theme = useSelectTheme();
 
-  const { handleSubmit, register, setValue, getValues, watch } = useForm();
-  const { data: userData, loading: userLoading } = useUser();
-  const [createComment, { loading }] = useMutation<
-    createComment,
-    createCommentVariables
-  >(CREATE_COMMENT_MUTATION, {
-    onCompleted: (data) => {
-      const {
-        createComment: { ok, error },
-      } = data;
-      if (!ok) {
-        Alert.alert(`${error}`);
-        // throw new Error(`코멘트 작성에러:${error}`);
-      } else if (ok) {
-        reloadVar(true);
-      }
-    },
-  });
-
-  const onValid = (data: createCommentVariables) => {
-    if (!loading) {
-      createComment({
-        variables: {
-          payload: data.payload,
-        },
-      });
-      setValue("payload", "");
-    }
-  };
+  const { data: meData, loading: userLoading } = useUser();
 
   return (
     <ScreenLayout loading={userLoading} isKeyboard={false}>
-      <SettingIcon onPress={() => navigation.navigate("EditProfile")}>
-        <Ionicons name="cog-outline" size={28} color={theme.txtColor} />
-      </SettingIcon>
+      <SettingView>
+        <SettingIcon onPress={() => navigation.navigate("EditProfile")}>
+          <Ionicons name="cog-outline" size={28} color={theme.txtColor} />
+        </SettingIcon>
+      </SettingView>
       <UserInfo>
-        {userData?.isMe.avatar ? (
+        {meData?.isMe.avatar ? (
           <Avatar
             source={{
-              uri: userData.isMe.avatar,
+              uri: meData.isMe.avatar,
             }}
           />
         ) : (
           <Avatar source={require("../../../assets/image/default.png")} />
         )}
-        <Username>{userData?.isMe.username}</Username>
-        <Bio>{userData?.isMe.bio}</Bio>
+        <Username>{meData?.isMe.username}</Username>
+        <Bio>{meData?.isMe.bio}</Bio>
         <FollowWrapper>
           <FollowItem>
             <FollowText>팔로워</FollowText>
 
-            <FollowText>{userData?.isMe.totalFollowers}</FollowText>
+            <FollowText>{meData?.isMe.totalFollowers}</FollowText>
           </FollowItem>
           <FollowItem>
             <FollowText>팔로잉</FollowText>
-            <FollowText>{userData?.isMe.totalFollowing}</FollowText>
+            <FollowText>{meData?.isMe.totalFollowing}</FollowText>
           </FollowItem>
         </FollowWrapper>
       </UserInfo>
-      <View style={{ alignItems: "center" }}>
-        <DailyText
-          {...register("payload")}
-          value={watch("payload")}
-          placeholder="   일기 작성하기 :)"
-          placeholderTextColor={theme.txtColor}
-          autoCapitalize="none"
-          onChangeText={(text) => setValue("payload", text)}
-          onSubmitEditing={handleSubmit(onValid)}
-          autoCorrect={false}
-        />
-      </View>
+      <DailyBtnView>
+        <DailyBtn onPress={() => navigation.navigate("DailyText")}>
+          <DailyBtnText>일기 작성</DailyBtnText>
 
-      <CommentList onPress={() => navigation.navigate("Comment")} />
+          <Ionicons name="create-outline" size={22} color={theme.txtColor} />
+        </DailyBtn>
+      </DailyBtnView>
+
+      <CommentList
+        id={meData?.isMe.id}
+        username={meData?.isMe.username}
+        avatar={meData?.isMe.avatar}
+        isCreated={route?.params?.isCreated}
+      />
     </ScreenLayout>
   );
 }
 
-const UserInfo = styled.View`
-  align-items: center;
-`;
-const SettingIcon = styled.TouchableOpacity`
+const SettingView = styled.View`
   margin-right: 20px;
   margin-top: 5px;
   align-items: flex-end;
 `;
+
+const UserInfo = styled.View`
+  align-items: center;
+`;
+const SettingIcon = styled.TouchableOpacity``;
 
 const Avatar = styled.Image`
   height: 150px;
@@ -150,12 +110,19 @@ const FollowItem = styled.View`
 const FollowText = styled.Text`
   color: ${(props) => props.theme.txtColor};
 `;
-const DailyText = styled.TextInput`
-  width: ${screenXY.width}px;
-  height: 30px;
-  margin-top: 40px;
-  border-radius: 9px;
+
+const DailyBtnView = styled.View`
+  flex-direction: row;
+  justify-content: flex-end;
+`;
+
+const DailyBtn = styled.TouchableOpacity`
+  align-items: center;
+  flex-direction: row;
+  margin: 20px 15px 0 0;
   color: ${(props) => props.theme.txtColor};
   font-weight: bold;
-  border: 2px solid ${(props) => props.theme.txtColor};
+`;
+const DailyBtnText = styled.Text`
+  color: ${(props) => props.theme.txtColor};
 `;

@@ -40,7 +40,7 @@ export interface isMe_isMe {
   rank: string | null;
   exp: number | null;
   maxExp: number | null;
-  todayTime: number | null;
+  todayTime: number;
   weekTime: number | null;
   monthTime: number | null;
   totalTime: number | null;

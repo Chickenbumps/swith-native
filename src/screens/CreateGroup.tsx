@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/client";
 import { StackScreenProps } from "@react-navigation/stack";
 import gql from "graphql-tag";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Dimensions,
@@ -15,8 +15,8 @@ import {
   Alert,
 } from "react-native";
 import styled from "styled-components/native";
+import { cache } from "../apollo";
 import DismissKeyboard from "../components/DismissKeyboard";
-import HomeLayout from "../components/HomeLayout";
 import { LoggedInNavStackParamList } from "../navigation/Router";
 import {
   createGroup,
@@ -40,6 +40,7 @@ const CREATE_GROUP_MUTATION = gql`
 
 export default function CreateGroupProps({ navigation }: CreateGroupProps) {
   const { register, handleSubmit, getValues, watch, setValue } = useForm();
+  const [limitRank, setLimitRank] = useState("Bronze");
 
   const [createGroup, { data, loading }] = useMutation<
     createGroup,
@@ -53,6 +54,7 @@ export default function CreateGroupProps({ navigation }: CreateGroupProps) {
       console.log(ok, error);
       if (ok) {
         navigation.navigate("GroupList", { isCreated: true });
+        cache.gc();
       }
     },
   });
@@ -81,7 +83,7 @@ export default function CreateGroupProps({ navigation }: CreateGroupProps) {
         </ConfirmBtn>
       ),
     });
-  }, []);
+  }, [navigation]);
   return (
     <DismissKeyboard>
       <Container>
@@ -93,6 +95,7 @@ export default function CreateGroupProps({ navigation }: CreateGroupProps) {
             ref={register("title").ref}
             onChangeText={(data) => setValue("title", data)}
             placeholder={"그룹 이름을 입력하세요."}
+            autoCompleteType="off"
           />
 
           <RankLimitView>
@@ -100,14 +103,23 @@ export default function CreateGroupProps({ navigation }: CreateGroupProps) {
               <RankNavText>랭크 제한</RankNavText>
             </RankNavView>
             <RankView>
-              <Rank>
-                <RankText>Bronze</RankText>
+              <Rank
+                isSelected={limitRank === "Bronze"}
+                onPress={() => setLimitRank("Bronze")}
+              >
+                <RankText isSelected={limitRank === "Bronze"}>Bronze</RankText>
               </Rank>
-              <Rank>
-                <RankText>Silver</RankText>
+              <Rank
+                isSelected={limitRank === "Silver"}
+                onPress={() => setLimitRank("Silver")}
+              >
+                <RankText isSelected={limitRank === "Silver"}>Silver</RankText>
               </Rank>
-              <Rank>
-                <RankText>Gold</RankText>
+              <Rank
+                isSelected={limitRank === "Gold"}
+                onPress={() => setLimitRank("Gold")}
+              >
+                <RankText isSelected={limitRank === "Gold"}>Gold</RankText>
               </Rank>
             </RankView>
           </RankLimitView>
@@ -166,15 +178,23 @@ const RankView = styled.View`
   padding: 10px 0;
 `;
 
-const Rank = styled.View`
+interface RankProps {
+  isSelected: boolean;
+}
+const Rank = styled.TouchableOpacity<RankProps>`
   border: 1px solid ${(props) => props.theme.txtColor};
   border-radius: 10px;
+  background-color: ${(props) =>
+    props.isSelected ? props.theme.txtColor : props.theme.bgColor};
   width: 60px;
   align-items: center;
   justify-content: center;
 `;
 
-const RankText = styled.Text``;
+const RankText = styled.Text<RankProps>`
+  color: ${(props) =>
+    props.isSelected ? props.theme.bgColor : props.theme.txtColor};
+`;
 
 const DescView = styled(RankLimitView)``;
 const DescNavView = styled(RankNavView)``;

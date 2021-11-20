@@ -14,12 +14,15 @@ import {
 } from "@apollo/client/utilities";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { createUploadLink } from "apollo-upload-client";
+import { Camera } from "expo-camera";
 
 export const isLoggedInVar = makeVar(false);
 export const darkModeVar = makeVar(false);
 export const tokenVar = makeVar<string | null>(null);
 export const reloadVar = makeVar(false);
 export const modalVisibleVar = makeVar(false);
+export const cameraTypeVar = makeVar(Camera.Constants.Type.back);
+export const isLottieVar = makeVar(true);
 const TOKEN = "token";
 
 export const logUserIn = async (token: any) => {
@@ -48,7 +51,7 @@ const onErrorLink = onError(({ graphQLErrors, networkError }) => {
 });
 
 const wsLink = new WebSocketLink({
-  uri: "wss://a5ff-221-150-231-140.ngrok.io/graphql",
+  uri: "ws://43af-221-150-231-140.ngrok.io/graphql",
   options: {
     reconnect: true,
     connectionParams: () => ({
@@ -58,7 +61,7 @@ const wsLink = new WebSocketLink({
 });
 
 const httpLink = createUploadLink({
-  uri: "https://a5ff-221-150-231-140.ngrok.io/graphql",
+  uri: "https://43af-221-150-231-140.ngrok.io/graphql",
 });
 
 const authLink = setContext((request, prevContext) => {

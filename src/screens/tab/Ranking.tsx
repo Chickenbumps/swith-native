@@ -146,10 +146,21 @@ export default function Ranking({ navigation }: RankingScreenProps) {
           }
           if (hour == "00") {
             hour = `00:00:00`;
+          } else if (hour.length === 5) {
+            hour = "00:" + hour;
           }
           return (
             <FlatContainer>
               <NumRankView>
+                <Throphy>
+                  {index == 0 ? (
+                    <Ionicons name="trophy" size={26} color="gold" />
+                  ) : index == 1 ? (
+                    <Ionicons name="trophy" size={26} color="silver" />
+                  ) : index == 2 ? (
+                    <Ionicons name="trophy" size={26} color="brown" />
+                  ) : null}
+                </Throphy>
                 <NumRank>{index + 1}</NumRank>
               </NumRankView>
 
@@ -208,7 +219,7 @@ const FlatContainer = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  margin-left: 20px;
+  margin-left: 10px;
   margin-bottom: 10px;
 `;
 
@@ -230,10 +241,15 @@ const NumRankNav = styled.Text`
   font-size: 14px;
 `;
 const NumRankView = styled.View`
+  flex-direction: row;
   align-items: center;
+  justify-content: flex-end;
   width: 30px;
 `;
+const Throphy = styled.View``;
+
 const NumRank = styled.Text`
+  padding-left: 10px;
   color: ${(props) => props.theme.txtColor};
 `;
 
@@ -249,8 +265,9 @@ const UserNav = styled.Text`
 const UserInfo = styled.TouchableOpacity`
   width: 120px;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   flex-direction: row;
+  margin-left: 20px;
 `;
 const Avatar = styled.Image`
   width: 35px;

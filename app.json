@@ -32,6 +32,16 @@
       "color": "#311b92",
       "iosDisplayInForeground": true,
       "androidMode": "default"
-    }
+    },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon1.png",
+          "color": "#311b92",
+          "mode": "production"
+        }
+      ]
+    ]
   }
 }

@@ -8,6 +8,8 @@ import styled from "styled-components/native";
 import { useSelectTheme } from "../styles";
 import { StyleSheet, View, Text } from "react-native";
 import Constants from "expo-constants";
+import { useReactiveVar } from "@apollo/client";
+import { cameraTypeVar } from "../apollo";
 
 type CameraScreenProps = StackScreenProps<
   LoggedInNavStackParamList,
@@ -16,7 +18,7 @@ type CameraScreenProps = StackScreenProps<
 
 export default function CameraScreen({ route, navigation }: CameraScreenProps) {
   const [cameraHasPermission, setCameraHasPermission] = useState(false);
-  const [type, setType] = useState(Camera.Constants.Type.back);
+  const cameraType = useReactiveVar(cameraTypeVar);
   const [faces, setFaces] = useState<any>([]);
   const cameraRef = useRef<Camera>(null);
   const theme = useSelectTheme();
@@ -73,7 +75,7 @@ export default function CameraScreen({ route, navigation }: CameraScreenProps) {
       <Camera
         ref={cameraRef}
         style={{ flex: 1 }}
-        type={type}
+        type={cameraType}
         onFacesDetected={handleFacesDetected}
         faceDetectorSettings={{
           mode: FaceDetector.Constants.Mode.fast,
@@ -88,11 +90,9 @@ export default function CameraScreen({ route, navigation }: CameraScreenProps) {
       <CameraReverseBtnView>
         <CameraReverseBtn
           onPress={() => {
-            setType(
-              type === Camera.Constants.Type.back
-                ? Camera.Constants.Type.front
-                : Camera.Constants.Type.back
-            );
+            cameraType === Camera.Constants.Type.back
+              ? cameraTypeVar(Camera.Constants.Type.front)
+              : cameraTypeVar(Camera.Constants.Type.back);
           }}
         >
           <Ionicons

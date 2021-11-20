@@ -47,137 +47,138 @@ export default function Home({ navigation, route }: HomeScreenProps) {
 
   const weekName = ["일", "월", "화", "수", "목", "금", "토"];
   const test = moment().subtract(7, "days").format("YYYYMMDD");
-  const hour = Math.floor(
-    meData?.isMe?.todayTime ? meData?.isMe?.todayTime : 0
-  );
-  const minute =
-    ((meData?.isMe?.todayTime ? meData?.isMe?.todayTime : 0) - hour) * 60;
+  // const hour = Math.floor(
+  //   meData?.isMe?.todayTime ? meData?.isMe?.todayTime : 0
+  // );
+  // const minute =
+  //   ((meData?.isMe?.todayTime ? meData?.isMe?.todayTime : 0) - hour) * 60;
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity
-          style={{ marginRight: 20 }}
-          // onPress={navigation.navigate("PushNotification")}
-        >
-          <Ionicons name="notifications" size={24} color={theme.txtColor} />
-        </TouchableOpacity>
-      ),
-    });
-  }, [navigation]);
+  // useEffect(() => {
+  //   navigation.setOptions({
+  //     headerRight: () => (
+  //       <TouchableOpacity
+  //         style={{ marginRight: 20 }}
+  //         // onPress={navigation.navigate("PushNotification")}
+  //       >
+  //         <Ionicons name="notifications" size={24} color={theme.txtColor} />
+  //       </TouchableOpacity>
+  //     ),
+  //   });
+  // }, [navigation]);
 
   useEffect(() => {
     refetch();
     timeRefetch();
-  }, [route?.params?.observers, meData?.isMe?.todayTime]);
+  }, [meData?.isMe.observers, meData?.isMe?.todayTime]);
 
   const goToObserver = () => {
     return navigation.navigate("Observer");
   };
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: theme.bgColor }}>
-      <HomeLayout loading={loading} color={true}>
-        <RankText>현재 랭크:</RankText>
-        <Rank rank={meData?.isMe ? meData.isMe.rank : "Bronze"}>
-          {meData?.isMe?.rank}
-        </Rank>
-        <Medal
-          maxExp={
-            meData?.isMe && meData.isMe.maxExp !== null ? meData.isMe.maxExp : 0
-          }
-          exp={meData?.isMe && meData.isMe.exp !== null ? meData.isMe.exp : 0}
-        />
-        <ExpBar
-          step={meData?.isMe?.exp ? meData.isMe.exp : 0}
-          steps={meData?.isMe?.maxExp ? meData.isMe.maxExp : 10}
-        />
-        <TimeContainer>
-          <DateText>{moment().format("YYYY.MM.D(dddd)")}</DateText>
-          <TimeText>
-            {moment(`${hour}:${minute}`, "HH:mm:ss").format("HH:mm:ss")}
-          </TimeText>
-        </TimeContainer>
+    <HomeLayout loading={loading} color={true}>
+      <RankText>현재 랭크:</RankText>
+      <Rank rank={meData?.isMe ? meData.isMe.rank : "Bronze"}>
+        {meData?.isMe?.rank}
+      </Rank>
+      <Medal
+        maxExp={
+          meData?.isMe && meData.isMe.maxExp !== null ? meData.isMe.maxExp : 0
+        }
+        exp={meData?.isMe && meData.isMe.exp !== null ? meData.isMe.exp : 0}
+      />
+      <ExpBar
+        step={meData?.isMe?.exp ? meData.isMe.exp : 0}
+        steps={meData?.isMe?.maxExp ? meData.isMe.maxExp : 10}
+      />
+      <TimeContainer>
+        <DateText>{moment().format("YYYY.MM.D(dddd)")}</DateText>
+        <TimeText>
+          {meData?.isMe.todayTime == 0
+            ? "00:00:00"
+            : meData?.isMe.todayTime && meData?.isMe.todayTime < 1
+            ? "00:" +
+              moment.duration(meData?.isMe.todayTime, "h").format("hh:mm:00")
+            : moment.duration(meData?.isMe.todayTime, "h").format("hh:mm:00")}
+        </TimeText>
+      </TimeContainer>
 
-        <ObserverContainer>
-          <ObserverText>감시자:</ObserverText>
+      <ObserverContainer>
+        <ObserverText>감시자:</ObserverText>
 
-          {route.params?.observers ? (
-            <Observer>{`${route.params.observers[0]?.username}`} </Observer>
-          ) : meData?.isMe.observers[0]?.username ? (
-            <Observer>{`${meData?.isMe.observers[0]?.username}`} </Observer>
-          ) : null}
-          {/* {route.params?.observers
+        {/* {route.params?.observers ? (
+          <Observer>{`${route.params.observers[0]?.username}`} </Observer>
+        ) : meData?.isMe.observers[0]?.username ? (
+          ) : null} */}
+        <Observer>
+          {meData?.isMe.observers[0]?.username
+            ? `${meData?.isMe.observers[0]?.username}`
+            : null}{" "}
+        </Observer>
+        {/* {route.params?.observers
             ? route.params?.observers?.map((observer, index) => (
                 <Observer key={index}>{`${observer?.username}`} </Observer>
               ))
             : meData?.isMe?.observers?.map((observer, index) => (
                 <Observer key={index}>{`${observer?.username}`} </Observer>
               ))} */}
-          <TouchableOpacity onPress={goToObserver}>
-            <Ionicons
-              name="ellipsis-horizontal-circle-outline"
-              size={24}
-              color={theme.phColor}
-              style={{ bottom: 3 }}
-            />
-            {/* <ObserverText>더보기</ObserverText> */}
-          </TouchableOpacity>
-        </ObserverContainer>
-        <GotoStudyBtn
-          onPress={() =>
-            navigation.navigate("Plan", { faceDetected: false, second: false })
-          }
+        <TouchableOpacity onPress={goToObserver}>
+          <Ionicons
+            name="ellipsis-horizontal-circle-outline"
+            size={24}
+            color={theme.phColor}
+            style={{ bottom: 3 }}
+          />
+          {/* <ObserverText>더보기</ObserverText> */}
+        </TouchableOpacity>
+      </ObserverContainer>
+      <GotoStudyBtn
+        onPress={() =>
+          navigation.navigate("Plan", { faceDetected: false, second: false })
+        }
+      >
+        <LinearGradient
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            width: screenXY.width,
+            height: 70,
+            borderRadius: 13,
+          }}
+          colors={[theme.txtColor, theme.activeColor]}
         >
-          <LinearGradient
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              width: screenXY.width,
-              height: 70,
-              borderRadius: 13,
-            }}
-            colors={[theme.txtColor, theme.activeColor]}
-          >
-            <GotoStudyText>다음 공부 하러가기</GotoStudyText>
-          </LinearGradient>
-        </GotoStudyBtn>
-        <WeekStudy>이번주 공부량</WeekStudy>
-        <WeekContainer>
-          {weekName.map((value, index) => (
-            <WeekEntry
-              key={index}
-              index={index}
-              day={value}
-              date={
-                weekData?.seeTimes[index]
-                  ? weekData.seeTimes[index].updatedAt
-                  : "0"
-              }
-              hours={
-                weekData?.seeTimes[index]
-                  ? weekData?.seeTimes[index]?.timeValue
-                  : 0
-              }
-              nums={
-                weekData?.seeTimes[index]
-                  ? weekData?.seeTimes[index]?.timeNumber
-                  : 0
-              }
-            />
-          ))}
-        </WeekContainer>
-      </HomeLayout>
-    </ScrollView>
+          <GotoStudyText>다음 공부 하러가기</GotoStudyText>
+        </LinearGradient>
+      </GotoStudyBtn>
+      <WeekStudy>이번주 공부량</WeekStudy>
+      <WeekContainer>
+        {weekName.map((value, index) => (
+          <WeekEntry
+            key={index}
+            index={index}
+            day={value}
+            date={
+              weekData?.seeTimes[index]
+                ? weekData.seeTimes[index].updatedAt
+                : "0"
+            }
+            hours={
+              weekData?.seeTimes[index]
+                ? weekData?.seeTimes[index]?.timeValue
+                : 0
+            }
+            nums={
+              weekData?.seeTimes[index]
+                ? weekData?.seeTimes[index]?.timeNumber
+                : 0
+            }
+          />
+        ))}
+      </WeekContainer>
+    </HomeLayout>
   );
 }
-
-const Logo = styled.Image`
-  max-width: 100%;
-  width: 100%;
-  height: 130px;
-`;
 
 const RankText = styled.Text`
   color: ${(props) => props.theme.txtColor};

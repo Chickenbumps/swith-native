@@ -19,6 +19,7 @@ import UserProfile from "../screens/UserProfile";
 import DrawerNav from "./DrawerNav";
 import SearchGroup from "../screens/SearchGroup";
 import GroupInfo from "../screens/GroupInfo";
+import DailyText from "../screens/DailyText";
 const Stack = createStackNavigator();
 
 export default function LoggedInNav() {
@@ -64,7 +65,13 @@ export default function LoggedInNav() {
           ),
         }}
       />
-      <Stack.Screen name="Comment" component={Comment} />
+      <Stack.Screen
+        name="Comment"
+        component={Comment}
+        options={{
+          headerTitle: "일기",
+        }}
+      />
       <Stack.Screen
         name="EditProfile"
         component={EditProfile}
@@ -181,6 +188,21 @@ export default function LoggedInNav() {
         options={{
           headerTitle: "",
           headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        name="DailyText"
+        component={DailyText}
+        options={{
+          headerTitle: "일기 작성",
+          headerBackTitleVisible: false,
+          headerBackImage: () => (
+            <Ionicons
+              name="chevron-back-outline"
+              size={28}
+              color={theme.txtColor}
+            />
+          ),
         }}
       />
     </Stack.Navigator>

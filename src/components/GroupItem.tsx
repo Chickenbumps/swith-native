@@ -30,7 +30,9 @@ export default function GroupItem({
         ) : null}
         <Column>
           <GroupTitle>{title}</GroupTitle>
-          {description ? <GroupDesc>{description}</GroupDesc> : null}
+          {description ? (
+            <GroupDesc>{description.slice(0, 20)}</GroupDesc>
+          ) : null}
         </Column>
       </GroupInfo>
       <Column>

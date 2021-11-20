@@ -1,4 +1,4 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useReactiveVar } from "@apollo/client";
 
 import { StackScreenProps } from "@react-navigation/stack";
 import React, { useRef } from "react";
@@ -20,6 +20,7 @@ import {
   createPushTokenVariables,
 } from "../__generated__/createPushToken";
 import { login, loginVariables, login_login } from "../__generated__/login";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LOGIN_MUTATION = gql`
   mutation login($email: String!, $password: String!) {
@@ -173,6 +174,17 @@ export default function Login({ navigation, route }: LoginScreenProps) {
         disabled={false}
         onPress={() => navigation.navigate("CreateAccount")}
       />
+      <IntroBtn
+        onPress={async () => {
+          try {
+            await AsyncStorage.removeItem("@viewedIntro");
+          } catch (e) {
+            console.log("Error @clearIntro: ", e);
+          }
+        }}
+      >
+        <IntroText>인트로 다시보기</IntroText>
+      </IntroBtn>
     </AuthLayout>
   );
 }
@@ -195,3 +207,6 @@ const LostContainer = styled.TouchableOpacity`
 const LostText = styled.Text`
   color: ${(props) => props.theme.txtColor};
 `;
+
+const IntroBtn = styled.TouchableOpacity``;
+const IntroText = styled.Text``;

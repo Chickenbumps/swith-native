@@ -107,13 +107,11 @@ export default function Observer({ navigation }: ObserverScreenProps) {
           id: `User:${meData?.isMe.id}`,
           fields: {
             observers(prev) {
-              console.log("user:", user);
               if (user.isObserver) {
                 return [...prev, observerFragment];
               }
               let removedPrev = null;
               if (prev[0].__ref) {
-                console.log(prev[0].__ref);
                 removedPrev = prev.filter(
                   (observer: any) => observer.__ref !== `User:${user.id}`
                 );
@@ -146,7 +144,9 @@ export default function Observer({ navigation }: ObserverScreenProps) {
       headerBackImage: () => (
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("Home", { observers: myData?.observers });
+            // navigation.navigate("Home", { observers: myData?.observers });
+            refetch();
+            navigation.goBack();
           }}
         >
           <Ionicons

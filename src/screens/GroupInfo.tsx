@@ -70,7 +70,8 @@ export default function GroupInfo({ route, navigation }: GroupInfoScreenProps) {
         joinGroup: { ok, error },
       } = data;
       if (ok) {
-        navigation.replace("Drawer", {
+        navigation.popToTop();
+        navigation.navigate("Drawer", {
           id: route.params?.id,
           username: meData?.isMe?.username,
         });
@@ -79,18 +80,24 @@ export default function GroupInfo({ route, navigation }: GroupInfoScreenProps) {
       }
     },
   });
-  console.log(
-    groupInfoData?.seeGroupInfo.members.find(
-      (item) => item?.username === meData?.isMe.username
-    )
-  );
+  // console.log(
+  //   groupInfoData?.seeGroupInfo.members.find(
+  //     (item) => item?.username === meData?.isMe.username
+  //   )
+  // );
   const { data: meData } = useUser();
   useLayoutEffect(() => {
+    // console.log(
+    //   "groupInfo:",
+    //   groupInfoData?.seeGroupInfo.members.find(
+    //     (item) => item?.username === meData?.isMe.username
+    //   )
+    // );
     navigation.setOptions({
       headerRight: () =>
         groupInfoData?.seeGroupInfo.members.find(
           (item) => item?.username === meData?.isMe.username
-        ) !== undefined ? null : (
+        ) != undefined ? null : (
           <JoinBtn
             onPress={() =>
               joinGroup({
@@ -104,7 +111,7 @@ export default function GroupInfo({ route, navigation }: GroupInfoScreenProps) {
           </JoinBtn>
         ),
     });
-  }, []);
+  }, [groupInfoData?.seeGroupInfo.members.length]);
 
   return (
     <Container>

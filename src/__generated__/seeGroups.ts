@@ -40,6 +40,7 @@ export interface seeGroups_seeGroups {
   title: string;
   description: string | null;
   groupAvatar: string | null;
+  unreadMessage: number;
   members: seeGroups_seeGroups_members[];
   inviter: seeGroups_seeGroups_inviter;
 }

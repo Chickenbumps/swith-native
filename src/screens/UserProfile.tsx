@@ -14,6 +14,7 @@ import {
   followToggle,
   followToggleVariables,
 } from "../__generated__/followToggle";
+import CommentList from "./CommentList";
 
 const FOLLOW_TOGGLE = gql`
   mutation followToggle($username: String!) {
@@ -24,7 +25,7 @@ const FOLLOW_TOGGLE = gql`
   }
 `;
 
-const SEE_PROFILE = gql`
+const SEE_PROFILE_QUERY = gql`
   query seeProfile($username: String!) {
     seeProfile(username: $username) {
       id
@@ -54,10 +55,10 @@ export default function UserProfile({
   navigation,
 }: UserProfileScreenProps) {
   const theme = useSelectTheme();
-  const { data: userData, loading: userLoading } = useQuery<
+  const { data: userData, loading: userLoading, refetch } = useQuery<
     seeProfile,
     seeProfileVariables
-  >(SEE_PROFILE, {
+  >(SEE_PROFILE_QUERY, {
     variables: {
       username: route.params?.username,
     },
@@ -104,6 +105,7 @@ export default function UserProfile({
   const { data: meData } = useUser();
 
   useLayoutEffect(() => {
+    refetch();
     navigation.setOptions({
       headerLeft: () => (
         <BackBtn onPress={() => navigation.goBack()}>
@@ -115,7 +117,7 @@ export default function UserProfile({
         </BackBtn>
       ),
     });
-  }, [navigation]);
+  }, [navigation, route?.params]);
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: theme.bgColor }}>
@@ -131,6 +133,7 @@ export default function UserProfile({
             <Avatar source={require("../../assets/image/default.png")} />
           )}
           <Username>{userData?.seeProfile.username}</Username>
+          <Bio>{userData?.seeProfile.bio}</Bio>
           {route.params.username !== meData?.isMe.username ? (
             userData?.seeProfile.isFollowing ? (
               <FollowBtn
@@ -160,7 +163,7 @@ export default function UserProfile({
               </FollowBtn>
             )
           ) : null}
-          <Bio>{userData?.seeProfile.bio}</Bio>
+
           <FollowWrapper>
             <FollowItem>
               <FollowText>팔로워</FollowText>
@@ -173,6 +176,12 @@ export default function UserProfile({
             </FollowItem>
           </FollowWrapper>
         </UserInfo>
+
+        <CommentList
+          id={userData?.seeProfile.id}
+          username={userData?.seeProfile.username}
+          avatar={userData?.seeProfile.avatar}
+        />
       </ScreenLayout>
     </ScrollView>
   );
@@ -194,7 +203,9 @@ const Username = styled.Text`
   margin-top: 10px;
 `;
 
-const Bio = styled(Username)``;
+const Bio = styled(Username)`
+  margin-bottom: 10px;
+`;
 
 const FollowWrapper = styled.View`
   flex-direction: row;

@@ -25,6 +25,10 @@ export default function App() {
     const images = [
       require("./assets/image/logo.png"),
       require("./assets/image/default.png"),
+      require("./assets/image/undraw_Online_learning_blue.png"),
+      require("./assets/image/undraw_Surveillance_blue.png"),
+      require("./assets/image/undraw_connection_blue.png"),
+      require("./assets/image/undraw_stepping_up_blue.png"),
     ];
     const ImageCache = images.map((image) => Asset.loadAsync(images));
     await Promise.all<any>([...FontCache, ...ImageCache]);

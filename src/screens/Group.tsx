@@ -10,6 +10,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
+  Alert,
   KeyboardAvoidingView,
   RefreshControl,
   StyleSheet,
@@ -37,6 +38,7 @@ import moment from "moment";
 import { useLayoutEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { DrawerActions } from "@react-navigation/routers";
+import * as Notifications from "expo-notifications";
 
 const SEE_GROUP_QUERY = gql`
   query seeGroup($id: Int!, $offset: Int!) {
@@ -100,6 +102,7 @@ const UPDATE_MESSAGE_SUBSCRIPTION = gql`
 type GroupScreenProps = StackScreenProps<LoggedInNavStackParamList, "Group">;
 export default function Group({ route, navigation }: GroupScreenProps) {
   const [refreshing, setRefreshing] = useState(false);
+  const [subscribed, setSubscribed] = useState(false);
   const theme = useSelectTheme();
   const { data: meData } = useUser();
   const {
@@ -125,7 +128,7 @@ export default function Group({ route, navigation }: GroupScreenProps) {
         <DrawerIcon
           onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
         >
-          <Ionicons name="menu-outline" size={30} />
+          <Ionicons name="menu-outline" size={30} color={theme.txtColor} />
         </DrawerIcon>
       ),
     });
@@ -138,7 +141,7 @@ export default function Group({ route, navigation }: GroupScreenProps) {
         data: { updateMessage: message },
       },
     } = options;
-    // console.log(message);
+    console.log("11message:", message);
     if (message.id) {
       const incomingMessage = client.cache.writeFragment({
         fragment: gql`
@@ -155,6 +158,7 @@ export default function Group({ route, navigation }: GroupScreenProps) {
         `,
         data: message,
       });
+      refetch();
       client.cache.modify({
         id: `Group:${route.params.id}`,
         fields: {
@@ -171,7 +175,7 @@ export default function Group({ route, navigation }: GroupScreenProps) {
   };
 
   useEffect(() => {
-    if (data?.seeGroup) {
+    if (data?.seeGroup && !subscribed) {
       subscribeToMore({
         document: UPDATE_MESSAGE_SUBSCRIPTION,
         variables: {
@@ -179,10 +183,11 @@ export default function Group({ route, navigation }: GroupScreenProps) {
         },
         updateQuery: subscriptionUpdate,
       });
+      setSubscribed(true);
     }
-  }, [data]);
+  }, [data, subscribed]);
 
-  const updateSendMessage = (
+  const updateSendMessage = async (
     cache: ApolloCache<any>,
     result: FetchResult<any>
   ) => {
@@ -194,6 +199,7 @@ export default function Group({ route, navigation }: GroupScreenProps) {
     if (!ok) {
       throw new Error(`메시지 보내기 실패:${error}`);
     }
+    await refetch();
     const { message } = getValues();
     setValue("message", "");
     const messageObj = {
@@ -207,19 +213,32 @@ export default function Group({ route, navigation }: GroupScreenProps) {
       read: true,
       __typename: "Message",
     };
-
-    cache.modify({
-      id: `Group:${route.params.id}`,
-      fields: {
-        messages(prev: seeGroup_seeGroup_messages[]) {
-          const isExist = prev.find((item) => item.id === message.id);
-          if (isExist) {
-            return [...prev];
-          }
-          return [...prev, message];
-        },
-      },
-    });
+    // const messageFragment = cache.writeFragment({
+    //   fragment: gql`
+    //     fragment NewMessage on Message {
+    //       id
+    //       payload
+    //       user {
+    //         username
+    //         avatar
+    //       }
+    //       read
+    //     }
+    //   `,
+    //   data: messageObj,
+    // });
+    // cache.modify({
+    //   id: `Group:${route.params.id}`,
+    //   fields: {
+    //     messages(prev: seeGroup_seeGroup_messages[]) {
+    //       const isExist = prev.find((item) => item.id === messageObj.id);
+    //       if (isExist) {
+    //         return [...prev];
+    //       }
+    //       return [...prev, messageObj];
+    //     },
+    //   },
+    // });
   };
 
   const [sendMessage, { loading: mutationLoading }] = useMutation<
@@ -250,7 +269,8 @@ export default function Group({ route, navigation }: GroupScreenProps) {
       });
     }
   };
-
+  const setData = new Set(data?.seeGroup.messages);
+  const filterData = [...setData];
   return (
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: "black" }}
@@ -260,20 +280,23 @@ export default function Group({ route, navigation }: GroupScreenProps) {
       <ScreenLayout loading={groupLoading} isKeyboard={false}>
         <FlatList
           inverted
-          data={data?.seeGroup.messages}
+          data={filterData}
           keyExtractor={(item, index) => index.toString()}
           refreshing={refreshing}
           onRefresh={onRefresh}
-          onEndReachedThreshold={1}
+          onEndReachedThreshold={0.1}
           // scrollsToTop
-          onEndReached={() =>
+          onEndReached={() => {
+            // console.log(data?.seeGroup.messages);
+            // const setData = new Set(data?.seeGroup.messages);
+            // const filterData = [...setData];
             fetchMore({
               variables: {
-                offset: data?.seeGroup?.messages?.length,
+                offset: filterData.length,
                 id: data?.seeGroup.id,
               },
-            })
-          }
+            });
+          }}
           // refreshControl={
           //   <RefreshControl
           //     tintColor={theme.activeColor}

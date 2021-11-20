@@ -45,7 +45,7 @@ const ITEM_SIZE = width * 0.4;
 const ITEM_SPACING = (width - ITEM_SIZE) / 2;
 
 const UPDATE_TIME_MUTATION = gql`
-  mutation updateTime($time: Int!) {
+  mutation updateTime($time: Float!) {
     updateTime(time: $time) {
       ok
       error
@@ -54,7 +54,7 @@ const UPDATE_TIME_MUTATION = gql`
 `;
 
 const UPDATE_EXP_MUTATION = gql`
-  mutation updateExp($exp: Int!) {
+  mutation updateExp($exp: Float!) {
     updateExp(exp: $exp) {
       ok
       error
@@ -134,7 +134,7 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
           username: userData?.isMe.username,
         },
       });
-    }, 6000);
+    }, 15000);
     setTestVar(true);
     //@ts-ignore
     setFailTest(fail);
@@ -219,9 +219,17 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
           textInputAnimation.setValue(duration);
 
           (async () => {
-            await updateTime({ variables: { time: duration } });
-            await updateExp({ variables: { exp: duration } });
-            await navigation.replace("Result", { duration: duration });
+            await updateTime({
+              variables: { time: Math.round((duration / 60) * 100) / 100 },
+            });
+            await updateExp({
+              variables: { exp: Math.round((duration / 60) * 100) / 100 },
+            });
+            await refetch();
+            await navigation.replace("Result", {
+              duration: duration,
+              isNavigated: true,
+            });
           })();
           Animated.timing(buttonAnimation, {
             toValue: 0,
@@ -253,13 +261,20 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
           // console.log("In");
           textInputAnimation.setValue(duration);
           (async () => {
-            await updateTime({ variables: { time: duration } });
+            await updateTime({
+              variables: { time: Math.round((duration / 60) * 100) / 100 },
+            });
           })();
           (async () => {
-            await updateExp({ variables: { exp: duration } });
+            await updateExp({
+              variables: { exp: Math.round((duration / 60) * 100) / 100 },
+            });
             await refetch();
           })();
-          navigation.replace("Result", { duration: duration });
+          navigation.replace("Result", {
+            duration: duration,
+            isNavigated: true,
+          });
           Animated.timing(buttonAnimation, {
             toValue: 0,
             duration: 300,
@@ -269,8 +284,8 @@ export default function Plan({ route, navigation }: PlanScreenProps) {
       });
     } else if (!isRunning) {
       // console.log("33333");
-      textInputAnimation.stopAnimation((e) => console.log("text", e));
-      timerAnimation.stopAnimation((e) => console.log("timer", e));
+      textInputAnimation.stopAnimation();
+      timerAnimation.stopAnimation();
     }
   }, [duration, isRunning]);
 
