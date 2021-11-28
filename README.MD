@@ -32,7 +32,7 @@
     <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/home.PNG" width="375 " height="812" /></p></td>
     <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/plan.PNG" width="375 " height="812" /></p></td>
   </tr>
-  <tr><td><strong>Camera</strong></td></tr><tr><td><strong>FocusTime</strong></td></tr>
+  <tr><td><strong>Camera</strong></td><td><strong>FocusTime</strong></td></tr>
   <tr>
     <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/FaceCamera.PNG" width="375 " height="812" /></p></td>
     <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/focusTime.PNG" width="375 " height="812" /></p></td>
