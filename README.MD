@@ -9,7 +9,7 @@
 <table>
   <tr><td><strong>Loading1</strong></td><td>
   <tr>
-    <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/Loading.PNG" width="375 " height="812" /></p></td>
+    <td><p align="center"><img src="https://github.com/Chickenbumps/swith-native/blob/master/screenshot/Loading.png" width="375 " height="812" /></p></td>
   </tr>
   
   <tr><td><strong>Intro1</strong></td><td><strong>Intro2</strong></td></tr>
