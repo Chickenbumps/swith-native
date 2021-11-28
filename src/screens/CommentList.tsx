@@ -157,9 +157,11 @@ export default function CommentList({
   const reload = useReactiveVar(reloadVar);
   useEffect(() => {
     refetch();
-    console.log("reloaded");
   }, [reload, isCreated]);
 
+  const filteredData = data?.seeComments.filter(
+    (item) => item.user.username === username
+  );
   return loading ? (
     <View
       style={{
@@ -182,7 +184,7 @@ export default function CommentList({
       }
     >
       <Animated.FlatList
-        data={data?.seeComments}
+        data={filteredData}
         keyExtractor={(item, index) => item.id.toString() + index}
         horizontal
         snapToInterval={FULL_SIZE}
@@ -209,8 +211,8 @@ export default function CommentList({
           const month = item.updatedAt.slice(5, 7);
           const day = item.updatedAt.slice(8, 10);
           const isFollow = seeProfileData?.seeProfile.isFollowing;
-
-          return item.isMine && item.range === "Private" ? (
+          return item.user.username === meData?.isMe.username &&
+            item.range === "Private" ? (
             <Container>
               <InnerContainer>
                 <UserInfo>

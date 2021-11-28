@@ -111,7 +111,7 @@ export default function UserProfile({
         <BackBtn onPress={() => navigation.goBack()}>
           <Ionicons
             name="chevron-back-outline"
-            size={28}
+            size={30}
             color={theme.txtColor}
           />
         </BackBtn>
@@ -176,7 +176,6 @@ export default function UserProfile({
             </FollowItem>
           </FollowWrapper>
         </UserInfo>
-
         <CommentList
           id={userData?.seeProfile.id}
           username={userData?.seeProfile.username}

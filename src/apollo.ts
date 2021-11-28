@@ -61,7 +61,10 @@ const wsLink = new WebSocketLink({
 });
 
 const httpLink = createUploadLink({
-  uri: "https://43af-221-150-231-140.ngrok.io/graphql",
+  uri:
+    process.env.NODE_ENV === "production"
+      ? "https://swith-demo.herokuapp.com/graphql"
+      : "https://43af-221-150-231-140.ngrok.io/graphql",
 });
 
 const authLink = setContext((request, prevContext) => {

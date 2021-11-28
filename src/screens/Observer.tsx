@@ -151,7 +151,7 @@ export default function Observer({ navigation }: ObserverScreenProps) {
         >
           <Ionicons
             name="chevron-back-outline"
-            size={28}
+            size={30}
             color={theme.txtColor}
           />
         </TouchableOpacity>

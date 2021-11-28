@@ -29,7 +29,7 @@ export default function DrawerNav({ route, navigation }: DrawerProps) {
           <BackBtn onPress={() => navigation.goBack()}>
             <Ionicons
               name="chevron-back-outline"
-              size={28}
+              size={30}
               color={theme.txtColor}
             />
           </BackBtn>

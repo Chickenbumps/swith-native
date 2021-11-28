@@ -61,7 +61,6 @@ export default function Profile({ navigation, route }: ProfileScreenProps) {
           <Ionicons name="create-outline" size={22} color={theme.txtColor} />
         </DailyBtn>
       </DailyBtnView>
-
       <CommentList
         id={meData?.isMe.id}
         username={meData?.isMe.username}

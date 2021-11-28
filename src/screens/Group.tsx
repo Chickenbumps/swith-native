@@ -213,32 +213,34 @@ export default function Group({ route, navigation }: GroupScreenProps) {
       read: true,
       __typename: "Message",
     };
-    // const messageFragment = cache.writeFragment({
-    //   fragment: gql`
-    //     fragment NewMessage on Message {
-    //       id
-    //       payload
-    //       user {
-    //         username
-    //         avatar
-    //       }
-    //       read
-    //     }
-    //   `,
-    //   data: messageObj,
-    // });
-    // cache.modify({
-    //   id: `Group:${route.params.id}`,
-    //   fields: {
-    //     messages(prev: seeGroup_seeGroup_messages[]) {
-    //       const isExist = prev.find((item) => item.id === messageObj.id);
-    //       if (isExist) {
-    //         return [...prev];
-    //       }
-    //       return [...prev, messageObj];
-    //     },
-    //   },
-    // });
+    const messageFragment = cache.writeFragment({
+      fragment: gql`
+        fragment NewMessage on Message {
+          id
+          payload
+          user {
+            username
+            avatar
+          }
+          read
+        }
+      `,
+      data: messageObj,
+    });
+    cache.modify({
+      id: `Group:${route.params.id}`,
+      fields: {
+        messages(prev: seeGroup_seeGroup_messages[]) {
+          const isExist = prev.find(
+            (item: any) => item.__ref === messageFragment?.__ref
+          );
+          if (isExist) {
+            return [...prev];
+          }
+          return [...prev, messageObj];
+        },
+      },
+    });
   };
 
   const [sendMessage, { loading: mutationLoading }] = useMutation<

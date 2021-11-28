@@ -92,7 +92,7 @@ export default function Ranking({ navigation }: RankingScreenProps) {
         >
           <Ionicons
             name="chevron-back-outline"
-            size={28}
+            size={30}
             color={theme.txtColor}
           />
         </LeftArrow>
@@ -108,7 +108,7 @@ export default function Ranking({ navigation }: RankingScreenProps) {
         >
           <Ionicons
             name="chevron-forward-outline"
-            size={28}
+            size={30}
             color={theme.txtColor}
           />
         </RightArrow>
@@ -136,13 +136,13 @@ export default function Ranking({ navigation }: RankingScreenProps) {
         }) => {
           let day, hour, minute, second, total;
           if (curNav == "todayTime") {
-            hour = moment.duration(user.todayTime, "h").format("hh:mm:ss");
+            hour = moment.duration(user.todayTime, "h").format("hh:mm:00");
           } else if (curNav == "weekTime") {
-            hour = moment.duration(user.weekTime, "h").format("hh:mm:ss");
+            hour = moment.duration(user.weekTime, "h").format("hh:mm:00");
           } else if (curNav == "monthTime") {
-            hour = moment.duration(user.monthTime, "h").format("hh:mm:ss");
+            hour = moment.duration(user.monthTime, "h").format("hh:mm:00");
           } else {
-            hour = moment.duration(user.totalTime, "h").format("hh:mm:ss");
+            hour = moment.duration(user.totalTime, "h").format("hh:mm:00");
           }
           if (hour == "00") {
             hour = `00:00:00`;

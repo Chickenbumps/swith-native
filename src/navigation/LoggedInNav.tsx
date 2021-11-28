@@ -81,7 +81,7 @@ export default function LoggedInNav() {
           headerBackImage: () => (
             <Ionicons
               name="chevron-back-outline"
-              size={28}
+              size={30}
               color={theme.txtColor}
             />
           ),
@@ -97,7 +97,7 @@ export default function LoggedInNav() {
           headerBackImage: () => (
             <Ionicons
               name="chevron-back-outline"
-              size={28}
+              size={30}
               color={theme.txtColor}
             />
           ),
@@ -112,7 +112,7 @@ export default function LoggedInNav() {
           headerBackImage: () => (
             <Ionicons
               name="chevron-back-outline"
-              size={28}
+              size={30}
               color={theme.txtColor}
             />
           ),
@@ -127,7 +127,7 @@ export default function LoggedInNav() {
           headerBackImage: () => (
             <Ionicons
               name="chevron-back-outline"
-              size={28}
+              size={30}
               color={theme.txtColor}
             />
           ),
@@ -156,7 +156,7 @@ export default function LoggedInNav() {
           headerLeft: () => (
             <Ionicons
               name="chevron-back-outline"
-              size={28}
+              size={30}
               color={theme.txtColor}
             />
           ),
@@ -199,7 +199,7 @@ export default function LoggedInNav() {
           headerBackImage: () => (
             <Ionicons
               name="chevron-back-outline"
-              size={28}
+              size={30}
               color={theme.txtColor}
             />
           ),

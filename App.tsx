@@ -10,9 +10,9 @@ import Router from "./src/navigation/Router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeProvider } from "styled-components";
 import { lightTheme } from "./src/styles";
-import firebase from "firebase";
+// import firebase from "firebase";
 import "react-native-gesture-handler";
-import { firebaseConfig } from "./config/key";
+// import { firebaseConfig } from "./config/key";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -52,11 +52,11 @@ export default function App() {
       />
     );
   }
-  if (firebase.apps.length === 0) {
-    firebase.initializeApp(firebaseConfig);
-  } else {
-    firebase.app();
-  }
+  // if (firebase.apps.length === 0) {
+  //   firebase.initializeApp(firebaseConfig);
+  // } else {
+  //   firebase.app();
+  // }
   return (
     <ApolloProvider client={client}>
       <ThemeProvider theme={lightTheme}>

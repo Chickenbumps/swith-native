@@ -132,7 +132,7 @@ export default function Comment({ route, navigation }: CommentScreenProps) {
         >
           <Ionicons
             name="chevron-back-outline"
-            size={28}
+            size={30}
             color={theme.txtColor}
           />
         </HeaderLeftBtn>
