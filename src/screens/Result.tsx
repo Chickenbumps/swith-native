@@ -9,14 +9,12 @@ import { screenXY, useSelectTheme } from "../styles";
 import ConfirmBtn from "../components/ConfirmBtn";
 import useUser from "../hooks/useUser";
 import { Rank } from "../components/Rank";
-import { gql, useQuery, useReactiveVar } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import { seeTimes, seeTimesVariables } from "../__generated__/seeTimes";
 import moment from "moment";
-import { useSpring, animated, config } from "@react-spring/native";
 import Medal from "../components/Medal";
 import { StackScreenProps } from "@react-navigation/stack";
 import { LoggedInNavStackParamList } from "../navigation/Router";
-import { reloadVar } from "../apollo";
 
 const SEE_TIMES_QUERY = gql`
   query seeTimes($to: String!, $from: String!) {

@@ -1,10 +1,25 @@
 <!-- Image -->
 
-# Mechanism
+# Swith
+
+Swith is a Application that helps improve user's concentration.
+It provides Time management, Rank system, Group activity.
+It's an demo app that hasn't been launched yet.
+
+## Project stack
+
+- ReactNative
+- TypeScript
+- Apollo
+- GraphQL
+- AWS(S3)
+- Expo
+
+## Mechanism
 
 ![Mechanism](./screenshot/mechanism.png)
 
-# Screen
+## Screen
 
 <table>
   <tr><td><strong>Loading1</strong></td><td>
