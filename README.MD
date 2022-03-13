@@ -9,9 +9,11 @@ It's an demo app that hasn't been launched yet.
 ## Project stack
 
 - ReactNative
+- ReactNavigation
 - TypeScript
 - Apollo
 - GraphQL
+- StyledComponent
 - AWS(S3)
 - Expo
 
