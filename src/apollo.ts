@@ -51,7 +51,7 @@ const onErrorLink = onError(({ graphQLErrors, networkError }) => {
 });
 
 const wsLink = new WebSocketLink({
-  uri: "ws://2962-222-110-10-13.ngrok.io/graphql",
+  uri: "wss://b5f7-221-150-231-140.ngrok.io/graphql",
   options: {
     reconnect: true,
     connectionParams: () => ({
@@ -64,7 +64,7 @@ const httpLink = createUploadLink({
   uri:
     process.env.NODE_ENV === "production"
       ? "https://swith-demo.herokuapp.com/graphql"
-      : "https://2962-222-110-10-13.ngrok.io/graphql",
+      : "https://b5f7-221-150-231-140.ngrok.io/graphql",
 });
 
 const authLink = setContext((request, prevContext) => {

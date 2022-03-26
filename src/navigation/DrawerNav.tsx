@@ -1,5 +1,4 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import Group from "../screens/Group";
 import { Ionicons } from "@expo/vector-icons";
@@ -16,6 +15,7 @@ export default function DrawerNav({ route, navigation }: DrawerProps) {
   const theme = useSelectTheme();
   return (
     <Drawer.Navigator
+      useLegacyImplementation={true}
       drawerContent={(props) => (
         <DrawerContent
           id={route.params?.id}
@@ -24,7 +24,7 @@ export default function DrawerNav({ route, navigation }: DrawerProps) {
       )}
       screenOptions={{
         headerShadowVisible: false,
-        gestureEnabled: false,
+
         headerLeft: () => (
           <BackBtn onPress={() => navigation.goBack()}>
             <Ionicons
@@ -44,9 +44,11 @@ export default function DrawerNav({ route, navigation }: DrawerProps) {
           id: route.params?.id,
           username: route.params?.username,
         }}
-        options={{
-          gestureEnabled: false,
-        }}
+        options={
+          {
+            // gestureEnabled: false,
+          }
+        }
       />
     </Drawer.Navigator>
   );

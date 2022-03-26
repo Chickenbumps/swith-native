@@ -8,7 +8,7 @@ import { ApolloProvider } from "@apollo/client";
 import client, { isLoggedInVar, tokenVar } from "./src/apollo";
 import Router from "./src/navigation/Router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ThemeProvider } from "styled-components";
+import { ThemeProvider } from "styled-components/native";
 import { lightTheme } from "./src/styles";
 // import firebase from "firebase";
 import "react-native-gesture-handler";

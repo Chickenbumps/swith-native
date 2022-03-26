@@ -174,7 +174,7 @@ export default function Login({ navigation, route }: LoginScreenProps) {
         disabled={false}
         onPress={() => navigation.navigate("CreateAccount")}
       />
-      <IntroBtn
+      {/* <IntroBtn
         onPress={async () => {
           try {
             await AsyncStorage.removeItem("@viewedIntro");
@@ -184,7 +184,7 @@ export default function Login({ navigation, route }: LoginScreenProps) {
         }}
       >
         <IntroText>인트로 다시보기</IntroText>
-      </IntroBtn>
+      </IntroBtn> */}
     </AuthLayout>
   );
 }

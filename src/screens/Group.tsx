@@ -7,17 +7,9 @@ import {
   useQuery,
 } from "@apollo/client";
 import { StackScreenProps } from "@react-navigation/stack";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import { useForm } from "react-hook-form";
-import {
-  Alert,
-  KeyboardAvoidingView,
-  RefreshControl,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { KeyboardAvoidingView, TouchableOpacity, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import styled from "styled-components/native";
 import ScreenLayout from "../components/ScreenLayout";
@@ -27,7 +19,6 @@ import { useSelectTheme } from "../styles";
 import {
   seeGroup,
   seeGroupVariables,
-  seeGroup_seeGroup,
   seeGroup_seeGroup_messages,
 } from "../__generated__/seeGroup";
 import {
@@ -35,10 +26,8 @@ import {
   sendMessageVariables,
 } from "../__generated__/sendMessage";
 import moment from "moment";
-import { useLayoutEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { DrawerActions } from "@react-navigation/routers";
-import * as Notifications from "expo-notifications";
 
 const SEE_GROUP_QUERY = gql`
   query seeGroup($id: Int!, $offset: Int!) {
@@ -100,7 +89,7 @@ const UPDATE_MESSAGE_SUBSCRIPTION = gql`
 `;
 
 type GroupScreenProps = StackScreenProps<LoggedInNavStackParamList, "Group">;
-export default function Group({ route, navigation }: GroupScreenProps) {
+function Group({ route, navigation }: GroupScreenProps) {
   const [refreshing, setRefreshing] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
   const theme = useSelectTheme();
@@ -435,3 +424,5 @@ const SendIcon = styled.TouchableOpacity`
 `;
 
 const DrawerIcon = styled.TouchableOpacity``;
+
+export default React.memo(Group);

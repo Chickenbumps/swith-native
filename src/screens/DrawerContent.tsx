@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { Alert, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { DrawerContentScrollView } from "@react-navigation/drawer";
 import styled from "styled-components/native";
